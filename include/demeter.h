@@ -90,6 +90,7 @@ job_id_info_t *get_job_info(job_env_t* job); // Returns job info.
 linked_list_t *add_to_list(linked_list_t *list, void *data); // Adds a new link to the begining
 //of the list given as arg, returns new said link.
 bool handle_log_level(parsed_log_t *curr_log, demeter_conf_t *demeter_conf); // Handles log level.
+bool handle_sys_log_level(parsed_log_t *curr_log, demeter_conf_t *demeter_conf); // Handles system log level.
 
 // I'M FREE!!!
 //___________________________________________________________________________________________________________________________________________

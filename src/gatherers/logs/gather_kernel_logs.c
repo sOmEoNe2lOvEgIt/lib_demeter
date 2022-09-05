@@ -47,7 +47,7 @@ cgroup_data_t *cgroup_data, linked_list_t *log_list)
         if (curr_log->unparsed_log == NULL || is_log_empty(curr_log->unparsed_log))
             continue;
         curr_log->log_source_path = strdup("syslog");
-        if (!handle_log_level(curr_log, demeter_conf))
+        if (!handle_sys_log_level(curr_log, demeter_conf))
             continue;
         if (!handle_log_time(job_info, curr_log, demeter_conf))
             continue;

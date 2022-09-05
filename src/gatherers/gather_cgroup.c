@@ -12,10 +12,8 @@ static cgroup_data_t *alloc_cgroup_struct(void)
 {
     cgroup_data_t *cgroup_data = malloc(sizeof(cgroup_data_t));
 
-    if (cgroup_data == NULL) {
-        my_slurm_error("malloc failed");
+    if (cgroup_data == NULL)
         return (NULL);
-    }
     cgroup_data->mem_max_usage_bytes = 0;
     cgroup_data->oom_kill_disable = 0;
     cgroup_data->under_oom = 0;
