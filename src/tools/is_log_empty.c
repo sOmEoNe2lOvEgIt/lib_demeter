@@ -12,11 +12,7 @@ bool is_log_empty(char *log)
 {
     if (log == NULL)
         return (true);
-    if (strlen(log) == 0) {
-        free(log);
-        return (true);
-    }
-    if (strcmp(log, "\n") == 0) {
+    if (strlen(log) == 0 || strcmp(log, "\n") == 0) {
         free(log);
         return (true);
     }

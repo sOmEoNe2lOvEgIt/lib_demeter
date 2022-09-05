@@ -47,7 +47,7 @@ static demeter_conf_t *init_conf(void)
     conf->log_level = INFO;
     conf->log_file_path = strdup("/var/log/demeter.log");
     conf->slurm_log_path = strdup(slurm_log_path);
-    free (hostname);
+    free(hostname);
     return (conf);
 }
 

@@ -17,11 +17,10 @@ void log_parsed_sel(linked_list_t *gathered_sel, demeter_conf_t *demeter_conf)
 		gathered_sel = gathered_sel->next;
 	while (gathered_sel != NULL) {
     	if (gathered_sel != NULL && !is_log_empty(((parsed_sel_t *)gathered_sel->data)->unparsed_sel)) {
-			// write_log_to_file(demeter_conf, "logs gathered", DEBUG, 3);
 			write_log_to_file(demeter_conf, ((parsed_sel_t *)gathered_sel->data)->unparsed_sel, DEBUG, 3);
-			write_log_to_file(demeter_conf, ((parsed_sel_t *)gathered_sel->data)->sel_time_str, DEBUG, 3);
+			// write_log_to_file(demeter_conf, ((parsed_sel_t *)gathered_sel->data)->sel_time_str, DEBUG, 3);
 		} else
-			write_log_to_file(demeter_conf, "no worth logs gathered", DEBUG, 3);
+			write_log_to_file(demeter_conf, "no worth logs gathered", DEBUG, 2);
 		gathered_sel = gathered_sel->next;
 	}
 }

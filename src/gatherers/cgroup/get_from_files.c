@@ -20,18 +20,28 @@ static void cut_str_ret(char *str)
     str[i] = '\0';
 }
 
+static bool is_file_opened(FILE *file, demeter_conf_t *conf)
+{
+    if (file == NULL) {
+        write_log_to_file(conf, "Could not open cgroup file", DEBUG, 0);
+        return false;
+    }
+    return true;
+}
+
 void get_mem_max_usage(cgroup_data_t *cgroup_data, job_id_info_t *job_info, demeter_conf_t *conf)
 {
     char res[50];
     char cgroup_path[130];
     FILE *file = NULL;
 
-    sprintf(cgroup_path, "/sys/fs/cgroup/memory/slurm/uid_%u/job_%u/memory.max_usage_in_bytes", job_info->uid, job_info->job_id);
+    if (job_info->step_id < 4294967292)
+        sprintf(cgroup_path, "/sys/fs/cgroup/memory/slurm/uid_%u/job_%u/step_%u/memory.max_usage_in_bytes", job_info->uid, job_info->job_id, job_info->step_id);
+    else
+        sprintf(cgroup_path, "/sys/fs/cgroup/memory/slurm/uid_%u/job_%u/memory.max_usage_in_bytes", job_info->uid, job_info->job_id);
     file = fopen(cgroup_path, "r");
-    if (file == NULL) {
-        write_log_to_file(conf, "Could not open cgroup file", DEBUG, 0);
+    if (!is_file_opened(file, conf))
         return;
-    }
     write_log_to_file(conf, "Getting max memory usage", DEBUG, 99);
     fgets(res, 50, file);
     cgroup_data->mem_max_usage_bytes = atoi(res);
@@ -45,12 +55,13 @@ void get_oom_status(cgroup_data_t *cgroup_data, job_id_info_t *job_info, demeter
     size_t read_size = 30;
     FILE *file = NULL;
 
-    sprintf(cgroup_path, "/sys/fs/cgroup/memory/slurm/uid_%u/job_%u/memory.oom_control", job_info->uid, job_info->job_id);
+    if (job_info->step_id < 4294967292)
+        sprintf(cgroup_path, "/sys/fs/cgroup/memory/slurm/uid_%u/job_%u/step_%u/memory.oom_control", job_info->uid, job_info->job_id, job_info->step_id);
+    else
+        sprintf(cgroup_path, "/sys/fs/cgroup/memory/slurm/uid_%u/job_%u/memory.oom_control", job_info->uid, job_info->job_id);
     file = fopen(cgroup_path, "r");
-    if (file == NULL) {
-        write_log_to_file(conf, "Could not open cgroup file", DEBUG, 1);
+    if (!is_file_opened(file, conf))
         return;
-    }
     write_log_to_file(conf, "Getting oom status", DEBUG, 99);
     getline(&res, &read_size, file);
     cgroup_data->oom_kill_disable = atoi(&res[17]);
@@ -72,10 +83,8 @@ void get_cpuset(cgroup_data_t *cgroup_data, job_id_info_t *job_info, demeter_con
 
     sprintf(cgroup_path, "/sys/fs/cgroup/cpuset/slurm/uid_%u/job_%u/cpuset.cpu_exclusive", job_info->uid, job_info->job_id);
     file = fopen(cgroup_path, "r");
-    if (file == NULL) {
-        write_log_to_file(conf, "Could not open cgroup file", DEBUG, 0);
+    if (!is_file_opened(file, conf))
         return;
-    }
     write_log_to_file(conf, "Getting cpuset", DEBUG, 99);
     getline(&res, &read_size, file);
     cgroup_data->cpuset_cpus = strdup(res);
@@ -83,10 +92,8 @@ void get_cpuset(cgroup_data_t *cgroup_data, job_id_info_t *job_info, demeter_con
     fclose(file);
     sprintf(cgroup_path, "/sys/fs/cgroup/cpuset/slurm/uid_%u/job_%u/cpuset.effective_cpus", job_info->uid, job_info->job_id);
     file = fopen(cgroup_path, "r");
-    if (file == NULL) {
-        write_log_to_file(conf, "Could not open cgroup file", DEBUG, 0);
+    if (!is_file_opened(file, conf))
         return;
-    }
     write_log_to_file(conf, "Getting effective cpus", DEBUG, 99);
     getline(&res, &read_size, file);
     cgroup_data->cpuset_effective_cpus = strdup(res);

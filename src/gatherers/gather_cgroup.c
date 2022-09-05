@@ -25,9 +25,8 @@ static cgroup_data_t *alloc_cgroup_struct(void)
 
 cgroup_data_t *gather_cgroup(job_id_info_t *job_info, demeter_conf_t *conf)
 {
-    cgroup_data_t *cgroup_data = NULL;
+    cgroup_data_t *cgroup_data = alloc_cgroup_struct();
 
-    cgroup_data = alloc_cgroup_struct();
     if (cgroup_data == NULL || job_info == NULL)
         return (NULL);
     get_mem_max_usage(cgroup_data, job_info, conf);
