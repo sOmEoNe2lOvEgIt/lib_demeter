@@ -83,9 +83,6 @@ typedef struct linked_list_s { // Generic linked list.
 // TOOLS
 //___________________________________________________________________________________________________________________________________________
 
-void my_slurm_info(char *message); // Prints INFO message to slurm log.
-void my_slurm_error(char *message); // Prints ERROR message to slurm log.
-void my_slurm_debug(char *message, int level); // Prints DEBUG message to slurm log whith log level.
 char *get_time_str(void); // Returns time in readable format.
 bool is_log_empty(char *log); // Returns true if log is empty.
 demeter_conf_t *read_conf(void); // Reads demeter configuration.
