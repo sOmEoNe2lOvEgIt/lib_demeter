@@ -163,5 +163,6 @@ int handle_sel_assert(parsed_sel_t *curr_sel);
 //___________________________________________________________________________________________________________________________________________
 
 perf_data_t *gather_ib(void); // Gathers IB data.
+perf_data_t *gather_ib_diff(perf_data_t *prolog_perf_count); // Gathers IB data and substracts prolog data.
 
 #endif /* !DEMETER_H_ */
