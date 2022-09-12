@@ -158,6 +158,8 @@ perf_data_t *gather_ib_diff(perf_data_t *prolog_perf_count)
     perf_data_t *epilog_perf_count = NULL;
     perf_data_t *diff_perf_count = NULL;
 
+    if (prolog_perf_count == NULL)
+        return (NULL);
     epilog_perf_count = gather_ib();
     if (epilog_perf_count == NULL)
         return (NULL);
