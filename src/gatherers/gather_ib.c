@@ -124,7 +124,7 @@ static int resolve_self(char *ca_name, uint8_t ca_port, ib_portid_t *portid, int
 // MAIN
 //______________________________________________________________________________
 
-perf_data_t *gather_ib(int ac, char **av)
+perf_data_t *gather_ib(void)
 {
     perf_data_t *perf_count = NULL;
     char *ibd_ca = NULL;
@@ -137,8 +137,6 @@ perf_data_t *gather_ib(int ac, char **av)
         printf("malloc");
         return (NULL);
     }
-    if (ac > 1)
-        ibd_ca = av[1];
     if (resolve_self(ibd_ca, ibd_ca_port, &portid, &info.port) < 0) {
         free(perf_count);
         return (NULL);

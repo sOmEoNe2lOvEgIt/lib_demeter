@@ -162,6 +162,6 @@ int handle_sel_assert(parsed_sel_t *curr_sel);
 // GATHER_IB FUNCTION
 //___________________________________________________________________________________________________________________________________________
 
-perf_data_t *gather_ib(int ac, char **av); // Gathers IB data.
+perf_data_t *gather_ib(void); // Gathers IB data.
 
 #endif /* !DEMETER_H_ */
