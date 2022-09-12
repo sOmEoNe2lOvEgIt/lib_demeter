@@ -4,11 +4,12 @@
 // Wow, such include, many things!
 //___________________________________________________________________________________________________________________________________________
 
+#include <inttypes.h>
+#include <string.h>
 #include "slurm/slurm.h"
 #include "src/slurmd/slurmd/slurmd.h"
 #include "src/slurmd/slurmstepd/slurmstepd_job.h"
-#include <inttypes.h>
-#include <string.h>
+#include "gather_ib.h"
 
 #ifndef DEMETER_H_
 #define DEMETER_H_
@@ -104,6 +105,7 @@ void free_parsed_log(parsed_log_t *log);
 void free_log_list(linked_list_t *log_list);
 void free_sel_list(linked_list_t *sel_list);
 void free_parsed_sel(parsed_sel_t *parsed_sel);
+void free_perf_count(perf_data_t *perf_count);
 
 // LOGGER FUNCTIONS
 //___________________________________________________________________________________________________________________________________________
@@ -156,5 +158,10 @@ int handle_sel_time(parsed_sel_t *curr_sel, demeter_conf_t *demeter_conf, time_t
 int handle_sel_type(parsed_sel_t *curr_sel);
 int handle_sel_msg(parsed_sel_t *curr_sel);
 int handle_sel_assert(parsed_sel_t *curr_sel);
+
+// GATHER_IB FUNCTION
+//___________________________________________________________________________________________________________________________________________
+
+perf_data_t *gather_ib(int ac, char **av); // Gathers IB data.
 
 #endif /* !DEMETER_H_ */

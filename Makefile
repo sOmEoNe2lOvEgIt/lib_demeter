@@ -17,6 +17,7 @@ LIB_FILE = libdemeter.so
 SRC_FILES = src/gatherers/gather_cgroup.c					\
 			src/gatherers/gather_logs.c						\
 			src/gatherers/gather_sel.c						\
+			src/gatherers/gather_ib.c						\
 				src/gatherers/cgroup/get_from_files.c		\
 				src/gatherers/logs/gather_kernel_logs.c		\
 				src/gatherers/logs/gather_slurm_logs.c		\
@@ -24,8 +25,6 @@ SRC_FILES = src/gatherers/gather_cgroup.c					\
 				src/gatherers/logs/get_log_time.c			\
 				src/gatherers/sel/gather_sel_logs.c			\
 				src/gatherers/sel/handle_sel.c				\
-				src/gatherers/perf_querry/my_perf_querry.c	\
-				src/gatherers/perf_querry/aggregate.c		\
 			src/loggers/logger.c							\
 				src/loggers/cgroup/log_cgroup.c				\
 				src/loggers/parsed_logs/log_parsed_logs.c	\
@@ -39,8 +38,8 @@ SRC_FILES = src/gatherers/gather_cgroup.c					\
 				src/tools/get/get_time_str.c				\
 
 CC      = gcc
-CFLAGS  ?= -Wall -fPIC -g -I$(SLURM_INC_DIR) -I$(SLURM_BUILD_DIR) -Iinclude -Wl,-rpath=$(LIBIBMAD_DIR)
-LDFLAGS ?= -shared -L. -L$(LIBIBMAD_DIR) -libmad
+CFLAGS  ?= -Wall -fPIC -g -Iinclude -I$(SLURM_INC_DIR) -I$(SLURM_BUILD_DIR) -I/usr/include/infiniband/
+LDFLAGS ?= -shared -L. -L$(LIBIBMAD_DIR) -libmad -libumad
 
 all: $(LIB_FILE)
 

@@ -5,8 +5,9 @@
 //___________________________________________________________________________________________________________________________________________
 
 #include <stdio.h>
-#include "demeter.h"
 #include "src/common/slurm_xlator.h"
+#include "demeter.h"
+#include "gather_ib.h"
 
 void free_list(linked_list_t *list)
 {
@@ -124,4 +125,13 @@ void free_sel_list(linked_list_t *sel_list)
         free(sel_list);
         sel_list = next_list;
     }
+}
+
+// IB
+//___________________________________________________________________________________________________________________________________________
+
+void free_perf_count(perf_data_t *perf_count)
+{
+    if (perf_count != NULL)
+        free(perf_count);
 }
