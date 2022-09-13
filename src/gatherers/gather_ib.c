@@ -4,6 +4,7 @@
 #include <inttypes.h>
 #include <string.h>
 
+#include "src/common/log.h"
 #include "gather_ib.h"
 
 uint ibd_timeout = 20;
@@ -86,13 +87,13 @@ static void dump_perfcounters(ib_portid_t * portid, int port, perf_data_t *perf_
 
     memset(pc, 0, sizeof(pc));
     if (!pma_query_via(pc, portid, port, ibd_timeout, IB_GSI_PORT_COUNTERS, srcport)) {
-        printf("perfquery");
+        debug2("prep/demeter: perfquery failed");
         return;
     }
     aggregate_perfcounters(perf_count, pc);
     memset(pc, 0, sizeof(pc));
     if (!pma_query_via(pc, portid, port, ibd_timeout, IB_GSI_PORT_RCV_ERROR_DETAILS, srcport)){
-        printf("extperfquery");
+        debug2("prep/demeter: extperfquery failed");
         return;
     }
     aggregate_ext_perfcounters(perf_count, pc);
@@ -134,7 +135,7 @@ perf_data_t *gather_ib(void)
 
     perf_count = malloc(sizeof(perf_data_t));
     if (perf_count == NULL) {
-        printf("malloc");
+        debug2("prep/demeter: malloc failed");
         return (NULL);
     }
     if (resolve_self(ibd_ca, ibd_ca_port, &portid, &info.port) < 0) {
@@ -156,44 +157,41 @@ perf_data_t *gather_ib(void)
 perf_data_t *gather_ib_diff(perf_data_t *prolog_perf_count)
 {
     perf_data_t *epilog_perf_count = NULL;
-    perf_data_t *diff_perf_count = NULL;
+    perf_data_t *res = NULL;
 
     if (prolog_perf_count == NULL)
         return (NULL);
     epilog_perf_count = gather_ib();
     if (epilog_perf_count == NULL)
         return (NULL);
-    diff_perf_count = malloc(sizeof(perf_data_t));
-    if (diff_perf_count == NULL) {
-        free(epilog_perf_count);
+    perf_data_t diff_perf_count = {epilog_perf_count->portselect, epilog_perf_count->counterselect, (epilog_perf_count->symbolerrors - prolog_perf_count->symbolerrors),
+    (epilog_perf_count->linkrecovers - prolog_perf_count->linkrecovers),
+    (epilog_perf_count->linkdowned - prolog_perf_count->linkdowned),
+    (epilog_perf_count->rcverrors - prolog_perf_count->rcverrors),
+    (epilog_perf_count->rcvremotephyerrors - prolog_perf_count->rcvremotephyerrors),
+    (epilog_perf_count->rcvswrelayerrors - prolog_perf_count->rcvswrelayerrors),
+    (epilog_perf_count->xmtdiscards - prolog_perf_count->xmtdiscards),
+    (epilog_perf_count->xmtconstrainterrors - prolog_perf_count->xmtconstrainterrors),
+    (epilog_perf_count->rcvconstrainterrors - prolog_perf_count->rcvconstrainterrors),
+    (epilog_perf_count->linkintegrityerrors - prolog_perf_count->linkintegrityerrors),
+    (epilog_perf_count->excbufoverrunerrors - prolog_perf_count->excbufoverrunerrors),
+    (epilog_perf_count->qp1dropped - prolog_perf_count->qp1dropped),
+    (epilog_perf_count->vl15dropped - prolog_perf_count->vl15dropped),
+    (epilog_perf_count->xmtdata - prolog_perf_count->xmtdata),
+    (epilog_perf_count->rcvdata - prolog_perf_count->rcvdata),
+    (epilog_perf_count->xmtpkts - prolog_perf_count->xmtpkts),
+    (epilog_perf_count->rcvpkts - prolog_perf_count->rcvpkts),
+    (epilog_perf_count->xmtwait - prolog_perf_count->xmtwait),
+    (epilog_perf_count->portlocalphysicalerrors - prolog_perf_count->portlocalphysicalerrors),
+    (epilog_perf_count->portmalformedpkterrors - prolog_perf_count->portmalformedpkterrors),
+    (epilog_perf_count->portbufferoverrunerrors - prolog_perf_count->portbufferoverrunerrors),
+    (epilog_perf_count->portdlidmappingerrors - prolog_perf_count->portdlidmappingerrors),
+    (epilog_perf_count->portvlmappingerrors - prolog_perf_count->portvlmappingerrors),
+    (epilog_perf_count->portloopingerrors - prolog_perf_count->portloopingerrors)};
+    res = malloc(sizeof(perf_data_t));
+    if (res == NULL)
         return (NULL);
-    }
-    diff_perf_count->portselect = epilog_perf_count->portselect;
-    diff_perf_count->counterselect = epilog_perf_count->counterselect;
-    diff_perf_count->symbolerrors = epilog_perf_count->symbolerrors - prolog_perf_count->symbolerrors;
-    diff_perf_count->linkrecovers = epilog_perf_count->linkrecovers - prolog_perf_count->linkrecovers;
-    diff_perf_count->linkdowned = epilog_perf_count->linkdowned - prolog_perf_count->linkdowned;
-    diff_perf_count->rcverrors = epilog_perf_count->rcverrors - prolog_perf_count->rcverrors;
-    diff_perf_count->rcvremotephyerrors = epilog_perf_count->rcvremotephyerrors - prolog_perf_count->rcvremotephyerrors;
-    diff_perf_count->rcvswrelayerrors = epilog_perf_count->rcvswrelayerrors - prolog_perf_count->rcvswrelayerrors;
-    diff_perf_count->xmtdiscards = epilog_perf_count->xmtdiscards - prolog_perf_count->xmtdiscards;
-    diff_perf_count->xmtconstrainterrors = epilog_perf_count->xmtconstrainterrors - prolog_perf_count->xmtconstrainterrors;
-    diff_perf_count->rcvconstrainterrors = epilog_perf_count->rcvconstrainterrors - prolog_perf_count->rcvconstrainterrors;
-    diff_perf_count->linkintegrityerrors = epilog_perf_count->linkintegrityerrors - prolog_perf_count->linkintegrityerrors;
-    diff_perf_count->excbufoverrunerrors = epilog_perf_count->excbufoverrunerrors - prolog_perf_count->excbufoverrunerrors;
-    diff_perf_count->qp1dropped = epilog_perf_count->qp1dropped - prolog_perf_count->qp1dropped;
-    diff_perf_count->vl15dropped = epilog_perf_count->vl15dropped - prolog_perf_count->vl15dropped;
-    diff_perf_count->xmtdata = epilog_perf_count->xmtdata - prolog_perf_count->xmtdata;
-    diff_perf_count->rcvdata = epilog_perf_count->rcvdata - prolog_perf_count->rcvdata;
-    diff_perf_count->xmtpkts = epilog_perf_count->xmtpkts - prolog_perf_count->xmtpkts;
-    diff_perf_count->rcvpkts = epilog_perf_count->rcvpkts - prolog_perf_count->rcvpkts;
-    diff_perf_count->xmtwait = epilog_perf_count->xmtwait - prolog_perf_count->xmtwait;
-    diff_perf_count->portlocalphysicalerrors = epilog_perf_count->portlocalphysicalerrors - prolog_perf_count->portlocalphysicalerrors;
-    diff_perf_count->portmalformedpkterrors = epilog_perf_count->portmalformedpkterrors - prolog_perf_count->portmalformedpkterrors;
-    diff_perf_count->portbufferoverrunerrors = epilog_perf_count->portbufferoverrunerrors - prolog_perf_count->portbufferoverrunerrors;
-    diff_perf_count->portdlidmappingerrors = epilog_perf_count->portdlidmappingerrors - prolog_perf_count->portdlidmappingerrors;
-    diff_perf_count->portvlmappingerrors = epilog_perf_count->portvlmappingerrors - prolog_perf_count->portvlmappingerrors;
-    diff_perf_count->portloopingerrors = epilog_perf_count->portloopingerrors - prolog_perf_count->portloopingerrors;
+    memcpy(res, &diff_perf_count, sizeof(perf_data_t));
     free(epilog_perf_count);
-    return (diff_perf_count);
+    return (res);
 }
