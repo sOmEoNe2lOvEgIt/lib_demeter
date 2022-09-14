@@ -22,10 +22,30 @@ parsed_sel_t *init_parsed_sel(void)
     return (parsed_sel);
 }
 
-linked_list_t *gather_sel(demeter_conf_t *demeter_conf, job_id_info_t *job_info, cgroup_data_t *cgroup_data)
+linked_list_t *gather_sel(job_id_info_t *job_info)
 {
+    FILE *log_fd = NULL;
     linked_list_t *sel_list = NULL;
+    parsed_sel_t *curr_log = NULL;
+    char *buffer = NULL;
+    size_t len = 1000;
 
-    sel_list = gather_sel_logs(demeter_conf, job_info, sel_list);
+    if ((log_fd = popen("ipmitool -U admin -P password sel list", "r")) == NULL)
+        return (NULL);
+    sel_list = add_to_list(sel_list, init_parsed_sel());
+    while (getline(&buffer, &len, log_fd) != -1) {
+        curr_log = (parsed_sel_t *)sel_list->data;
+        curr_log->unparsed_sel = strdup(buffer);
+        if (get_sel_time(curr_log, job_info->start_time))
+            continue;
+        if (get_sel_element(curr_log, &curr_log->sel_msg_type, 3))
+            continue;
+        if (get_sel_element(curr_log, &curr_log->sel_msg, 4))
+            continue;
+        if (get_sel_assert(curr_log))
+            continue;
+        sel_list = add_to_list(sel_list, init_parsed_sel());
+    }
+    pclose(log_fd);
     return (sel_list);
 }

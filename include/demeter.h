@@ -147,17 +147,15 @@ linked_list_t *gather_slurm_logs (demeter_conf_t *demeter_conf, job_id_info_t *j
 // SEL_PARSER FUNCTION
 //___________________________________________________________________________________________________________________________________________
 
-linked_list_t *gather_sel(demeter_conf_t *demeter_conf, job_id_info_t *job_info, cgroup_data_t *cgroup_data); // Gathers sel.
+linked_list_t *gather_sel(job_id_info_t *job_info);
 
 // SEL_PARSER TOOLS
 //___________________________________________________________________________________________________________________________________________
 
 parsed_sel_t *init_parsed_sel(void); // Returns a new propperly allocated empty parsed sel struct.
-linked_list_t *gather_sel_logs(demeter_conf_t *demeter_conf, job_id_info_t *job_info, linked_list_t *sel_list);
-int handle_sel_time(parsed_sel_t *curr_sel, demeter_conf_t *demeter_conf, time_t start_time);
-int handle_sel_type(parsed_sel_t *curr_sel);
-int handle_sel_msg(parsed_sel_t *curr_sel);
-int handle_sel_assert(parsed_sel_t *curr_sel);
+int get_sel_assert(parsed_sel_t *curr_sel);
+int get_sel_element(parsed_sel_t *curr_sel, char **element, int element_nb);
+int get_sel_time(parsed_sel_t *curr_sel, time_t start_time);
 
 // GATHER_IB FUNCTION
 //___________________________________________________________________________________________________________________________________________

@@ -23,7 +23,6 @@ SRC_FILES = src/gatherers/gather_cgroup.c					\
 				src/gatherers/logs/gather_slurm_logs.c		\
 				src/gatherers/logs/read_logs.c				\
 				src/gatherers/logs/get_log_time.c			\
-				src/gatherers/sel/gather_sel_logs.c			\
 				src/gatherers/sel/handle_sel.c				\
 			src/loggers/logger.c							\
 				src/loggers/cgroup/log_cgroup.c				\
