@@ -28,6 +28,7 @@ SRC_FILES = src/gatherers/gather_cgroup.c					\
 				src/loggers/cgroup/log_cgroup.c				\
 				src/loggers/parsed_logs/log_parsed_logs.c	\
 				src/loggers/parsed_sel/log_sel.c			\
+			src/loggers/send_elasticsearch.c				\
 			src/tools/is_log_empty.c						\
 			src/tools/read_conf.c							\
 			src/tools/linked_list.c							\

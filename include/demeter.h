@@ -114,7 +114,10 @@ FILE *init_log_file(demeter_conf_t *conf, bool silent); // Initializes demeter l
 int write_log_to_file(demeter_conf_t *conf, char *message, dem_log_level_t level, uint verbose); // Writes log to demeter log file.
 void log_parsed_logs(linked_list_t *gathered_logs, demeter_conf_t *demeter_conf); // Specific to gathered logs.
 void log_cgroup(cgroup_data_t *cgroup_data, job_id_info_t *job_info, demeter_conf_t *conf); // Specific to cgroup data.
-void log_parsed_sel(linked_list_t *gathered_sel, demeter_conf_t *demeter_conf); // Specific to gathered sel.
+void log_parsed_sel(linked_list_t *gathered_sel); // Specific to gathered sel.
+int send_elastic(demeter_conf_t *demeter_conf ,job_id_info_t *job_info, cgroup_data_t *cgroup_data,
+linked_list_t *gathered_logs, linked_list_t *gathered_sel, perf_data_t *gathered_perf_data);
+
 // CGROUP FUNCTION
 //___________________________________________________________________________________________________________________________________________
 
