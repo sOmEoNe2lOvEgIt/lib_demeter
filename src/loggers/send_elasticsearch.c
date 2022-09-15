@@ -12,7 +12,7 @@ linked_list_t *gathered_logs, linked_list_t *gathered_sel, perf_data_t *gathered
 {
     CURL *curl;
     CURLcode res;
-    char *url = "http://localhost:9200/demeter/_doc"; //Has te be pulled from config file
+    char *url = "http://elastic:9200/slurm/_doc"; //Has te be pulled from config file
 
     curl = curl_easy_init();
     if (curl) {

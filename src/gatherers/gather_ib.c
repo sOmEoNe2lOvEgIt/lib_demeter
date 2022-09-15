@@ -87,13 +87,13 @@ static void dump_perfcounters(ib_portid_t * portid, int port, perf_data_t *perf_
 
     memset(pc, 0, sizeof(pc));
     if (!pma_query_via(pc, portid, port, ibd_timeout, IB_GSI_PORT_COUNTERS, srcport)) {
-        debug2("prep/demeter: perfquery failed");
+        debug2("demeter: perfquery failed");
         return;
     }
     aggregate_perfcounters(perf_count, pc);
     memset(pc, 0, sizeof(pc));
     if (!pma_query_via(pc, portid, port, ibd_timeout, IB_GSI_PORT_RCV_ERROR_DETAILS, srcport)){
-        debug2("prep/demeter: extperfquery failed");
+        debug2("demeter: extperfquery failed");
         return;
     }
     aggregate_ext_perfcounters(perf_count, pc);
@@ -135,15 +135,17 @@ perf_data_t *gather_ib(void)
 
     perf_count = malloc(sizeof(perf_data_t));
     if (perf_count == NULL) {
-        debug2("prep/demeter: malloc failed");
+        debug2("demeter: malloc failed");
         return (NULL);
     }
     if (resolve_self(ibd_ca, ibd_ca_port, &portid, &info.port) < 0) {
+        debug2("demeter: resolve_self failed");
         free(perf_count);
         return (NULL);
     }
     srcport = mad_rpc_open_port(ibd_ca, ibd_ca_port, mgmt_classes, 3);
     if (!srcport) {
+        debug2("demeter: mad_rpc_open_port failed");
         free(perf_count);
         return (NULL);
     }

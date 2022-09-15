@@ -10,22 +10,13 @@
 #include "slurm/slurm.h"
 #include "demeter.h"
 
-static int len_untill(char *str, char c)
-{
-    int i = 0;
-
-    while (str[i] != c && str[i] != '\0')
-        i++;
-    return (i);
-}
-
 int get_sel_assert(parsed_sel_t *curr_sel)
 {
     int i = 0;
     int j = 0;
 
     for (; j < 5; j++)
-        i += len_untill(&curr_sel->unparsed_sel[i], '|') + 1;
+        i += get_len_to_char(&curr_sel->unparsed_sel[i], '|') + 1;
     i++;
     if (curr_sel->unparsed_sel[i] == '\0')
         return (1);
@@ -42,7 +33,7 @@ int get_sel_element(parsed_sel_t *curr_sel, char **element, int element_nb)
     int len = 0;
 
     for (; element_nb > 0 ; element_nb--)
-        i += len_untill(&curr_sel->unparsed_sel[i], '|') + 1;
+        i += get_len_to_char(&curr_sel->unparsed_sel[i], '|') + 1;
     i++;
     if (curr_sel->unparsed_sel[i] == '\0')
         return (1);
@@ -57,27 +48,27 @@ int get_sel_time(parsed_sel_t *curr_sel, time_t start_time)
     struct tm *sel_time = malloc(sizeof(struct tm));
     char time_str[80];
 
-    i += len_untill(&curr_sel->unparsed_sel[i], '|') + 2;
+    i += get_len_to_char(&curr_sel->unparsed_sel[i], '|') + 2;
     if (curr_sel->unparsed_sel[i] == '\0')
         return (1);
     sel_time->tm_mday = atoi(&curr_sel->unparsed_sel[i]);
-    i += len_untill(&curr_sel->unparsed_sel[i], '/') + 1;
+    i += get_len_to_char(&curr_sel->unparsed_sel[i], '/') + 1;
     if (curr_sel->unparsed_sel[i] == '\0')
         return (1);
     sel_time->tm_mon = atoi(&curr_sel->unparsed_sel[i]);
-    i += len_untill(&curr_sel->unparsed_sel[i], '/') + 1;
+    i += get_len_to_char(&curr_sel->unparsed_sel[i], '/') + 1;
     if (curr_sel->unparsed_sel[i] == '\0')
         return (1);
     sel_time->tm_year = atoi(&curr_sel->unparsed_sel[i]);
-    i += len_untill(&curr_sel->unparsed_sel[i], '|') + 2;
+    i += get_len_to_char(&curr_sel->unparsed_sel[i], '|') + 2;
     if (curr_sel->unparsed_sel[i] == '\0')
         return (1);
     sel_time->tm_hour = atoi(&curr_sel->unparsed_sel[i]);
-    i += len_untill(&curr_sel->unparsed_sel[i], ':') + 1;
+    i += get_len_to_char(&curr_sel->unparsed_sel[i], ':') + 1;
     if (curr_sel->unparsed_sel[i] == '\0')
         return (1);
     sel_time->tm_min = atoi(&curr_sel->unparsed_sel[i]);
-    i += len_untill(&curr_sel->unparsed_sel[i], ':') + 1;
+    i += get_len_to_char(&curr_sel->unparsed_sel[i], ':') + 1;
     if (curr_sel->unparsed_sel[i] == '\0')
         return (1);
     sel_time->tm_sec = atoi(&curr_sel->unparsed_sel[i]);

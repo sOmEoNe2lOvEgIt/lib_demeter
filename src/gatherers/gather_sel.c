@@ -7,6 +7,7 @@
 
 #include <stdio.h>
 #include <syslog.h>
+#include "src/common/log.h"
 #include "slurm/slurm.h"
 #include "demeter.h"
 
@@ -30,8 +31,10 @@ linked_list_t *gather_sel(job_id_info_t *job_info)
     char *buffer = NULL;
     size_t len = 1000;
 
-    if ((log_fd = popen("ipmitool -U admin -P password sel list", "r")) == NULL)
+    if ((log_fd = popen("ipmitool -U admin -P password sel list", "r")) == NULL) {
+        debug2("demeter: Cannot exec ipmitool command.");
         return (NULL);
+    }
     sel_list = add_to_list(sel_list, init_parsed_sel());
     while (getline(&buffer, &len, log_fd) != -1) {
         curr_log = (parsed_sel_t *)sel_list->data;

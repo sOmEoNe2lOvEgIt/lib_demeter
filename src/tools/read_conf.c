@@ -11,34 +11,28 @@
 static char *get_hostname(void)
 {
     char *hostname = NULL;
-    size_t hostname_len = 50;
     FILE *hostname_file = NULL;
+    size_t hostname_len = 100;
 
-    hostname_file = fopen("/etc/hostname", "r");
-    if (hostname_file == NULL)
+    if ((hostname_file = fopen("/etc/hostname", "r")) == NULL)
         return (NULL);
     getline(&hostname, &hostname_len, hostname_file);
     fclose(hostname_file);
-    for (hostname_len = 0; hostname[hostname_len] != '\0'; hostname_len++) {
-        if (hostname[hostname_len] == '\n') {
-            hostname[hostname_len] = '\0';
-            break;
-        }
-    }
+    hostname_len = get_len_to_char(hostname, '\n');
+    hostname[hostname_len] = '\0';
     return (hostname);
 }
 
 static demeter_conf_t *init_conf(void)
 {
-    demeter_conf_t *conf = malloc(sizeof(demeter_conf_t));
+    demeter_conf_t *conf;
     char *hostname = NULL;
     char slurm_log_path[80];
 
-    if (conf == NULL)
+    if ((hostname = get_hostname()) == NULL)
         return (NULL);
-    hostname = get_hostname();
-    if (hostname == NULL) {
-        free(conf);
+    if ((conf = malloc(sizeof(demeter_conf_t))) == NULL) {
+        free(hostname);
         return (NULL);
     }
     sprintf(slurm_log_path, "/var/log/slurm/slurm.%s.log", hostname);
@@ -71,6 +65,7 @@ static dem_log_level_t get_slurm_log_level(char *str_level)
 static bool is_conf_path_accesible(char *path)
 {
     FILE *file = fopen(path, "r");
+ 
     if (file == NULL)
         return (false);
     fclose(file);
@@ -79,25 +74,15 @@ static bool is_conf_path_accesible(char *path)
 
 demeter_conf_t *read_conf(void)
 {
-    s_p_options_t options[] = {
-    {"Verbose", S_P_UINT32},
-    {"LogStyle", S_P_STRING},
-    {"LogLevel", S_P_STRING},
-    {"SlurmLogLevel", S_P_STRING},
-    {"SysLogLevel", S_P_STRING},
-    {"LogFilePath", S_P_STRING},
-    {"SlurmLogPath", S_P_STRING},
-    {NULL}};
-    s_p_hashtbl_t *tbl = NULL;
+    s_p_options_t options[] = {{"Verbose", S_P_UINT32},
+    {"LogStyle", S_P_STRING}, {"LogLevel", S_P_STRING},
+    {"SlurmLogLevel", S_P_STRING}, {"SysLogLevel", S_P_STRING},
+    {"LogFilePath", S_P_STRING}, {"SlurmLogPath", S_P_STRING}, {NULL}};
     demeter_conf_t *conf = init_conf();
-    char conf_path[] = "/etc/slurm/demeter.conf";
-    char *log_style = NULL;
-    char *log_level = NULL;
-    char *slurm_log_level = NULL;
-    char *sys_log_level = NULL;
-    char *log_file_path = NULL;
-    char *slurm_log_path = NULL;
-    char teststr[1000];
+    char *log_style = NULL, *log_level = NULL, *slurm_log_level = NULL,
+    *sys_log_level = NULL, *log_file_path = NULL, *slurm_log_path = NULL,
+    teststr[1000], conf_path[] = "/etc/slurm/demeter.conf";
+    s_p_hashtbl_t *tbl = NULL;
 
     tbl = s_p_hashtbl_create(options);
     if (s_p_parse_file(tbl, NULL, conf_path, false) == SLURM_ERROR) {

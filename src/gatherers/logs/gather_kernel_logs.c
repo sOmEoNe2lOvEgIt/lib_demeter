@@ -39,7 +39,7 @@ cgroup_data_t *cgroup_data, linked_list_t *log_list)
     log_list = add_to_list(log_list, init_parsed_log());
     for (int i = 0; log_buffer[i] != '\0'; i++) {
         curr_log = (parsed_log_t *)log_list->data;
-        for (len = 0; log_buffer[i + len] != '\0' && log_buffer[i + len] != '\n'; len++);
+        len += get_len_to_char(&log_buffer[i + len], '\n');
         if (len <= 2)
             continue;
         curr_log->unparsed_log = strndup(log_buffer + i, len);

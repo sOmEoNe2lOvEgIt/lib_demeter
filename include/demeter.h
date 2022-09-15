@@ -85,6 +85,7 @@ typedef struct linked_list_s { // Generic linked list.
 //___________________________________________________________________________________________________________________________________________
 
 char *get_time_str(void); // Returns time in readable format.
+int get_len_to_char(char *str, char c); // Returns distance to the next char c in  string str.
 bool is_log_empty(char *log); // Returns true if log is empty.
 demeter_conf_t *read_conf(void); // Reads demeter configuration.
 job_id_info_t *get_job_info(job_env_t* job); // Returns job info.
