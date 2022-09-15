@@ -129,8 +129,7 @@ perf_data_t *gather_ib(void)
 {
     perf_data_t *perf_count = NULL;
     char *ibd_ca = NULL;
-    int ibd_ca_port = 1;
-    int mgmt_classes[3] = { IB_SMI_CLASS, IB_SA_CLASS, IB_PERFORMANCE_CLASS };
+    int ibd_ca_port = 1, mgmt_classes[3] = { IB_SMI_CLASS, IB_SA_CLASS, IB_PERFORMANCE_CLASS };
     ib_portid_t portid;
 
     perf_count = malloc(sizeof(perf_data_t));
@@ -158,8 +157,7 @@ perf_data_t *gather_ib(void)
 
 perf_data_t *gather_ib_diff(perf_data_t *prolog_perf_count)
 {
-    perf_data_t *epilog_perf_count = NULL;
-    perf_data_t *res = NULL;
+    perf_data_t *epilog_perf_count = NULL, *res = NULL;
 
     if (prolog_perf_count == NULL)
         return (NULL);

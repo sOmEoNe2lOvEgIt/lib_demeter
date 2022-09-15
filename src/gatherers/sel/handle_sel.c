@@ -12,8 +12,7 @@
 
 int get_sel_assert(parsed_sel_t *curr_sel)
 {
-    int i = 0;
-    int j = 0;
+    int i = 0, j = 0;
 
     for (; j < 5; j++)
         i += get_len_to_char(&curr_sel->unparsed_sel[i], '|') + 1;
@@ -29,8 +28,7 @@ int get_sel_assert(parsed_sel_t *curr_sel)
 
 int get_sel_element(parsed_sel_t *curr_sel, char **element, int element_nb)
 {
-    int i = 0;
-    int len = 0;
+    int i = 0, len = 0;
 
     for (; element_nb > 0 ; element_nb--)
         i += get_len_to_char(&curr_sel->unparsed_sel[i], '|') + 1;

@@ -11,17 +11,15 @@
 int get_sys_log_time(parsed_log_t *log_to_parse, time_t start_time)
 {
     FILE *uptime_file = NULL;
-    char *uptime_str = NULL;
-    char time_str[80];
-    int len_before_timestamp;
-    time_t uptime = 0;
-    time_t log_time = 0;
+    char *uptime_str = NULL, time_str[80];
+    time_t uptime = 0, log_time = 0;
     size_t uptime_str_len = 30;
+    int len_before_timestamp;
     struct tm *timeinfo;
 
     if (log_to_parse->log_source_path == NULL || strcmp(log_to_parse->log_source_path, "syslog") != 0)
         return(1);
-    for (len_before_timestamp = 0; log_to_parse->unparsed_log[len_before_timestamp] != '\0' && log_to_parse->unparsed_log[len_before_timestamp] != '['; len_before_timestamp++);
+    len_before_timestamp = get_len_to_char(log_to_parse->unparsed_log, '[');
     if (log_to_parse->unparsed_log[len_before_timestamp] == '\0')
         return(1);
     len_before_timestamp ++;
@@ -47,27 +45,23 @@ int get_sys_log_time(parsed_log_t *log_to_parse, time_t start_time)
 time_t slurm_time_to_time(char *slurm_time)
 {
     struct tm timeinfo;
+    int slurm_time_idx = 0;
 
     if (slurm_time == NULL)
         return (0);
-    for (; slurm_time[0] != '\0' && slurm_time[0] != '['; slurm_time++);
-    slurm_time++;
-    timeinfo.tm_year = atoi(slurm_time) - 1900;
-    for (; slurm_time[0] != '\0' && slurm_time[0] != '-'; slurm_time++);
-    slurm_time++;
-    timeinfo.tm_mon = atoi(slurm_time) - 1;
-    for (; slurm_time[0] != '\0' && slurm_time[0] != '-'; slurm_time++);
-    slurm_time++;
-    timeinfo.tm_mday = atoi(slurm_time);
-    for (; slurm_time[0] != '\0' && slurm_time[0] != 'T'; slurm_time++);
-    slurm_time++;
-    timeinfo.tm_hour = atoi(slurm_time);
-    for (; slurm_time[0] != '\0' && slurm_time[0] != ':'; slurm_time++);
-    slurm_time++;
-    timeinfo.tm_min = atoi(slurm_time);
-    for (; slurm_time[0] != '\0' && slurm_time[0] != ':'; slurm_time++);
-    slurm_time++;
-    timeinfo.tm_sec = atoi(slurm_time);
+    memset(&timeinfo, 0, sizeof(struct tm));
+    slurm_time_idx += get_len_to_char(&slurm_time[slurm_time_idx], '[') + 1;
+    timeinfo.tm_year = atoi(&slurm_time[slurm_time_idx]) - 1900;
+    slurm_time_idx += get_len_to_char(&slurm_time[slurm_time_idx], '-') + 1;
+    timeinfo.tm_mon = atoi(&slurm_time[slurm_time_idx]) - 1;
+    slurm_time_idx += get_len_to_char(&slurm_time[slurm_time_idx], '-') + 1;
+    timeinfo.tm_mday = atoi(&slurm_time[slurm_time_idx]);
+    slurm_time_idx += get_len_to_char(&slurm_time[slurm_time_idx], 'T') + 1;
+    timeinfo.tm_hour = atoi(&slurm_time[slurm_time_idx]);
+    slurm_time_idx += get_len_to_char(&slurm_time[slurm_time_idx], ':') + 1;
+    timeinfo.tm_min = atoi(&slurm_time[slurm_time_idx]);
+    slurm_time_idx += get_len_to_char(&slurm_time[slurm_time_idx], ':') + 1;
+    timeinfo.tm_sec = atoi(&slurm_time[slurm_time_idx]);
     return(mktime(&timeinfo));
 }
 

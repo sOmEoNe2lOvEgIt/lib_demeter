@@ -31,8 +31,7 @@ static bool is_file_opened(FILE *file, demeter_conf_t *conf)
 
 void get_mem_max_usage(cgroup_data_t *cgroup_data, job_id_info_t *job_info, demeter_conf_t *conf)
 {
-    char res[50];
-    char cgroup_path[130];
+    char res[50], cgroup_path[130];
     FILE *file = NULL;
 
     if (job_info->step_id < 4294967292)
@@ -50,8 +49,7 @@ void get_mem_max_usage(cgroup_data_t *cgroup_data, job_id_info_t *job_info, deme
 
 void get_oom_status(cgroup_data_t *cgroup_data, job_id_info_t *job_info, demeter_conf_t *conf)
 {
-    char *res = NULL;
-    char cgroup_path[130];
+    char *res = NULL, cgroup_path[130];
     size_t read_size = 30;
     FILE *file = NULL;
 
@@ -69,15 +67,13 @@ void get_oom_status(cgroup_data_t *cgroup_data, job_id_info_t *job_info, demeter
     cgroup_data->under_oom = atoi(&res[10]);
     getline(&res, &read_size, file);
     cgroup_data->oom_kill = atoi(&res[9]);
-    free(res);
     fclose(file);
-    write_log_to_file(conf, "Got oom status", DEBUG, 99);
+    free(res);
 }
 
 void get_cpuset(cgroup_data_t *cgroup_data, job_id_info_t *job_info, demeter_conf_t *conf)
 {
-    char *res = NULL;
-    char cgroup_path[130];
+    char *res = NULL, cgroup_path[130];
     size_t read_size = 30;
     FILE *file = NULL;
 

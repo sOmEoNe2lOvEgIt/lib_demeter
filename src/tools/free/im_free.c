@@ -11,8 +11,7 @@
 
 void free_list(linked_list_t *list)
 {
-    linked_list_t *tmp = list;
-    linked_list_t *prev = NULL;
+    linked_list_t *tmp = list, *prev = NULL;
 
     while (tmp != NULL) {
         prev = tmp;
