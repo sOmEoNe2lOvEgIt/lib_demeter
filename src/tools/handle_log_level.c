@@ -36,6 +36,7 @@ bool handle_log_level(parsed_log_t *curr_log, demeter_conf_t *demeter_conf)
         }
         return false;
     }
+    curr_log->log_level = level_of_curr_log;
     return true;
 }
 
@@ -66,5 +67,6 @@ bool handle_sys_log_level(parsed_log_t *curr_log, demeter_conf_t *demeter_conf)
         }
         return false;
     }
+    curr_log->log_level = level_of_curr_log;
     return true;
 }

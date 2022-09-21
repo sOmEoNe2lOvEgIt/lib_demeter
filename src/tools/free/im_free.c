@@ -90,6 +90,13 @@ void free_log_list(linked_list_t *log_list)
     }
 }
 
+void free_log_counter(log_counter_t *log_counter)
+{
+    if (log_counter == NULL)
+        return;
+    free(log_counter);
+}
+
 // SEL
 //___________________________________________________________________________________________________________________________________________
 

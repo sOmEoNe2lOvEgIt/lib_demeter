@@ -66,6 +66,7 @@ typedef struct parsed_log_s { // Logs gathered for each job step || job.
     char *log_time_str; // Time & date of log in readable format.
     //struct host_info_s *host_info; <-- future struct whith info about the host to implement eventually
     int error_code; //0 if no error, 1 if error, only used for stdout as log source
+    dem_log_level_t log_level; // Log level of log.
 } parsed_log_t;
 
 typedef struct parsed_sel_s {
@@ -74,12 +75,21 @@ typedef struct parsed_sel_s {
     char *sel_msg_type; // Type of sel message.
     char *sel_msg; // Actual sel message.
     bool asserted; // True if sel message is "asserted".
+    dem_log_level_t log_level; // Log level of log.
 } parsed_sel_t;
 
 typedef struct linked_list_s { // Generic linked list.
     void *data; // Needs to be casted to the appropriate type.
     struct linked_list_s *next;
 } linked_list_t;
+
+typedef struct log_counter_s {
+    uint errors;
+    uint warnings;
+    uint infos;
+    uint debugs;
+    uint fatals;
+} log_counter_t;
 
 // TOOLS
 //___________________________________________________________________________________________________________________________________________
@@ -93,6 +103,8 @@ linked_list_t *add_to_list(linked_list_t *list, void *data); // Adds a new link 
 //of the list given as arg, returns new said link.
 bool handle_log_level(parsed_log_t *curr_log, demeter_conf_t *demeter_conf); // Handles log level.
 bool handle_sys_log_level(parsed_log_t *curr_log, demeter_conf_t *demeter_conf); // Handles system log level.
+void remove_newline(char *str);
+char *append_str(char *str, char *to_append);
 
 // I'M FREE!!!
 //___________________________________________________________________________________________________________________________________________
@@ -104,6 +116,7 @@ void free_cgroup(cgroup_data_t *data);
 void free_job_id_info(job_id_info_t *job_info);
 void free_parsed_log(parsed_log_t *log);
 void free_log_list(linked_list_t *log_list);
+void free_log_counter(log_counter_t *log_counter);
 void free_sel_list(linked_list_t *sel_list);
 void free_parsed_sel(parsed_sel_t *parsed_sel);
 void free_perf_count(perf_data_t *perf_count);
@@ -117,7 +130,15 @@ void log_parsed_logs(linked_list_t *gathered_logs, demeter_conf_t *demeter_conf)
 void log_cgroup(cgroup_data_t *cgroup_data, job_id_info_t *job_info, demeter_conf_t *conf); // Specific to cgroup data.
 void log_parsed_sel(linked_list_t *gathered_sel); // Specific to gathered sel.
 int send_elastic(demeter_conf_t *demeter_conf ,job_id_info_t *job_info, cgroup_data_t *cgroup_data,
-linked_list_t *gathered_logs, linked_list_t *gathered_sel, perf_data_t *gathered_perf_data);
+linked_list_t *gathered_logs, log_counter_t *log_counter, linked_list_t *gathered_sel, perf_data_t *gathered_perf_data);
+
+// JSON FORMATTERS
+//__________________________________________________________________________________________________________________________________________
+
+char *format_logs(linked_list_t *gathered_logs, linked_list_t *gathered_sel);
+char *format_cgroup(cgroup_data_t *cgroup);
+char *format_job_info(job_id_info_t *job_info);
+char *format_log_counter(log_counter_t *log_counter);
 
 // CGROUP FUNCTION
 //___________________________________________________________________________________________________________________________________________
@@ -134,7 +155,7 @@ void get_cpuset(cgroup_data_t *cgroup_data, job_id_info_t *job_info, demeter_con
 // LOG_PARSER FUNCTION
 //___________________________________________________________________________________________________________________________________________
 
-linked_list_t *gather_logs(demeter_conf_t *demeter_conf, job_id_info_t *job_info, cgroup_data_t *cgroup_data); // Gathers logs.
+linked_list_t *gather_logs(demeter_conf_t *demeter_conf, job_id_info_t *job_info, cgroup_data_t *cgroup_data, log_counter_t **log_counter);// Gathers logs.
 
 // LOG_PARSER TOOLS
 //___________________________________________________________________________________________________________________________________________
@@ -166,5 +187,7 @@ int get_sel_time(parsed_sel_t *curr_sel, time_t start_time);
 
 perf_data_t *gather_ib(void); // Gathers IB data.
 perf_data_t *gather_ib_diff(perf_data_t *prolog_perf_count); // Gathers IB data and substracts prolog data.
+
+
 
 #endif /* !DEMETER_H_ */
