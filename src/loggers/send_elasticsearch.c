@@ -40,7 +40,7 @@ static bool send_log(demeter_conf_t *demeter_conf, char *json_log, job_id_info_t
     return true;
 }
 
-int send_elastic(demeter_conf_t *demeter_conf ,job_id_info_t *job_info, cgroup_data_t *cgroup_data,
+int send_elastic(demeter_conf_t *demeter_conf ,job_id_info_t *job_info, linked_list_t *cgroup_data,
 linked_list_t *gathered_logs, log_counter_t *log_counter, linked_list_t *gathered_sel, perf_data_t *gathered_perf_data)
 {
     char *json_log, *tmp;
@@ -64,10 +64,15 @@ linked_list_t *gathered_logs, log_counter_t *log_counter, linked_list_t *gathere
     json_log = append_str(json_log, tmp);
     if (tmp != NULL)
         free(tmp);
+    json_log = append_str(json_log, ", ");
+    tmp = format_perf_count(gathered_perf_data);
+    json_log = append_str(json_log, tmp);
+    if (tmp != NULL)
+        free(tmp);
     json_log = append_str(json_log, "}}");
     if (send_log(demeter_conf, json_log, job_info) == false)
         write_log_to_file(demeter_conf, "Failed to send log to elastic", DEBUG, 2);
-    write_log_to_file(demeter_conf, json_log, INFO, 0);
+    // write_log_to_file(demeter_conf, json_log, INFO, 0);
     if (json_log != NULL)
         free(json_log);
     return (0);

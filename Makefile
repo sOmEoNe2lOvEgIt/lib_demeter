@@ -26,6 +26,7 @@ SRC_FILES = src/gatherers/gather_cgroup.c						\
 				src/gatherers/sel/handle_sel.c					\
 			src/loggers/logger.c								\
 				src/loggers/cgroup/log_cgroup.c					\
+				src/loggers/cgroup/unlog_cgroup.c				\
 				src/loggers/parsed_logs/log_parsed_logs.c		\
 				src/loggers/parsed_sel/log_sel.c				\
 				src/loggers/send_elasticsearch/json_formatters.c\

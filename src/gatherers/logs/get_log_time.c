@@ -14,9 +14,10 @@ int get_sys_log_time(parsed_log_t *log_to_parse, time_t start_time)
     char *uptime_str = NULL, time_str[80];
     time_t uptime = 0, log_time = 0;
     size_t uptime_str_len = 30;
-    int len_before_timestamp;
+    int len_before_timestamp = 0;
     struct tm *timeinfo;
 
+    memset(time_str, 0, 80);
     if (log_to_parse->log_source_path == NULL || strcmp(log_to_parse->log_source_path, "syslog") != 0)
         return(1);
     len_before_timestamp = get_len_to_char(log_to_parse->unparsed_log, '[');

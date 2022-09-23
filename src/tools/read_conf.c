@@ -11,15 +11,21 @@
 static char *get_hostname(void)
 {
     char *hostname = NULL;
+    char *line = NULL;
     FILE *hostname_file = NULL;
     size_t hostname_len = 100;
 
     if ((hostname_file = fopen("/etc/hostname", "r")) == NULL)
         return (NULL);
-    getline(&hostname, &hostname_len, hostname_file);
+    getline(&line, &hostname_len, hostname_file);
     fclose(hostname_file);
-    hostname_len = get_len_to_char(hostname, '\n');
-    hostname[hostname_len] = '\0';
+    hostname_len = get_len_to_char(line, '\n');
+    line[hostname_len] = '\0';
+    hostname = strdup(line);
+    if (line != NULL)
+        free(line);
+    else
+        return (NULL);
     return (hostname);
 }
 
@@ -29,6 +35,7 @@ static demeter_conf_t *init_conf(void)
     char *hostname = NULL;
     char slurm_log_path[80];
 
+    memset(slurm_log_path, 0, 80);
     if ((hostname = get_hostname()) == NULL)
         return (NULL);
     if ((conf = malloc(sizeof(demeter_conf_t))) == NULL) {
@@ -84,6 +91,7 @@ demeter_conf_t *read_conf(void)
     teststr[1000], conf_path[] = "/etc/slurm/demeter.conf";
     s_p_hashtbl_t *tbl = NULL;
 
+    memset(teststr, 0, 1000);
     tbl = s_p_hashtbl_create(options);
     if (s_p_parse_file(tbl, NULL, conf_path, false) == SLURM_ERROR) {
         s_p_hashtbl_destroy(tbl);

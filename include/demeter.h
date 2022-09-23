@@ -48,6 +48,7 @@ typedef struct cgroup_data_s { // Cgroup gathered data for each job step || job.
     uint oom_kill; 
     char *cpuset_cpus;
     char *cpuset_effective_cpus;
+    uint step_id;
 } cgroup_data_t;
 
 typedef struct job_id_info_s {
@@ -112,6 +113,7 @@ char *append_str(char *str, char *to_append);
 // Functions for freeing different types of structs whithin demeter.
 void free_list(linked_list_t *list);
 void free_conf(demeter_conf_t *conf);
+void free_cgroup_list(linked_list_t *cgroup_list);
 void free_cgroup(cgroup_data_t *data);
 void free_job_id_info(job_id_info_t *job_info);
 void free_parsed_log(parsed_log_t *log);
@@ -128,26 +130,30 @@ FILE *init_log_file(demeter_conf_t *conf, bool silent); // Initializes demeter l
 int write_log_to_file(demeter_conf_t *conf, char *message, dem_log_level_t level, uint verbose); // Writes log to demeter log file.
 void log_parsed_logs(linked_list_t *gathered_logs, demeter_conf_t *demeter_conf); // Specific to gathered logs.
 void log_cgroup(cgroup_data_t *cgroup_data, job_id_info_t *job_info, demeter_conf_t *conf); // Specific to cgroup data.
+void transfer_log_cgroup(cgroup_data_t *cgroup_data, job_id_info_t *job_info, demeter_conf_t *conf); // for transfering cgroup data between plugins.
 void log_parsed_sel(linked_list_t *gathered_sel); // Specific to gathered sel.
-int send_elastic(demeter_conf_t *demeter_conf ,job_id_info_t *job_info, cgroup_data_t *cgroup_data,
+int send_elastic(demeter_conf_t *demeter_conf ,job_id_info_t *job_info, linked_list_t *cgroup_data,
 linked_list_t *gathered_logs, log_counter_t *log_counter, linked_list_t *gathered_sel, perf_data_t *gathered_perf_data);
 
 // JSON FORMATTERS
 //__________________________________________________________________________________________________________________________________________
 
 char *format_logs(linked_list_t *gathered_logs, linked_list_t *gathered_sel);
-char *format_cgroup(cgroup_data_t *cgroup);
+char *format_cgroup(linked_list_t *cgroup);
 char *format_job_info(job_id_info_t *job_info);
 char *format_log_counter(log_counter_t *log_counter);
+char *format_perf_count(perf_data_t *perf_data);
 
 // CGROUP FUNCTION
 //___________________________________________________________________________________________________________________________________________
 
 cgroup_data_t *gather_cgroup(job_id_info_t *job_info, demeter_conf_t *conf); // Gathers cgroup data.
+linked_list_t *unlog_cgroup(demeter_conf_t *demeter_conf);
 
 // CGROUP TOOLS
 //___________________________________________________________________________________________________________________________________________
 
+cgroup_data_t *alloc_cgroup_struct(void);
 void get_oom_status(cgroup_data_t *cgroup_data, job_id_info_t *job_info, demeter_conf_t *conf);
 void get_mem_max_usage(cgroup_data_t *cgroup_data, job_id_info_t *job_info, demeter_conf_t *conf);
 void get_cpuset(cgroup_data_t *cgroup_data, job_id_info_t *job_info, demeter_conf_t *conf);
@@ -155,7 +161,7 @@ void get_cpuset(cgroup_data_t *cgroup_data, job_id_info_t *job_info, demeter_con
 // LOG_PARSER FUNCTION
 //___________________________________________________________________________________________________________________________________________
 
-linked_list_t *gather_logs(demeter_conf_t *demeter_conf, job_id_info_t *job_info, cgroup_data_t *cgroup_data, log_counter_t **log_counter);// Gathers logs.
+linked_list_t *gather_logs(demeter_conf_t *demeter_conf, job_id_info_t *job_info, log_counter_t **log_counter);// Gathers logs.
 
 // LOG_PARSER TOOLS
 //___________________________________________________________________________________________________________________________________________
@@ -166,8 +172,8 @@ int get_sys_log_time(parsed_log_t *log_to_parse, time_t start_time); // Adds rea
 // other if error (including the log time not being at job runtime).
 int get_slurm_log_time(parsed_log_t *log_to_parse, time_t start_time); // Adds readable time to log. Returns 0 if no error,
 // other if error (including the log time not being at job runtime).
-linked_list_t *gather_kernel_logs (demeter_conf_t *demeter_conf, job_id_info_t *job_info, cgroup_data_t *cgroup_data, linked_list_t *log_list);
-linked_list_t *gather_slurm_logs (demeter_conf_t *demeter_conf, job_id_info_t *job_info,cgroup_data_t *cgroup_data, linked_list_t *log_list);
+linked_list_t *gather_kernel_logs (demeter_conf_t *demeter_conf, job_id_info_t *job_info, linked_list_t *log_list);
+linked_list_t *gather_slurm_logs (demeter_conf_t *demeter_conf, job_id_info_t *job_info, linked_list_t *log_list);
 
 // SEL_PARSER FUNCTION
 //___________________________________________________________________________________________________________________________________________

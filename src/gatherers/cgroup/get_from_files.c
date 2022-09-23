@@ -34,6 +34,8 @@ void get_mem_max_usage(cgroup_data_t *cgroup_data, job_id_info_t *job_info, deme
     char res[50], cgroup_path[130];
     FILE *file = NULL;
 
+    memset(cgroup_path, 0, 130);
+    memset(res, 0, 50);
     if (job_info->step_id < 4294967292)
         sprintf(cgroup_path, "/sys/fs/cgroup/memory/slurm/uid_%u/job_%u/step_%u/memory.max_usage_in_bytes", job_info->uid, job_info->job_id, job_info->step_id);
     else
@@ -53,6 +55,7 @@ void get_oom_status(cgroup_data_t *cgroup_data, job_id_info_t *job_info, demeter
     size_t read_size = 30;
     FILE *file = NULL;
 
+    memset(cgroup_path, 0, 130);
     if (job_info->step_id < 4294967292)
         sprintf(cgroup_path, "/sys/fs/cgroup/memory/slurm/uid_%u/job_%u/step_%u/memory.oom_control", job_info->uid, job_info->job_id, job_info->step_id);
     else
@@ -77,6 +80,7 @@ void get_cpuset(cgroup_data_t *cgroup_data, job_id_info_t *job_info, demeter_con
     size_t read_size = 30;
     FILE *file = NULL;
 
+    memset(cgroup_path, 0, 130);
     sprintf(cgroup_path, "/sys/fs/cgroup/cpuset/slurm/uid_%u/job_%u/cpuset.cpu_exclusive", job_info->uid, job_info->job_id);
     file = fopen(cgroup_path, "r");
     if (!is_file_opened(file, conf))

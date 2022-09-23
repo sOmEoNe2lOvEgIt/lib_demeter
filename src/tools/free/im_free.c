@@ -31,19 +31,36 @@ void free_conf(demeter_conf_t *conf)
     if (conf->log_file_path != NULL)
         free(conf->log_file_path);
     free(conf);
-    conf = NULL;
 }
 
 void free_cgroup(cgroup_data_t *data)
 {
     if (data == NULL)
         return;
-    if (data->cpuset_cpus != NULL)
+    if (!is_log_empty(data->cpuset_cpus))
         free(data->cpuset_cpus);
-    if (data->cpuset_effective_cpus != NULL)
+    if (!is_log_empty(data->cpuset_effective_cpus))
         free(data->cpuset_effective_cpus);
-    free(data);
-    data = NULL;
+    if (data != NULL)
+        free(data);
+}
+
+void free_cgroup_list(linked_list_t *cgroup_list)
+{
+    cgroup_data_t *curr_cgroup = NULL;
+    linked_list_t *next_list = NULL;
+
+    if (cgroup_list == NULL || cgroup_list->data == NULL)
+        return;
+    while (cgroup_list != NULL) {
+        next_list = cgroup_list->next;
+        if (cgroup_list->data != NULL) {
+            curr_cgroup = (cgroup_data_t *)cgroup_list->data;
+            free_cgroup(curr_cgroup);
+        }
+        free(cgroup_list);
+        cgroup_list = next_list;
+    }
 }
 
 void free_job_id_info(job_id_info_t *job_info)
@@ -51,7 +68,6 @@ void free_job_id_info(job_id_info_t *job_info)
     if (job_info == NULL)
         return;
     free(job_info);
-    job_info = NULL;
 }
 
 // LOG
@@ -63,13 +79,14 @@ void free_parsed_log(parsed_log_t *log)
         return;
     if (!is_log_empty(log->unparsed_log))
         free(log->unparsed_log);
-    if (log->log_proc_name != NULL)
+    if (!is_log_empty(log->log_proc_name))
         free(log->log_proc_name);
-    if (log->log_source_path != NULL)
+    if (!is_log_empty(log->log_source_path))
         free(log->log_source_path);
-    if (log->log_time_str != NULL)
+    if (!is_log_empty(log->log_time_str))
         free(log->log_time_str);
-    free(log);
+    if (log != NULL)
+        free(log);
 }
 
 void free_log_list(linked_list_t *log_list)
@@ -81,7 +98,7 @@ void free_log_list(linked_list_t *log_list)
         return;
     while (log_list != NULL) {
         next_list = log_list->next;
-        if ((parsed_log_t *)log_list->data != NULL) {
+        if (log_list->data != NULL) {
             curr_log = (parsed_log_t *)log_list->data;
             free_parsed_log(curr_log);
         }
@@ -104,13 +121,13 @@ void free_parsed_sel(parsed_sel_t *parsed_sel)
 {
     if (parsed_sel == NULL)
         return;
-    if (parsed_sel->unparsed_sel != NULL)
+    if (!is_log_empty(parsed_sel->unparsed_sel))
         free(parsed_sel->unparsed_sel);
-    if (parsed_sel->sel_time_str != NULL)
+    if (!is_log_empty(parsed_sel->sel_time_str))
         free(parsed_sel->sel_time_str);
-    if (parsed_sel->sel_msg != NULL)
+    if (!is_log_empty(parsed_sel->sel_msg))
         free(parsed_sel->sel_msg);
-    if (parsed_sel->sel_msg_type != NULL)
+    if (!is_log_empty(parsed_sel->sel_msg_type))
         free(parsed_sel->sel_msg_type);
     free(parsed_sel);
 }
@@ -124,7 +141,7 @@ void free_sel_list(linked_list_t *sel_list)
         return;
     while (sel_list != NULL) {
         next_list = sel_list->next;
-        if ((parsed_sel_t *)sel_list->data != NULL) {
+        if (sel_list->data != NULL) {
             curr_sel = (parsed_sel_t *)sel_list->data;
             free_parsed_sel(curr_sel);
         }

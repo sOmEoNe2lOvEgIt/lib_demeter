@@ -26,23 +26,8 @@ static bool handle_log_time(parsed_log_t *curr_log, demeter_conf_t *demeter_conf
     return true;
 }
 
-static void caught_oom_kill(parsed_log_t *curr_log, cgroup_data_t *cgroup_data, demeter_conf_t *demeter_conf)
-
-{
-    int temp_log_ptr = 0;
-
-    if (curr_log == NULL || cgroup_data == NULL || curr_log->unparsed_log == NULL)
-        return;
-    if (strstr(curr_log->unparsed_log, "oom-kill") != NULL) {
-        cgroup_data->under_oom = 1;
-        temp_log_ptr += get_len_to_char(&curr_log->unparsed_log[temp_log_ptr], 'd') + 2;
-        temp_log_ptr += 2;
-        cgroup_data->oom_kill = atoi(&curr_log->unparsed_log[temp_log_ptr]);
-    }
-}
-
 linked_list_t *gather_slurm_logs
-(demeter_conf_t *demeter_conf, job_id_info_t *job_info, cgroup_data_t *cgroup_data, linked_list_t *log_list)
+(demeter_conf_t *demeter_conf, job_id_info_t *job_info, linked_list_t *log_list)
 {
     FILE *log_file = NULL;
     parsed_log_t *curr_log = NULL;
@@ -54,17 +39,20 @@ linked_list_t *gather_slurm_logs
         write_log_to_file(demeter_conf, demeter_conf->slurm_log_path, DEBUG, 99);
         return (NULL);
     }
-    log_list = add_to_list(log_list, init_parsed_log());
+    if (log_list == NULL)
+        log_list = add_to_list(NULL, init_parsed_log());
+    else
+        log_list = add_to_list(log_list, init_parsed_log());
     while (getline(&buffer, &len, log_file) != -1) {
         curr_log = (parsed_log_t *)log_list->data;
         curr_log->unparsed_log = strdup(buffer);
+        curr_log->unparsed_log[strlen(buffer)] = '\0';
         curr_log->log_source_path = strdup("slurm_log_path");
         if (!handle_log_level(curr_log, demeter_conf))
             continue;
         if (!handle_log_time(curr_log, demeter_conf, job_info->start_time))
             continue;
         curr_log->log_proc_name = strdup("slurm");
-        caught_oom_kill(curr_log, cgroup_data, demeter_conf);
         log_list = add_to_list(log_list, init_parsed_log());
     }
     fclose(log_file);

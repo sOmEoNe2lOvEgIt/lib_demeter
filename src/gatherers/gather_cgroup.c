@@ -8,7 +8,7 @@
 #include "src/slurmd/slurmd/slurmd.h"
 #include "demeter.h"
 
-static cgroup_data_t *alloc_cgroup_struct(void)
+cgroup_data_t *alloc_cgroup_struct(void)
 {
     cgroup_data_t *cgroup_data = malloc(sizeof(cgroup_data_t));
 
@@ -20,6 +20,7 @@ static cgroup_data_t *alloc_cgroup_struct(void)
     cgroup_data->oom_kill = 0;
     cgroup_data->cpuset_cpus = NULL;
     cgroup_data->cpuset_effective_cpus = NULL;
+    cgroup_data->step_id = 4294967200;
     return (cgroup_data);
 }
 

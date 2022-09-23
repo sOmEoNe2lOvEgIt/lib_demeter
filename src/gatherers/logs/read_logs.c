@@ -11,6 +11,7 @@ char *read_sys_logs(void)
 {
     static char log_buffer[16384];
 
+    memset(log_buffer, 0, 16384);
     if (klogctl(3, log_buffer, 16384) < 0)
         return (NULL);
     log_buffer[16384] = '\0';

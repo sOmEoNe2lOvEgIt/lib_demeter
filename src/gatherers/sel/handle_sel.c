@@ -46,6 +46,7 @@ int get_sel_time(parsed_sel_t *curr_sel, time_t start_time)
     struct tm *sel_time = malloc(sizeof(struct tm));
     char time_str[80];
 
+    memset(time_str, 0, 80);
     i += get_len_to_char(&curr_sel->unparsed_sel[i], '|') + 2;
     if (curr_sel->unparsed_sel[i] == '\0')
         return (1);

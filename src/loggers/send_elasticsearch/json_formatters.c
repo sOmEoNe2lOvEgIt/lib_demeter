@@ -43,14 +43,37 @@ char *format_logs(linked_list_t *gathered_logs, linked_list_t *gathered_sel)
     return (json_log);
 }
 
-char *format_cgroup(cgroup_data_t *cgroup)
+static char *format_cgroup_single(cgroup_data_t *cgroup)
 {
     char tmp[200];
 
+    if (cgroup == NULL)
+        return (NULL);
     memset(tmp, 0, 200);
-    sprintf(tmp, "\"cgroup\":{\"cpuset_cpus\":\"%s\", \"cpuset_effective_cpus\":\"%s\", \"mem_max_usage_bytes\":\"%u\", \"oom_kill\":\"%u\", \"oom_kill_disable\":\"%u\", \"under_oom\":\"%u\"}",
-    cgroup->cpuset_cpus, cgroup->cpuset_effective_cpus, cgroup->mem_max_usage_bytes, cgroup->oom_kill, cgroup->oom_kill_disable, cgroup->under_oom);
+    if (cgroup->step_id < 4294967200)
+        sprintf(tmp, "\"cgroup_%u\":{\"cpuset_cpus\":\"%s\", \"cpuset_effective_cpus\":\"%s\", \"mem_max_usage_bytes\":%u, \"oom_kill\":%u, \"oom_kill_disable\":%u, \"under_oom\":%u}",
+        cgroup->step_id, cgroup->cpuset_cpus, cgroup->cpuset_effective_cpus, cgroup->mem_max_usage_bytes, cgroup->oom_kill, cgroup->oom_kill_disable, cgroup->under_oom);
+    else
+        sprintf(tmp, "\"cgroup_no_step\":{\"cpuset_cpus\":\"%s\", \"cpuset_effective_cpus\":\"%s\", \"mem_max_usage_bytes\":%u, \"oom_kill\":%u, \"oom_kill_disable\":%u, \"under_oom\":%u}",
+        cgroup->cpuset_cpus, cgroup->cpuset_effective_cpus, cgroup->mem_max_usage_bytes, cgroup->oom_kill, cgroup->oom_kill_disable, cgroup->under_oom);
     return (strdup(tmp));
+}
+
+char *format_cgroup(linked_list_t *cgroup)
+{
+    linked_list_t *tmp = cgroup;
+    char *json_cgroup = NULL;
+
+    if (tmp == NULL)
+        return (NULL);
+    json_cgroup = strdup("\"cgroup\":[");
+    for (;tmp != NULL; tmp = tmp->next) {
+        json_cgroup = append_str(json_cgroup, format_cgroup_single((cgroup_data_t *)tmp->data));
+        if (tmp->next != NULL)
+            json_cgroup = append_str(json_cgroup, ", ");
+    }
+    json_cgroup = append_str(json_cgroup, "]");
+    return (json_cgroup);
 }
 
 char *format_job_info(job_id_info_t *job_info)
@@ -59,7 +82,7 @@ char *format_job_info(job_id_info_t *job_info)
 
     memset(tmp, 0, 200);
     gethostname(hostname, 1024);
-    sprintf(tmp, "\"job_id\":%u, \"user_id\":%u, \"hostname\":\"%s\", ", job_info->job_id, job_info->uid, hostname);
+    sprintf(tmp, "\"job_id\": \"%u\", \"user_id\":%u, \"hostname\":\"%s\", ", job_info->job_id, job_info->uid, hostname);
     return (strdup(tmp));
 }
 
@@ -73,4 +96,17 @@ char *format_log_counter(log_counter_t *log_counter)
     sprintf(tmp, "\"log_counter\":{\"errors\" : %u, \"warnings\" : %u, \"infos\" : %u, \"debugs\" : %u, \"fatals\" : %u}",
     log_counter->errors, log_counter->warnings, log_counter->infos, log_counter->debugs, log_counter->fatals);
     return (strdup(tmp));   
+}
+
+// to be completed
+char *format_perf_count(perf_data_t *perf_data)
+{
+    char tmp[631];
+
+    if (perf_data == NULL)
+        return (strdup("\"perf_data\":{}"));
+    memset(tmp, 0, 631);
+    sprintf (tmp, "\"perf_count\":{\"counterselect\" : %u, \"excbufoverrunerrors\" : %u, \"linkdowned\" : %u, \"linkintegrityerrors\" : %u, \"linkrecovers\" : %u, \"portbufferoverrunerrors\" : %u, \"portdlidmappingerrors\" : %u, \"portlocalphysicalerrors\" : %u, \"portloopingerrors\" : %u, \"portmalformedpkterrors\" : %u, \"portselect\" : %u, \"portvlmappingerrors\" : %u, \"qp1dropped\" : %u, \"rcvconstrainterrors\" : %u, \"rcvdata\" : %u, \"rcverrors\" : %u, \"rcvpkts\" : %u, \"rcvremotephyerrors\" : %u, \"rcvswrelayerrors\" : %u}",
+    perf_data->counterselect, perf_data->excbufoverrunerrors, perf_data->linkdowned, perf_data->linkintegrityerrors, perf_data->linkrecovers, perf_data->portbufferoverrunerrors, perf_data->portdlidmappingerrors, perf_data->portlocalphysicalerrors, perf_data->portloopingerrors, perf_data->portmalformedpkterrors, perf_data->portselect, perf_data->portvlmappingerrors, perf_data->qp1dropped, perf_data->rcvconstrainterrors, perf_data->rcvdata, perf_data->rcverrors, perf_data->rcvpkts, perf_data->rcvremotephyerrors, perf_data->rcvswrelayerrors);
+    return (strdup(tmp));
 }
