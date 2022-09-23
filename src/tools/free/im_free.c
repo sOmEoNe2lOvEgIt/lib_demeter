@@ -37,9 +37,9 @@ void free_cgroup(cgroup_data_t *data)
 {
     if (data == NULL)
         return;
-    if (!is_log_empty(data->cpuset_cpus))
+    if (data->cpuset_cpus != NULL)
         free(data->cpuset_cpus);
-    if (!is_log_empty(data->cpuset_effective_cpus))
+    if (data->cpuset_effective_cpus != NULL)
         free(data->cpuset_effective_cpus);
     if (data != NULL)
         free(data);
@@ -77,13 +77,13 @@ void free_parsed_log(parsed_log_t *log)
 {
     if (log == NULL)
         return;
-    if (!is_log_empty(log->unparsed_log))
+    if (log->unparsed_log != NULL)
         free(log->unparsed_log);
-    if (!is_log_empty(log->log_proc_name))
+    if (log->log_proc_name != NULL)
         free(log->log_proc_name);
-    if (!is_log_empty(log->log_source_path))
+    if (log->log_source_path != NULL)
         free(log->log_source_path);
-    if (!is_log_empty(log->log_time_str))
+    if (log->log_time_str != NULL)
         free(log->log_time_str);
     if (log != NULL)
         free(log);
@@ -121,13 +121,13 @@ void free_parsed_sel(parsed_sel_t *parsed_sel)
 {
     if (parsed_sel == NULL)
         return;
-    if (!is_log_empty(parsed_sel->unparsed_sel))
+    if (parsed_sel->unparsed_sel != NULL)
         free(parsed_sel->unparsed_sel);
-    if (!is_log_empty(parsed_sel->sel_time_str))
+    if (parsed_sel->sel_time_str != NULL)
         free(parsed_sel->sel_time_str);
-    if (!is_log_empty(parsed_sel->sel_msg))
+    if (parsed_sel->sel_msg != NULL)
         free(parsed_sel->sel_msg);
-    if (!is_log_empty(parsed_sel->sel_msg_type))
+    if (parsed_sel->sel_msg_type != NULL)
         free(parsed_sel->sel_msg_type);
     free(parsed_sel);
 }

@@ -26,11 +26,11 @@ bool handle_log_level(parsed_log_t *curr_log, demeter_conf_t *demeter_conf)
     if (strstr(curr_log->unparsed_log, "DEBUG") != NULL)
         level_of_curr_log = DEBUG;
     if (level_of_curr_log < demeter_conf->slurm_log_level) {
-        if (!is_log_empty(curr_log->unparsed_log)) {
+        if (curr_log->unparsed_log != NULL) {
             free(curr_log->unparsed_log);
             curr_log->unparsed_log = NULL;
         }
-        if (!is_log_empty(curr_log->log_source_path)) {
+        if (curr_log->log_source_path != NULL) {
             free(curr_log->log_source_path);
             curr_log->log_source_path = NULL;
         }
@@ -57,11 +57,11 @@ bool handle_sys_log_level(parsed_log_t *curr_log, demeter_conf_t *demeter_conf)
     if (strstr(curr_log->unparsed_log, "DEBUG") != NULL)
         level_of_curr_log = DEBUG;
     if (level_of_curr_log < demeter_conf->sys_log_level) {
-        if (!is_log_empty(curr_log->unparsed_log)) {
+        if (curr_log->unparsed_log != NULL) {
             free(curr_log->unparsed_log);
             curr_log->unparsed_log = NULL;
         }
-        if (!is_log_empty(curr_log->log_source_path)) {
+        if (curr_log->log_source_path != NULL) {
             free(curr_log->log_source_path);
             curr_log->log_source_path = NULL;
         }

@@ -30,6 +30,8 @@ log_counter_t *count_log(linked_list_t *log_list)
     parsed_log_t *parsed_log = NULL;
     linked_list_t *tmp = log_list;
     
+    if (log_counter == NULL)
+        return (NULL);
     memset(log_counter, 0, sizeof(log_counter_t));
     while (tmp != NULL) {
         parsed_log = (parsed_log_t *)tmp->data;

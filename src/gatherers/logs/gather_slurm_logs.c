@@ -39,13 +39,17 @@ linked_list_t *gather_slurm_logs
         write_log_to_file(demeter_conf, demeter_conf->slurm_log_path, DEBUG, 99);
         return (NULL);
     }
-    if (log_list == NULL)
-        log_list = add_to_list(NULL, init_parsed_log());
-    else
-        log_list = add_to_list(log_list, init_parsed_log());
+    log_list = add_to_list(log_list, init_parsed_log());
     while (getline(&buffer, &len, log_file) != -1) {
         curr_log = (parsed_log_t *)log_list->data;
         curr_log->unparsed_log = strdup(buffer);
+        if (curr_log->unparsed_log == NULL)
+            continue;
+        if (is_log_empty(curr_log->unparsed_log)) {
+            free(curr_log->unparsed_log);
+            curr_log->unparsed_log = NULL;
+            continue;
+        }
         curr_log->unparsed_log[strlen(buffer)] = '\0';
         curr_log->log_source_path = strdup("slurm_log_path");
         if (!handle_log_level(curr_log, demeter_conf))
@@ -56,6 +60,7 @@ linked_list_t *gather_slurm_logs
         log_list = add_to_list(log_list, init_parsed_log());
     }
     fclose(log_file);
-    free(buffer);
+    if (buffer != NULL)
+        free(buffer);
     return (log_list);
 }

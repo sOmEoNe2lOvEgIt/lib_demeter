@@ -9,11 +9,11 @@
 
 char *read_sys_logs(void)
 {
-    static char log_buffer[16384];
+    static char log_buffer[16385];
 
-    memset(log_buffer, 0, 16384);
-    if (klogctl(3, log_buffer, 16384) < 0)
+    memset(log_buffer, 0, 16385);
+    if (klogctl(3, log_buffer, 16384) <= 0)
         return (NULL);
-    log_buffer[16384] = '\0';
+    log_buffer[16385] = '\0';
     return (strdup(log_buffer));
 }
