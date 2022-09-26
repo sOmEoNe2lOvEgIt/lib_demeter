@@ -30,6 +30,8 @@ void free_conf(demeter_conf_t *conf)
         free(conf->slurm_log_path);
     if (conf->log_file_path != NULL)
         free(conf->log_file_path);
+    if (conf->demeter_comp_loc != NULL)
+        free(conf->demeter_comp_loc);
     free(conf);
 }
 

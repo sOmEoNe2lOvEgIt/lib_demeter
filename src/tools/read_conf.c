@@ -48,6 +48,7 @@ static demeter_conf_t *init_conf(void)
     conf->log_level = INFO;
     conf->log_file_path = strdup("/var/log/demeter.log");
     conf->slurm_log_path = strdup(slurm_log_path);
+    conf->demeter_comp_loc = strdup("http://elastic:9200/demeter/_doc");
     free(hostname);
     return (conf);
 }
@@ -84,11 +85,12 @@ demeter_conf_t *read_conf(void)
     s_p_options_t options[] = {{"Verbose", S_P_UINT32},
     {"LogStyle", S_P_STRING}, {"LogLevel", S_P_STRING},
     {"SlurmLogLevel", S_P_STRING}, {"SysLogLevel", S_P_STRING},
-    {"LogFilePath", S_P_STRING}, {"SlurmLogPath", S_P_STRING}, {NULL}};
+    {"LogFilePath", S_P_STRING}, {"SlurmLogPath", S_P_STRING}, 
+    {"DemeterCompLoc", S_P_STRING}, {NULL}};
     demeter_conf_t *conf = init_conf();
     char *log_style = NULL, *log_level = NULL, *slurm_log_level = NULL,
     *sys_log_level = NULL, *log_file_path = NULL, *slurm_log_path = NULL,
-    teststr[1000], conf_path[] = "/etc/slurm/demeter.conf";
+    *demeter_comp_loc = NULL, teststr[1000], conf_path[] = "/etc/slurm/demeter.conf";
     s_p_hashtbl_t *tbl = NULL;
 
     memset(teststr, 0, 1000);
@@ -104,6 +106,7 @@ demeter_conf_t *read_conf(void)
     s_p_get_string(&sys_log_level, "SysLogLevel", tbl);
     s_p_get_string(&log_file_path, "LogFilePath", tbl);
     s_p_get_string(&slurm_log_path, "SlurmLogPath", tbl);
+    s_p_get_string(&demeter_comp_loc, "DemeterCompLoc", tbl);
     if (log_style != NULL) {
         if (strncmp(log_style, "FANCY", 5) == 0)
             conf->log_style = FANCY;
@@ -134,6 +137,11 @@ demeter_conf_t *read_conf(void)
         if (is_conf_path_accesible(slurm_log_path))
             conf->slurm_log_path = strdup(slurm_log_path);
         xfree(slurm_log_path);
+    }
+    if (demeter_comp_loc != NULL) {
+        if (demeter_comp_loc != NULL)
+            conf->demeter_comp_loc = strdup(demeter_comp_loc);
+        xfree(demeter_comp_loc);
     }
     s_p_hashtbl_destroy(tbl);
     sprintf(teststr, "%u,%u,%s,%s", conf->verbose_lv, conf->log_style, conf->log_file_path, conf->slurm_log_path);

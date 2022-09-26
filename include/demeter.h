@@ -39,6 +39,7 @@ typedef struct demeter_conf_s { // Demeter configuration.
     char *slurm_log_path; // Path to file in which demeter will parse log from. (to be implemented)
     dem_log_level_t slurm_log_level; // Log level for slurm log parsing.
     dem_log_level_t sys_log_level; // Log level for system log parsing.
+    char *demeter_comp_loc;
 } demeter_conf_t;
 
 typedef struct cgroup_data_s { // Cgroup gathered data for each job step || job.

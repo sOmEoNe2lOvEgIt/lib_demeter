@@ -7,14 +7,14 @@
 #define _GNU_SOURCE
 #include <stdio.h>
 #include <curl/curl.h>
-#include "demeter.h"
 #include "src/common/macros.h"
+#include "demeter.h"
 
 static bool send_log(demeter_conf_t *demeter_conf, char *json_log, job_id_info_t *job_info)
 {
     CURL *curl;
     CURLcode res;
-    char *base_url = "http://elastic:9200/slurm_demeter/_doc"; //url has to be pulled from config file
+    char *base_url = demeter_conf->demeter_comp_loc;
     struct curl_slist *list = NULL;
 
     if (json_log == NULL)
