@@ -111,6 +111,7 @@ demeter_conf_t *read_conf(void)
             conf->log_style = SIMPLE;
         if (strncmp(log_style, "SYSTEM", 6) == 0)
             conf->log_style = SYSTEM;
+        xfree(log_style);
     }
     if (log_level != NULL) {
         conf->log_level = get_slurm_log_level(log_level);

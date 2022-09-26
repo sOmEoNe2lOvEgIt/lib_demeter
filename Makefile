@@ -43,7 +43,7 @@ SRC_FILES = src/gatherers/gather_cgroup.c						\
 				src/tools/get/get_len_to_char.c					\
 
 CC      = gcc
-CFLAGS  ?= -Wall -fPIC -g -Iinclude -I$(SLURM_INC_DIR) -I$(SLURM_BUILD_DIR) -I/usr/include/infiniband/
+CFLAGS  ?= -Wall -fPIC -g3 -gstrict-dwarf -Iinclude -I$(SLURM_INC_DIR) -I$(SLURM_BUILD_DIR) -I/usr/include/infiniband/
 LDFLAGS ?= -shared -lcurl -L. -L$(LIBIBMAD_DIR) -libmad -libumad
 
 all: $(LIB_FILE)
