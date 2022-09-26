@@ -97,6 +97,7 @@ typedef struct log_counter_s {
 
 char *get_time_str(void); // Returns time in readable format.
 int get_len_to_char(char *str, char c); // Returns distance to the next char c in  string str.
+char *get_job_transfer_path(uint job_id);
 bool is_log_empty(char *log); // Returns true if log is empty.
 demeter_conf_t *read_conf(void); // Reads demeter configuration.
 job_id_info_t *get_job_info(job_env_t* job); // Returns job info.
@@ -148,7 +149,7 @@ char *format_perf_count(perf_data_t *perf_data);
 //___________________________________________________________________________________________________________________________________________
 
 cgroup_data_t *gather_cgroup(job_id_info_t *job_info, demeter_conf_t *conf); // Gathers cgroup data.
-linked_list_t *unlog_cgroup(demeter_conf_t *demeter_conf);
+linked_list_t *unlog_cgroup(demeter_conf_t *demeter_conf, uint job_id);
 
 // CGROUP TOOLS
 //___________________________________________________________________________________________________________________________________________

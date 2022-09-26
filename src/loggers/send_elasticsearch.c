@@ -14,7 +14,7 @@ static bool send_log(demeter_conf_t *demeter_conf, char *json_log, job_id_info_t
 {
     CURL *curl;
     CURLcode res;
-    char *base_url = "http://elastic:9200/slurm_demeter/_doc"; //url has te be pulled from config file
+    char *base_url = "http://elastic:9200/slurm_demeter/_doc"; //url has to be pulled from config file
     struct curl_slist *list = NULL;
 
     if (json_log == NULL)
@@ -72,7 +72,7 @@ linked_list_t *gathered_logs, log_counter_t *log_counter, linked_list_t *gathere
     json_log = append_str(json_log, "}}");
     if (send_log(demeter_conf, json_log, job_info) == false)
         write_log_to_file(demeter_conf, "Failed to send log to elastic", DEBUG, 2);
-    // write_log_to_file(demeter_conf, json_log, INFO, 0);
+    write_log_to_file(demeter_conf, json_log, INFO, 0);
     if (json_log != NULL)
         free(json_log);
     return (0);

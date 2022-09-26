@@ -8,10 +8,10 @@
 #include <stdio.h>
 #include "demeter.h"
 
-linked_list_t *unlog_cgroup(demeter_conf_t *demeter_conf)
+linked_list_t *unlog_cgroup(demeter_conf_t *demeter_conf, uint job_id)
 {
     FILE *file = NULL;
-    char *line = NULL;
+    char *line = NULL, *cgroup_path = NULL;
     size_t len = 1000;
     signed long long int step_id = 0;
     linked_list_t *list = NULL;
@@ -19,16 +19,22 @@ linked_list_t *unlog_cgroup(demeter_conf_t *demeter_conf)
 
     if (demeter_conf == NULL)
         return NULL;
-    file = fopen(demeter_conf->log_file_path, "r");
+    cgroup_path = get_job_transfer_path(job_id);
+    if (cgroup_path == NULL)
+        return NULL;
+    file = fopen(cgroup_path, "r");
     if (file == NULL)
         return NULL;
     while (getline(&line, &len, file) != -1) {
         if (strstr(line, "###") != NULL) {
             cgroup_data = alloc_cgroup_struct();
-            if (cgroup_data == NULL)
+            if (cgroup_data == NULL) {
+                fclose(file);
+                free(line);
                 return NULL;
+            }
             line += get_len_to_char(line, '#');
-            sscanf(line, "###%lli,%u,%d,%d,%d,#%[^#]#,#%[^#]#,###",
+            sscanf(line, "###%lli,%u,%d,%d,%d,#%[^#]#,#%[^#]####",
             &step_id, &cgroup_data->mem_max_usage_bytes, &cgroup_data->oom_kill_disable, &cgroup_data->under_oom, &cgroup_data->oom_kill, cgroup_data->cpuset_cpus, cgroup_data->cpuset_effective_cpus);
             if (step_id < 0)
                 cgroup_data->step_id = 4294967200;
@@ -38,6 +44,8 @@ linked_list_t *unlog_cgroup(demeter_conf_t *demeter_conf)
         }
     }
     fclose(file);
+    remove(cgroup_path);
+    free (cgroup_path);
     if (line != NULL)
         free (line);
     return (list);

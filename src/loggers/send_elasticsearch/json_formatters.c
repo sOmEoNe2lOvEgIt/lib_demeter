@@ -51,10 +51,10 @@ static char *format_cgroup_single(cgroup_data_t *cgroup)
         return (NULL);
     memset(tmp, 0, 200);
     if (cgroup->step_id < 4294967200)
-        sprintf(tmp, "\"cgroup_%u\":{\"cpuset_cpus\":\"%s\", \"cpuset_effective_cpus\":\"%s\", \"mem_max_usage_bytes\":%u, \"oom_kill\":%u, \"oom_kill_disable\":%u, \"under_oom\":%u}",
+        sprintf(tmp, "\"step_%u\":{\"cpuset_cpus\":\"%s\", \"cpuset_effective_cpus\":\"%s\", \"mem_max_usage_bytes\":%u, \"oom_kill\":%u, \"oom_kill_disable\":%u, \"under_oom\":%u}",
         cgroup->step_id, cgroup->cpuset_cpus, cgroup->cpuset_effective_cpus, cgroup->mem_max_usage_bytes, cgroup->oom_kill, cgroup->oom_kill_disable, cgroup->under_oom);
     else
-        sprintf(tmp, "\"cgroup_no_step\":{\"cpuset_cpus\":\"%s\", \"cpuset_effective_cpus\":\"%s\", \"mem_max_usage_bytes\":%u, \"oom_kill\":%u, \"oom_kill_disable\":%u, \"under_oom\":%u}",
+        sprintf(tmp, "\"no_step\":{\"cpuset_cpus\":\"%s\", \"cpuset_effective_cpus\":\"%s\", \"mem_max_usage_bytes\":%u, \"oom_kill\":%u, \"oom_kill_disable\":%u, \"under_oom\":%u}",
         cgroup->cpuset_cpus, cgroup->cpuset_effective_cpus, cgroup->mem_max_usage_bytes, cgroup->oom_kill, cgroup->oom_kill_disable, cgroup->under_oom);
     return (strdup(tmp));
 }
@@ -66,13 +66,13 @@ char *format_cgroup(linked_list_t *cgroup)
 
     if (tmp == NULL)
         return (NULL);
-    json_cgroup = strdup("\"cgroup\":[");
+    json_cgroup = strdup("\"cgroup\":{");
     for (;tmp != NULL; tmp = tmp->next) {
         json_cgroup = append_str(json_cgroup, format_cgroup_single((cgroup_data_t *)tmp->data));
         if (tmp->next != NULL)
             json_cgroup = append_str(json_cgroup, ", ");
     }
-    json_cgroup = append_str(json_cgroup, "]");
+    json_cgroup = append_str(json_cgroup, "}");
     return (json_cgroup);
 }
 
