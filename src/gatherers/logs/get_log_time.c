@@ -79,7 +79,7 @@ int get_slurm_log_time(parsed_log_t *log_to_parse, time_t start_time)
     time_str = strndup(log_to_parse->unparsed_log, len + 1);
     if (slurm_time_to_time(time_str) < start_time) {
         free(time_str);
-        return(1);
+        return(2);
     }
     log_to_parse->log_time_str = time_str;
     return (0);

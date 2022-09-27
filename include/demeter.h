@@ -99,6 +99,7 @@ typedef struct log_counter_s {
 char *get_time_str(void); // Returns time in readable format.
 int get_len_to_char(char *str, char c); // Returns distance to the next char c in  string str.
 char *get_job_transfer_path(uint job_id);
+ssize_t getline_from_end(char **line, size_t *len, FILE *file, long *line_offset); // Returns line from end of file. Offset of Line_nb
 bool is_log_empty(char *log); // Returns true if log is empty.
 demeter_conf_t *read_conf(void); // Reads demeter configuration.
 job_id_info_t *get_job_info(job_env_t* job); // Returns job info.

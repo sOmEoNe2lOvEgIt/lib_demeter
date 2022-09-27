@@ -29,12 +29,13 @@ static bool handle_log_time(job_id_info_t *job_info, parsed_log_t *curr_log, dem
 linked_list_t *gather_kernel_logs
 (demeter_conf_t *demeter_conf, job_id_info_t *job_info, linked_list_t *log_list)
 {
-    static char *log_buffer = NULL;
+    static char *log_buffer = NULL; // to get replaced by a fd whith popen command on log files.
+    // Log files path to be specified in demeter.conf.
     static size_t buffer_len;
     parsed_log_t *curr_log = NULL;
     static int len = 0;
 
-    log_buffer = read_sys_logs();
+    log_buffer = read_sys_logs(); // to get replaced by a fd whith popen command on log files.
     if (log_buffer == NULL)
         return (NULL);
     buffer_len = strlen(log_buffer);
