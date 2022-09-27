@@ -4,9 +4,14 @@ prep_demeter is a slurm plugin made for harvesting data on your cluster's nodes 
 
 Demeter gathers info by reading sys files just after a job ran as well as reading output logs to parse them into more digestible outputs.
 
+This plugin may be used in pair whith "task_demeter" plugin so that you can gather more accurate information if not any.
+
 ## Conf:
-A conf file can be provided to the plugin if placed at /etc/slurm/demeter.conf. 
+A conf file can be provided to the plugin if placed at /etc/slurm/demeter.conf.
+
 This file has to be readable by the slurm user and has to be present on every slurmd as well as the slurm controller.
+
+This is strictly optional but highly recommended as you will probably need to setup some file paths or your elastic database adress and index.
 
 ### This file can contain multiple parameters that you can define:
 
@@ -23,3 +28,5 @@ LogStyle <------ syntax: *"LogStyle=FANCY||SIMPLE||SYSTEM"*. Sets the logging st
 LogFilePath <--- syntax: *"LogFilePath=path/to/an/existing/or/non/existing/file"*. Sets a custom path for the log file that demeter outputs in.
 
 SlurmLogPath <-- syntax: *"LogFilePath=path/to/an/existing/or/non/existing/file"*. Sets a custom path for the slur log file that demeter will parse.
+
+!!!NEW OPTIONS TO BE ADDED!!!
