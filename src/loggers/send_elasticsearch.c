@@ -27,7 +27,7 @@ static bool send_log(demeter_conf_t *demeter_conf, char *json_log, job_id_info_t
             curl_easy_setopt(curl, CURLOPT_PROXY, demeter_conf->demeter_comp_proxy);
         }
         curl_easy_setopt(curl, CURLOPT_POST, 1);
-		curl_easy_setopt(curl, CURLOPT_POSTFIELDS, json_log);
+        curl_easy_setopt(curl, CURLOPT_POSTFIELDS, json_log);
         curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, (long)(sizeof(char) * strlen(json_log)));
         curl_easy_setopt(curl, CURLOPT_HTTPHEADER, list);
         res = curl_easy_perform(curl);
