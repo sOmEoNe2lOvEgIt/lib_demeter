@@ -8,48 +8,19 @@
 #include "demeter.h"
 #include "src/common/slurm_xlator.h"
 
-static char *get_hostname(void)
-{
-    char *hostname = NULL;
-    char *line = NULL;
-    FILE *hostname_file = NULL;
-    size_t hostname_len = 100;
-
-    if ((hostname_file = fopen("/etc/hostname", "r")) == NULL)
-        return (NULL);
-    getline(&line, &hostname_len, hostname_file);
-    fclose(hostname_file);
-    hostname_len = get_len_to_char(line, '\n');
-    line[hostname_len] = '\0';
-    hostname = strdup(line);
-    if (line != NULL)
-        free(line);
-    else
-        return (NULL);
-    return (hostname);
-}
-
 static demeter_conf_t *init_conf(void)
 {
     demeter_conf_t *conf;
-    char *hostname = NULL;
-    char slurm_log_path[80];
 
-    memset(slurm_log_path, 0, 80);
-    if ((hostname = get_hostname()) == NULL)
+    if ((conf = malloc(sizeof(demeter_conf_t))) == NULL)
         return (NULL);
-    if ((conf = malloc(sizeof(demeter_conf_t))) == NULL) {
-        free(hostname);
-        return (NULL);
-    }
-    sprintf(slurm_log_path, "/var/log/slurm/slurm.%s.log", hostname);
     conf->verbose_lv = 0;
     conf->log_style = SIMPLE;
     conf->log_level = INFO;
     conf->log_file_path = strdup("/var/log/demeter.log");
-    conf->slurm_log_path = strdup(slurm_log_path);
+    conf->slurm_log_path = strdup("/var/log/slurm/");
     conf->demeter_comp_loc = strdup("http://elastic:9200/demeter/_doc");
-    free(hostname);
+    conf->demeter_comp_proxy = NULL;
     return (conf);
 }
 
@@ -86,11 +57,12 @@ demeter_conf_t *read_conf(void)
     {"LogStyle", S_P_STRING}, {"LogLevel", S_P_STRING},
     {"SlurmLogLevel", S_P_STRING}, {"SysLogLevel", S_P_STRING},
     {"LogFilePath", S_P_STRING}, {"SlurmLogPath", S_P_STRING}, 
-    {"DemeterCompLoc", S_P_STRING}, {NULL}};
+    {"DemeterCompLoc", S_P_STRING}, {"DemeterCompProxy", S_P_STRING}, {NULL}};
     demeter_conf_t *conf = init_conf();
     char *log_style = NULL, *log_level = NULL, *slurm_log_level = NULL,
     *sys_log_level = NULL, *log_file_path = NULL, *slurm_log_path = NULL,
-    *demeter_comp_loc = NULL, teststr[1000], conf_path[] = "/etc/slurm/demeter.conf";
+    *demeter_comp_loc = NULL, *demeter_comp_proxy = NULL,teststr[1000],
+    conf_path[] = "/etc/slurm/demeter.conf";
     s_p_hashtbl_t *tbl = NULL;
 
     memset(teststr, 0, 1000);
@@ -107,6 +79,7 @@ demeter_conf_t *read_conf(void)
     s_p_get_string(&log_file_path, "LogFilePath", tbl);
     s_p_get_string(&slurm_log_path, "SlurmLogPath", tbl);
     s_p_get_string(&demeter_comp_loc, "DemeterCompLoc", tbl);
+    s_p_get_string(&demeter_comp_proxy, "DemeterCompProxy", tbl);
     if (log_style != NULL) {
         if (strncmp(log_style, "FANCY", 5) == 0)
             conf->log_style = FANCY;
@@ -142,6 +115,11 @@ demeter_conf_t *read_conf(void)
         if (demeter_comp_loc != NULL)
             conf->demeter_comp_loc = strdup(demeter_comp_loc);
         xfree(demeter_comp_loc);
+    }
+    if (demeter_comp_proxy != NULL) {
+        if (demeter_comp_proxy != NULL)
+            conf->demeter_comp_proxy = strdup(demeter_comp_proxy);
+        xfree(demeter_comp_proxy);
     }
     s_p_hashtbl_destroy(tbl);
     sprintf(teststr, "%u,%u,%s,%s", conf->verbose_lv, conf->log_style, conf->log_file_path, conf->slurm_log_path);

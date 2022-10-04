@@ -21,6 +21,7 @@ SRC_FILES = src/gatherers/gather_cgroup.c						\
 				src/gatherers/cgroup/get_from_files.c			\
 				src/gatherers/logs/gather_kernel_logs.c			\
 				src/gatherers/logs/gather_slurm_logs.c			\
+				src/gatherers/logs/slurm_logs_tools.c			\
 				src/gatherers/logs/read_logs.c					\
 				src/gatherers/logs/get_log_time.c				\
 				src/gatherers/sel/handle_sel.c					\
@@ -43,6 +44,8 @@ SRC_FILES = src/gatherers/gather_cgroup.c						\
 				src/tools/get/get_time_str.c					\
 				src/tools/get/get_len_to_char.c					\
 				src/tools/get/get_job_transfer_path.c			\
+				src/tools/get/get_hostname.c					\
+				src/tools/get/zgetline.c						\
 
 CC      = gcc
 CFLAGS  ?= -Wall -fPIC -g3 -gstrict-dwarf -Iinclude -I$(SLURM_INC_DIR) -I$(SLURM_BUILD_DIR) -I/usr/include/infiniband/
