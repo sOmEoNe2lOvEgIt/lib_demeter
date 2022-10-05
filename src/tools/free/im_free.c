@@ -32,6 +32,10 @@ void free_conf(demeter_conf_t *conf)
         free(conf->log_file_path);
     if (conf->demeter_comp_loc != NULL)
         free(conf->demeter_comp_loc);
+    if (conf->demeter_comp_proxy != NULL)
+        free(conf->demeter_comp_proxy);
+    if (conf->sys_log_path != NULL)
+        free(conf->sys_log_path);
     free(conf);
 }
 

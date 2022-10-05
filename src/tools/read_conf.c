@@ -19,6 +19,7 @@ static demeter_conf_t *init_conf(void)
     conf->log_level = INFO;
     conf->log_file_path = strdup("/var/log/demeter.log");
     conf->slurm_log_path = strdup("/var/log/slurm/");
+    conf->sys_log_path = strdup("/var/log/");
     conf->demeter_comp_loc = strdup("http://elastic:9200/demeter/_doc");
     conf->demeter_comp_proxy = NULL;
     return (conf);
@@ -80,12 +81,13 @@ demeter_conf_t *read_conf(void)
     {"LogStyle", S_P_STRING}, {"LogLevel", S_P_STRING},
     {"SlurmLogLevel", S_P_STRING}, {"SysLogLevel", S_P_STRING},
     {"LogFilePath", S_P_STRING}, {"SlurmLogPath", S_P_STRING}, 
-    {"DemeterCompLoc", S_P_STRING}, {"DemeterCompProxy", S_P_STRING}, {NULL}};
+    {"DemeterCompLoc", S_P_STRING}, {"DemeterCompProxy", S_P_STRING},
+    {"SysLogPath", S_P_STRING}, {NULL}};
     demeter_conf_t *conf = init_conf();
     char *log_style = NULL, *log_level = NULL, *slurm_log_level = NULL,
     *sys_log_level = NULL, *log_file_path = NULL, *slurm_log_path = NULL,
-    *demeter_comp_loc = NULL, *demeter_comp_proxy = NULL,teststr[1000],
-    conf_path[] = "/etc/slurm/demeter.conf";
+    *demeter_comp_loc = NULL, *demeter_comp_proxy = NULL, *sys_log_path = NULL,
+    teststr[1000], conf_path[] = "/etc/slurm/demeter.conf";
     s_p_hashtbl_t *tbl = NULL;
 
     memset(teststr, 0, 1000);
@@ -101,6 +103,7 @@ demeter_conf_t *read_conf(void)
     s_p_get_string(&sys_log_level, "SysLogLevel", tbl);
     s_p_get_string(&log_file_path, "LogFilePath", tbl);
     s_p_get_string(&slurm_log_path, "SlurmLogPath", tbl);
+    s_p_get_string(&sys_log_path, "SysLogPath", tbl);
     s_p_get_string(&demeter_comp_loc, "DemeterCompLoc", tbl);
     s_p_get_string(&demeter_comp_proxy, "DemeterCompProxy", tbl);
     if (log_style != NULL) {
@@ -134,6 +137,11 @@ demeter_conf_t *read_conf(void)
             conf->slurm_log_path = strdup(slurm_log_path);
         xfree(slurm_log_path);
     }
+    if (sys_log_path != NULL) {
+        if (is_conf_path_accesible(sys_log_path))
+            conf->sys_log_path = strdup(sys_log_path);
+        xfree(sys_log_path);
+    }
     if (demeter_comp_loc != NULL) {
         if (demeter_comp_loc != NULL)
             conf->demeter_comp_loc = strdup(demeter_comp_loc);
@@ -145,7 +153,5 @@ demeter_conf_t *read_conf(void)
         xfree(demeter_comp_proxy);
     }
     s_p_hashtbl_destroy(tbl);
-    sprintf(teststr, "%u,%u,%s,%s", conf->verbose_lv, conf->log_style, conf->log_file_path, conf->slurm_log_path);
-    write_log_to_file(conf, teststr, DEBUG, 99);
     return (conf);
 }

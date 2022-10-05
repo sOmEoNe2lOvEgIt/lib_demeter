@@ -57,7 +57,9 @@ typedef struct demeter_conf_s {
     char *log_file_path;
     // Path to demeter log file.
     char *slurm_log_path;
-    // Path to file in which demeter will parse log from. (to be implemented)
+    // Path to file in which demeter will parse log from.
+    char *sys_log_path;
+    // Path to file in which demeter will parse log from.
     dem_log_level_t slurm_log_level;
     // Log level for slurm log parsing.
     kernel_log_level_t sys_log_level;
