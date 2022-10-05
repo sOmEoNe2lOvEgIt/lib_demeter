@@ -41,6 +41,29 @@ static dem_log_level_t get_slurm_log_level(char *str_level)
     return (INFO);
 }
 
+static kernel_log_level_t get_sys_log_level(char *str_level)
+{
+    if (str_level == NULL)
+        return (KERN_INFO);
+    if (strncmp(str_level, "KERN_EMERG", 10) == 0)
+        return (KERN_EMERG);
+    if (strncmp(str_level, "KERN_ALERT", 10) == 0)
+        return (KERN_ALERT);
+    if (strncmp(str_level, "KERN_CRIT", 9) == 0)
+        return (KERN_CRIT);
+    if (strncmp(str_level, "KERN_ERR", 8) == 0)
+        return (KERN_ERR);
+    if (strncmp(str_level, "KERN_WARNING", 12) == 0)
+        return (KERN_WARNING);
+    if (strncmp(str_level, "KERN_NOTICE", 11) == 0)
+        return (KERN_NOTICE);
+    if (strncmp(str_level, "KERN_INFO", 9) == 0)
+        return (KERN_INFO);
+    if (strncmp(str_level, "KERN_DEBUG", 10) == 0)
+        return (KERN_DEBUG);
+    return (KERN_INFO);
+}
+
 static bool is_conf_path_accesible(char *path)
 {
     FILE *file = fopen(path, "r");
@@ -98,7 +121,7 @@ demeter_conf_t *read_conf(void)
         xfree(slurm_log_level);
     }
     if (sys_log_level != NULL) {
-        conf->sys_log_level = get_slurm_log_level(sys_log_level);
+        conf->sys_log_level = get_sys_log_level(sys_log_level);
         xfree(sys_log_level);
     }
     if (log_file_path != NULL) {

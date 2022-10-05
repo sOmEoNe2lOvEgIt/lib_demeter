@@ -11,7 +11,7 @@
 
 bool handle_log_level(parsed_log_t *curr_log, demeter_conf_t *demeter_conf)
 {
-    dem_log_level_t level_of_curr_log = DEBUG;
+    dem_log_level_t level_of_curr_log = INFO;
 
     if (curr_log->unparsed_log == NULL)
         return false;
@@ -42,20 +42,12 @@ bool handle_log_level(parsed_log_t *curr_log, demeter_conf_t *demeter_conf)
 
 bool handle_sys_log_level(parsed_log_t *curr_log, demeter_conf_t *demeter_conf)
 {
-    dem_log_level_t level_of_curr_log = DEBUG;
+    kernel_log_level_t level_of_curr_log = KERN_INFO;
 
     if (curr_log->unparsed_log == NULL)
         return false;
-    if (strstr(curr_log->unparsed_log, "FATAL") != NULL)
-        level_of_curr_log = FATAL;
-    if (strstr(curr_log->unparsed_log, "ERROR") != NULL)
-        level_of_curr_log = ERROR;
-    if (strstr(curr_log->unparsed_log, "WARNING") != NULL)
-        level_of_curr_log = WARNING;
-    if (strstr(curr_log->unparsed_log, "INFO") != NULL)
-        level_of_curr_log = INFO;
-    if (strstr(curr_log->unparsed_log, "DEBUG") != NULL)
-        level_of_curr_log = DEBUG;
+    if (curr_log->unparsed_log[0] == '<')
+        level_of_curr_log = curr_log->unparsed_log[1] - '0';
     if (level_of_curr_log < demeter_conf->sys_log_level) {
         if (curr_log->unparsed_log != NULL) {
             free(curr_log->unparsed_log);
