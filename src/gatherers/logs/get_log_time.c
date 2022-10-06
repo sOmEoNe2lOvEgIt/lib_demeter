@@ -21,7 +21,8 @@ int get_sys_log_time(parsed_log_t *log_to_parse, time_t start_time)
     if (log_time < start_time)
         return(3);
     timeinfo = localtime(&log_time);
-    sprintf(time_str, "[%d-%02d-%02dT%02d:%02d:%02d]", (timeinfo->tm_year + 1900), (timeinfo->tm_mon + 1), timeinfo->tm_mday, timeinfo->tm_hour, timeinfo->tm_min, timeinfo->tm_sec);
+    sprintf(time_str, "[%d-%02d-%02dT%02d:%02d:%02d]",
+    (timeinfo->tm_year + 1900), (timeinfo->tm_mon + 1), timeinfo->tm_mday, timeinfo->tm_hour, timeinfo->tm_min, timeinfo->tm_sec);
     log_to_parse->log_time_str = strdup(time_str);
     return (0);
 }

@@ -19,7 +19,8 @@ SRC_FILES = src/gatherers/gather_cgroup.c						\
 			src/gatherers/gather_sel.c							\
 			src/gatherers/gather_ib.c							\
 				src/gatherers/cgroup/get_from_files.c			\
-				src/gatherers/logs/gather_kernel_logs.c			\
+				src/gatherers/logs/gather_system_logs.c			\
+				src/gatherers/logs/sys_log_tools.c				\
 				src/gatherers/logs/gather_slurm_logs.c			\
 				src/gatherers/logs/slurm_logs_tools.c			\
 				src/gatherers/logs/read_logs.c					\
