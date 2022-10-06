@@ -108,7 +108,8 @@ linked_list_t *gather_logs(demeter_conf_t *demeter_conf, job_id_info_t *job_info
 {
     linked_list_t *log_list;
 
-    log_list = gather_kernel_logs(demeter_conf, job_info, NULL);
+    // log_list = gather_kernel_logs(demeter_conf, job_info, NULL);
+    log_list = gather_system_logs(demeter_conf, job_info, NULL);
     log_list = gather_slurm_logs(demeter_conf, job_info, log_list);
     *log_counter = count_log(log_list);
     *kern_log_counter = count_kern_log(log_list);

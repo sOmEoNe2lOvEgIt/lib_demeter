@@ -5,14 +5,14 @@
 ## Wow, such make, much file!
 ##
 
-SLURM_ROOT_DIR = /usr
-SLURM_INC_DIR = /root/SLURM/slurm.build
-SLURM_LIB_DIR = /usr/lib64/slurm
-SLURM_BUILD = 21.08.8-2
-SLURM_BUILD_DIR = /root/rpmbuild/BUILD/slurm-$(SLURM_BUILD)
-LIBIBMAD_DIR = /usr/lib64/
+SLURM_ROOT_DIR	=	/usr
+SLURM_INC_DIR	=	/root/SLURM/slurm.build
+SLURM_LIB_DIR	=	/usr/lib64/slurm
+SLURM_BUILD		=	21.08.8-2
+SLURM_BUILD_DIR	=	/root/rpmbuild/BUILD/slurm-$(SLURM_BUILD)
+LIBIBMAD_DIR	=	/usr/lib64/
 
-LIB_FILE = libdemeter.so
+LIB_FILE		=	libdemeter.so
 
 SRC_FILES = src/gatherers/gather_cgroup.c						\
 			src/gatherers/gather_logs.c							\
@@ -46,22 +46,23 @@ SRC_FILES = src/gatherers/gather_cgroup.c						\
 				src/tools/get/get_job_transfer_path.c			\
 				src/tools/get/get_hostname.c					\
 				src/tools/get/zgetline.c						\
+				src/tools/get/get_rotate_time.c					\
 
-CC      = gcc
-CFLAGS  ?= -Wall -fPIC -g3 -gstrict-dwarf -Iinclude -I$(SLURM_INC_DIR) -I$(SLURM_BUILD_DIR) -I/usr/include/infiniband/
-LDFLAGS ?= -shared -lcurl -L. -L$(LIBIBMAD_DIR) -libmad -libumad
+CC		=	gcc
+CFLAGS	?=	-Wall -fPIC -g3 -gstrict-dwarf -Iinclude -I$(SLURM_INC_DIR) -I$(SLURM_BUILD_DIR) -I/usr/include/infiniband/
+LDFLAGS	?=	-shared -lcurl -L. -L$(LIBIBMAD_DIR) -libmad -libumad
 
-all: $(LIB_FILE)
+all:			$(LIB_FILE)
 
-default: $(LIB_FILE)
+default:		$(LIB_FILE)
 
-$(LIB_FILE): $(SRC_FILES)
-	$(CC) $(CFLAGS) $(LDFLAGS) $^ -o $@
+$(LIB_FILE):	$(SRC_FILES)
+		$(CC) $(CFLAGS) $(LDFLAGS) $^ -o $@
 
-send: all
-	scp $(LIB_FILE) my_vm:/home/compose_fake_taranis/shared/
+send:	all
+		scp $(LIB_FILE) my_vm:/home/compose_fake_taranis/shared/
 
 clean:
-	rm -f $(LIB_FILE)
+		rm -f $(LIB_FILE)
 
-re: clean all
+re:		clean all

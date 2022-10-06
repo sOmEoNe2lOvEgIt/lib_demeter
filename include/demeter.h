@@ -186,7 +186,11 @@ bool handle_log_level(parsed_log_t *curr_log, demeter_conf_t *demeter_conf);
 bool handle_sys_log_level(parsed_log_t *curr_log, demeter_conf_t *demeter_conf);
 // Handles system log level.
 void remove_newline(char *str);
+// Removes newline from string.
 char *append_str(char *str, char *to_append);
+// Appends string to another.
+time_t get_rotate_time(char *file_name);
+// Returns time of last rotation of file. (file name has to have "~log-YYYY-MM-DD~" format)
 
 // I'M FREE!!!
 //___________________________________________________________________________________________________________________________________________
@@ -270,7 +274,11 @@ int get_slurm_log_time(parsed_log_t *log_to_parse, time_t start_time);
 // Adds readable time to log. Returns 0 if no error,
 // positive int if error (including the log time not being at job runtime).
 linked_list_t *gather_kernel_logs (demeter_conf_t *demeter_conf, job_id_info_t *job_info, linked_list_t *log_list);
+// Gatrers kernel logs that are still in the ring log buffer.
+linked_list_t *gather_system_logs (demeter_conf_t *demeter_conf, job_id_info_t *job_info, linked_list_t *log_list);
+// Gathers system logs by reading them from the syslog files and rotated files if necessary.
 linked_list_t *gather_slurm_logs (demeter_conf_t *demeter_conf, job_id_info_t *job_info, linked_list_t *log_list);
+// Gathers slurm logs by reading them from the slurm logs files and rotated files if necessary.
 gzFile open_rotated_slurm_log(demeter_conf_t *demeter_conf, job_id_info_t *job_info);
 FILE *open_slurm_log(demeter_conf_t *demeter_conf);
 
