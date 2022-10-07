@@ -120,13 +120,6 @@ void free_log_counter(log_counter_t *log_counter)
     free(log_counter);
 }
 
-void free_kern_log_counter(kern_log_counter_t *kern_log_counter)
-{
-    if (kern_log_counter == NULL)
-        return;
-    free(kern_log_counter);
-}
-
 // SEL
 //___________________________________________________________________________________________________________________________________________
 

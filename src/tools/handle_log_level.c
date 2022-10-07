@@ -39,26 +39,3 @@ bool handle_log_level(parsed_log_t *curr_log, demeter_conf_t *demeter_conf)
     curr_log->log_level = level_of_curr_log;
     return true;
 }
-
-bool handle_sys_log_level(parsed_log_t *curr_log, demeter_conf_t *demeter_conf)
-{
-    // kernel_log_level_t level_of_curr_log = KERN_INFO;
-
-    // if (curr_log->unparsed_log == NULL)
-    //     return false;
-    // if (curr_log->unparsed_log[0] == '<')
-    //     level_of_curr_log = curr_log->unparsed_log[1] - '0';
-    // if (level_of_curr_log < demeter_conf->sys_log_level) {
-    //     if (curr_log->unparsed_log != NULL) {
-    //         free(curr_log->unparsed_log);
-    //         curr_log->unparsed_log = NULL;
-    //     }
-    //     if (curr_log->log_source_path != NULL) {
-    //         free(curr_log->log_source_path);
-    //         curr_log->log_source_path = NULL;
-    //     }
-    //     return false;
-    // }
-    // curr_log->log_level = level_of_curr_log;
-    return true;
-}

@@ -35,19 +35,6 @@ typedef enum dem_log_level_e {
 } dem_log_level_t;
 // Log level for demeter log output.
 
-typedef enum kernel_log_level_e {
-    KERN_EMERG=0,
-    KERN_ALERT=1,
-    KERN_CRIT=2,
-    KERN_ERR=3,
-    KERN_WARNING=4,
-    KERN_NOTICE=5,
-    KERN_INFO=6,
-    KERN_DEBUG=7,
-    KERN_NONE=8,
-} kernel_log_level_t;
-// Log level for kernel log output.
-
 typedef struct demeter_conf_s {
     uint verbose_lv;
     // Verbosity level if log level is DEBUG.
@@ -62,8 +49,6 @@ typedef struct demeter_conf_s {
     // Path to file in which demeter will parse log from.
     dem_log_level_t slurm_log_level;
     // Log level for slurm log parsing.
-    kernel_log_level_t sys_log_level;
-    // Log level for system log parsing.
     char *demeter_comp_loc;
     // Location of elasticsearch database.
     char *demeter_comp_proxy;
@@ -110,9 +95,6 @@ typedef struct parsed_log_s {
     //0 if no error, 1 if error, only used for stdout as log source
     dem_log_level_t log_level;
     // Log level of log.
-    kernel_log_level_t kernel_log_level;
-    // Kernel log level of log.
-    // Unused if slurm log.
 } parsed_log_t;
 // Logs gathered for each job step || job.
 
@@ -146,16 +128,6 @@ typedef struct log_counter_s {
     uint fatals;
 } log_counter_t;
 
-typedef struct kern_log_counter_s {
-    uint emerg;
-    uint alert;
-    uint crit;
-    uint err;
-    uint warning;
-    uint notice;
-    uint info;
-    uint debug;
-} kern_log_counter_t;
 
 // TOOLS
 //___________________________________________________________________________________________________________________________________________
@@ -183,8 +155,6 @@ linked_list_t *add_to_list(linked_list_t *list, void *data);
 //of the list given as arg, returns new said link.
 bool handle_log_level(parsed_log_t *curr_log, demeter_conf_t *demeter_conf);
 // Handles log level.
-bool handle_sys_log_level(parsed_log_t *curr_log, demeter_conf_t *demeter_conf);
-// Handles system log level.
 void remove_newline(char *str);
 // Removes newline from string.
 char *append_str(char *str, char *to_append);
@@ -204,7 +174,6 @@ void free_job_id_info(job_id_info_t *job_info);
 void free_parsed_log(parsed_log_t *log);
 void free_log_list(linked_list_t *log_list);
 void free_log_counter(log_counter_t *log_counter);
-void free_kern_log_counter(kern_log_counter_t *kern_log_counter);
 void free_sel_list(linked_list_t *sel_list);
 void free_parsed_sel(parsed_sel_t *parsed_sel);
 void free_perf_count(perf_data_t *perf_count);
@@ -225,7 +194,7 @@ void transfer_log_cgroup(cgroup_data_t *cgroup_data, job_id_info_t *job_info, de
 void log_parsed_sel(linked_list_t *gathered_sel);
 // Specific to gathered sel.
 int send_elastic(demeter_conf_t *demeter_conf ,job_id_info_t *job_info, linked_list_t *cgroup_data,
-linked_list_t *gathered_logs, log_counter_t *log_counter, kern_log_counter_t *kern_log_counter,
+linked_list_t *gathered_logs, log_counter_t *log_counter,
 linked_list_t *gathered_sel, perf_data_t *gathered_perf_data);
 
 // JSON FORMATTERS
@@ -235,7 +204,6 @@ char *format_logs(linked_list_t *gathered_logs, linked_list_t *gathered_sel);
 char *format_cgroup(linked_list_t *cgroup);
 char *format_job_info(job_id_info_t *job_info);
 char *format_log_counter(log_counter_t *log_counter);
-char *format_sys_log_counter(kern_log_counter_t *log_counter);
 char *format_perf_count(perf_data_t *perf_data);
 
 // CGROUP FUNCTION
@@ -256,8 +224,7 @@ void get_cpuset(cgroup_data_t *cgroup_data, job_id_info_t *job_info, demeter_con
 // LOG_PARSER FUNCTION
 //___________________________________________________________________________________________________________________________________________
 
-linked_list_t *gather_logs(demeter_conf_t *demeter_conf, job_id_info_t *job_info,
-log_counter_t **log_counter, kern_log_counter_t **kern_log_counter);
+linked_list_t *gather_logs(demeter_conf_t *demeter_conf, job_id_info_t *job_info, log_counter_t **log_counter);
 // Gathers logs.
 
 // LOG_PARSER TOOLS

@@ -98,18 +98,6 @@ char *format_log_counter(log_counter_t *log_counter)
     return (strdup(tmp));   
 }
 
-char *format_sys_log_counter(kern_log_counter_t *log_counter)
-{
-    char tmp[200];
-
-    if (log_counter == NULL)
-        return (NULL);
-    memset(tmp, 0, 200);
-    sprintf(tmp, "\"sys_log_counter\":{\"emergencies\" : %u, \"alerts\" : %u, \"criticals\" : %u, \"errors\" : %u, \"warnings\" : %u, \"notices\" : %u, \"infos\" : %u, \"debugs\" : %u}",
-    log_counter->emerg, log_counter->alert, log_counter->crit, log_counter->err, log_counter->warning, log_counter->notice, log_counter->info, log_counter->debug);
-    return (strdup(tmp));   
-}
-
 // to be completed
 char *format_perf_count(perf_data_t *perf_data)
 {
