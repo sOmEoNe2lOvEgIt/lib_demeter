@@ -14,40 +14,42 @@ LIBIBMAD_DIR	=	/usr/lib64/
 
 LIB_FILE		=	libdemeter.so
 
-SRC_FILES = src/gatherers/gather_cgroup.c						\
-			src/gatherers/gather_logs.c							\
-			src/gatherers/gather_sel.c							\
-			src/gatherers/gather_ib.c							\
-				src/gatherers/cgroup/get_from_files.c			\
-				src/gatherers/logs/gather_system_logs.c			\
-				src/gatherers/logs/sys_log_tools.c				\
-				src/gatherers/logs/gather_slurm_logs.c			\
-				src/gatherers/logs/slurm_logs_tools.c			\
-				src/gatherers/logs/read_logs.c					\
-				src/gatherers/logs/get_log_time.c				\
-				src/gatherers/sel/handle_sel.c					\
-			src/loggers/logger.c								\
-				src/loggers/cgroup/log_cgroup.c					\
-				src/loggers/cgroup/unlog_cgroup.c				\
-				src/loggers/parsed_logs/log_parsed_logs.c		\
-				src/loggers/parsed_sel/log_sel.c				\
-				src/loggers/send_elasticsearch/json_formatters.c\
-			src/loggers/send_elasticsearch.c					\
-			src/tools/is_log_empty.c							\
-			src/tools/read_conf.c								\
-			src/tools/linked_list.c								\
-			src/tools/handle_log_level.c						\
-			src/tools/remove_newline.c							\
-			src/tools/append_str.c								\
-			src/tools/getline_from_end.c						\
-				src/tools/free/im_free.c						\
-				src/tools/get/get_job_info.c					\
-				src/tools/get/get_time_str.c					\
-				src/tools/get/get_len_to_char.c					\
-				src/tools/get/get_job_transfer_path.c			\
-				src/tools/get/get_hostname.c					\
-				src/tools/get/zgetline.c						\
-				src/tools/get/get_rotate_time.c					\
+GATHER_SRC =src/gatherers/gather_cgroup.c							\
+			src/gatherers/gather_logs.c								\
+			src/gatherers/gather_sel.c								\
+			src/gatherers/gather_ib.c								\
+			src/gatherers/cgroup/get_from_files.c					\
+			src/gatherers/logs/gather_system_logs.c					\
+			src/gatherers/logs/sys_log_tools.c						\
+			src/gatherers/logs/gather_slurm_logs.c					\
+			src/gatherers/logs/slurm_logs_tools.c					\
+			src/gatherers/logs/read_logs.c							\
+			src/gatherers/logs/get_log_time.c						\
+			src/gatherers/sel/handle_sel.c							\
+
+LOGER_SRC =	src/loggers/logger.c									\
+			src/loggers/cgroup/log_cgroup.c							\
+			src/loggers/cgroup/unlog_cgroup.c						\
+			src/loggers/parsed_logs/log_parsed_logs.c				\
+			src/loggers/parsed_sel/log_sel.c						\
+			src/loggers/send_elasticsearch/json_formatters.c		\
+			src/loggers/send_elasticsearch.c						\
+
+TOOLS_SRC = src/tools/is_log_empty.c								\
+			src/tools/read_conf.c									\
+			src/tools/linked_list.c									\
+			src/tools/handle_log_level.c							\
+			src/tools/remove_newline.c								\
+			src/tools/append_str.c									\
+			src/tools/getline_from_end.c							\
+			src/tools/free/im_free.c								\
+			src/tools/get/get_job_info.c							\
+			src/tools/get/get_time_str.c							\
+			src/tools/get/get_len_to_char.c							\
+			src/tools/get/get_job_transfer_path.c					\
+			src/tools/get/get_hostname.c							\
+			src/tools/get/zgetline.c								\
+			src/tools/get/get_rotate_time.c							\
 
 CC		=	gcc
 CFLAGS	?=	-Wall -fPIC -g3 -gstrict-dwarf -Iinclude -I$(SLURM_INC_DIR) -I$(SLURM_BUILD_DIR) -I/usr/include/infiniband/
@@ -57,7 +59,7 @@ all:			$(LIB_FILE)
 
 default:		$(LIB_FILE)
 
-$(LIB_FILE):	$(SRC_FILES)
+$(LIB_FILE):	$(GATHER_SRC) $(LOGER_SRC) $(TOOLS_SRC)
 		$(CC) $(CFLAGS) $(LDFLAGS) $^ -o $@
 
 send:	all
