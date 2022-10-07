@@ -15,14 +15,11 @@ int get_sys_log_time(parsed_log_t *log_to_parse, time_t start_time)
     struct tm *timeinfo;
 
     memset(time_str, 0, 80);
-    if (log_to_parse->log_source_path == NULL)
-        return(1);
     log_time = (time_t)atol((log_to_parse->unparsed_log));
     if (log_time < start_time)
         return(3);
     timeinfo = localtime(&log_time);
-    sprintf(time_str, "[%d-%02d-%02dT%02d:%02d:%02d]",
-    (timeinfo->tm_year + 1900), (timeinfo->tm_mon + 1), timeinfo->tm_mday, timeinfo->tm_hour, timeinfo->tm_min, timeinfo->tm_sec);
+    strftime(time_str, 80, "[%Y-%m-%dT%H:%M:%S]", timeinfo);
     log_to_parse->log_time_str = strdup(time_str);
     return (0);
 }

@@ -13,14 +13,22 @@ ssize_t getline_from_end(char **line, size_t *len, FILE *file, long *line_offset
     long line_count = 0;
     ssize_t return_value = 0;
     int read_char = 0;
+    bool reach_start = false;
 
     fseek(file, 0, SEEK_END);
     while (line_count <= *line_offset) {
-        if (fseek(file, -2, SEEK_CUR) == -1)
-            return (-1);
+        if (fseek(file, -2, SEEK_CUR) == -1) {
+            reach_start = true;
+            break;
+        }
         read_char = fgetc(file);
         if (read_char == '\n' || read_char == '\0')
             line_count++;
+    }
+    if (reach_start) {
+        fseek(file, 0, SEEK_SET);
+        getline(line, len, file);
+        return (-42);
     }
     return_value = getline(line, len, file);
     if (return_value == -1) {

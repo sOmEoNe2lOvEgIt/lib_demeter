@@ -63,17 +63,19 @@ linked_list_t *gather_slurm_logs
     long ln_offset = 0;
     char *buffer = NULL;
     size_t len = 1000;
-    int zgetline_ret = 0;
+    int getline_ret = 0, zgetline_ret = 0;
 
     if ((log_file = open_slurm_log(demeter_conf)) == NULL)
         return (NULL);
     log_list = add_to_list(log_list, init_parsed_log());
-    for (ln_offset = 0; getline_from_end(&buffer, &len, log_file, &ln_offset) != -1; ln_offset++){
+    for (ln_offset = 0; (getline_ret = getline_from_end(&buffer, &len, log_file, &ln_offset)) != -1; ln_offset++){
         if (!handle_log(ln_offset, buffer, &log_list, demeter_conf, job_info)) {
             fclose(log_file);
             free(buffer);
             return (log_list);
         }
+        if (getline_ret == -42)
+            break;
     }
     fclose(log_file);
     if (buffer != NULL) {

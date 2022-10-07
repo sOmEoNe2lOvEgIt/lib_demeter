@@ -267,7 +267,7 @@ char *read_sys_logs(void);
 //Returns logs from kernel logs.
 parsed_log_t *init_parsed_log(void);
 // Returns a new propperly allocated empty parsed log struct.
-int get_sys_log_time(parsed_log_t *log_to_parse, time_t start_time); 
+int get_sys_log_time(parsed_log_t *log_to_parse, time_t start_time);
 // Adds readable time to log. Returns 0 if no error,
 // other if error (including the log time not being at job runtime).
 int get_slurm_log_time(parsed_log_t *log_to_parse, time_t start_time);
