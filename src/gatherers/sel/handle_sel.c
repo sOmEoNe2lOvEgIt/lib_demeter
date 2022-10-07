@@ -47,30 +47,12 @@ int get_sel_time(parsed_sel_t *curr_sel, time_t start_time)
     char time_str[80];
 
     memset(time_str, 0, 80);
-    i += get_len_to_char(&curr_sel->unparsed_sel[i], '|') + 2;
+    i += get_len_to_char(&curr_sel->unparsed_sel[i], '|');
     if (curr_sel->unparsed_sel[i] == '\0')
         return (1);
-    sel_time->tm_mday = atoi(&curr_sel->unparsed_sel[i]);
-    i += get_len_to_char(&curr_sel->unparsed_sel[i], '/') + 1;
-    if (curr_sel->unparsed_sel[i] == '\0')
-        return (1);
-    sel_time->tm_mon = atoi(&curr_sel->unparsed_sel[i]);
-    i += get_len_to_char(&curr_sel->unparsed_sel[i], '/') + 1;
-    if (curr_sel->unparsed_sel[i] == '\0')
-        return (1);
-    sel_time->tm_year = atoi(&curr_sel->unparsed_sel[i]);
-    i += get_len_to_char(&curr_sel->unparsed_sel[i], '|') + 2;
-    if (curr_sel->unparsed_sel[i] == '\0')
-        return (1);
-    sel_time->tm_hour = atoi(&curr_sel->unparsed_sel[i]);
-    i += get_len_to_char(&curr_sel->unparsed_sel[i], ':') + 1;
-    if (curr_sel->unparsed_sel[i] == '\0')
-        return (1);
-    sel_time->tm_min = atoi(&curr_sel->unparsed_sel[i]);
-    i += get_len_to_char(&curr_sel->unparsed_sel[i], ':') + 1;
-    if (curr_sel->unparsed_sel[i] == '\0')
-        return (1);
-    sel_time->tm_sec = atoi(&curr_sel->unparsed_sel[i]);
+    sscanf(&curr_sel->unparsed_sel[i], "| %d/%d/%d | %d:%d:%d |",
+    &sel_time->tm_mday, &sel_time->tm_mon, &sel_time->tm_year,
+    &sel_time->tm_hour, &sel_time->tm_min, &sel_time->tm_sec);
     if (mktime(sel_time) < start_time)
         return (1);
     sprintf(time_str, "[%d-%02d-%02dT%02d:%02d:%02d]",

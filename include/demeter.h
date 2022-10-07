@@ -230,8 +230,6 @@ linked_list_t *gather_logs(demeter_conf_t *demeter_conf, job_id_info_t *job_info
 // LOG_PARSER TOOLS
 //___________________________________________________________________________________________________________________________________________
 
-char *read_sys_logs(void);
-//Returns logs from kernel logs.
 parsed_log_t *init_parsed_log(void);
 // Returns a new propperly allocated empty parsed log struct.
 int get_sys_log_time(parsed_log_t *log_to_parse, time_t start_time);

@@ -60,10 +60,10 @@ linked_list_t *gather_slurm_logs
 {
     FILE *log_file = NULL;
     gzFile gz_log_file = NULL;
-    long ln_offset = 0;
     char *buffer = NULL;
     size_t len = 1000;
     int getline_ret = 0, zgetline_ret = 0;
+    long ln_offset = 0;
 
     if ((log_file = open_slurm_log(demeter_conf)) == NULL)
         return (NULL);

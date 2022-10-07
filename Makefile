@@ -23,7 +23,6 @@ GATHER_SRC =src/gatherers/gather_cgroup.c							\
 			src/gatherers/logs/sys_log_tools.c						\
 			src/gatherers/logs/gather_slurm_logs.c					\
 			src/gatherers/logs/slurm_logs_tools.c					\
-			src/gatherers/logs/read_logs.c							\
 			src/gatherers/logs/get_log_time.c						\
 			src/gatherers/sel/handle_sel.c							\
 

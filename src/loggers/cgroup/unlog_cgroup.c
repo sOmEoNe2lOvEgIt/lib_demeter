@@ -35,7 +35,9 @@ linked_list_t *unlog_cgroup(demeter_conf_t *demeter_conf, uint job_id)
             }
             line += get_len_to_char(line, '#');
             sscanf(line, "###%lli,%u,%d,%d,%d,#%[^#]#,#%[^#]####",
-            &step_id, &cgroup_data->mem_max_usage_bytes, &cgroup_data->oom_kill_disable, &cgroup_data->under_oom, &cgroup_data->oom_kill, cgroup_data->cpuset_cpus, cgroup_data->cpuset_effective_cpus);
+            &step_id, &cgroup_data->mem_max_usage_bytes, &cgroup_data->oom_kill_disable,
+            &cgroup_data->under_oom, &cgroup_data->oom_kill,
+            cgroup_data->cpuset_cpus, cgroup_data->cpuset_effective_cpus);
             if (step_id < 0)
                 cgroup_data->step_id = 4294967200;
             else

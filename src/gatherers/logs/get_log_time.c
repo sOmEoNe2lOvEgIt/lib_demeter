@@ -32,18 +32,9 @@ time_t slurm_time_to_time(char *slurm_time)
     if (slurm_time == NULL)
         return (0);
     memset(&timeinfo, 0, sizeof(struct tm));
-    slurm_time_idx += get_len_to_char(&slurm_time[slurm_time_idx], '[') + 1;
-    timeinfo.tm_year = atoi(&slurm_time[slurm_time_idx]) - 1900;
-    slurm_time_idx += get_len_to_char(&slurm_time[slurm_time_idx], '-') + 1;
-    timeinfo.tm_mon = atoi(&slurm_time[slurm_time_idx]) - 1;
-    slurm_time_idx += get_len_to_char(&slurm_time[slurm_time_idx], '-') + 1;
-    timeinfo.tm_mday = atoi(&slurm_time[slurm_time_idx]);
-    slurm_time_idx += get_len_to_char(&slurm_time[slurm_time_idx], 'T') + 1;
-    timeinfo.tm_hour = atoi(&slurm_time[slurm_time_idx]);
-    slurm_time_idx += get_len_to_char(&slurm_time[slurm_time_idx], ':') + 1;
-    timeinfo.tm_min = atoi(&slurm_time[slurm_time_idx]);
-    slurm_time_idx += get_len_to_char(&slurm_time[slurm_time_idx], ':') + 1;
-    timeinfo.tm_sec = atoi(&slurm_time[slurm_time_idx]);
+    slurm_time_idx += get_len_to_char(&slurm_time[slurm_time_idx], '[');
+    sscanf(&slurm_time[slurm_time_idx], "%d-%d-%dT%d:%d:%d", &timeinfo.tm_year,
+    &timeinfo.tm_mon, &timeinfo.tm_mday, &timeinfo.tm_hour, &timeinfo.tm_min, &timeinfo.tm_sec);
     return(mktime(&timeinfo));
 }
 
