@@ -57,8 +57,8 @@ demeter_conf_t *read_conf(void)
     s_p_options_t options[] = {{"Verbose", S_P_UINT32},
     {"LogStyle", S_P_STRING}, {"LogLevel", S_P_STRING},
     {"SlurmLogLevel", S_P_STRING}, {"LogFilePath", S_P_STRING},
-    {"SlurmLogPath", S_P_STRING},  {"DemeterCompLoc", S_P_STRING},
-    {"DemeterCompProxy", S_P_STRING}, {"SysLogPath", S_P_STRING}, {NULL}};
+    {"SlurmLogPath", S_P_STRING}, {"SysLogPath", S_P_STRING}, {NULL},
+    {"DemeterCompLoc", S_P_STRING}, {"DemeterCompProxy", S_P_STRING}};
     demeter_conf_t *conf = init_conf();
     char *log_style = NULL, *log_level = NULL, *slurm_log_level = NULL,
     *log_file_path = NULL, *slurm_log_path = NULL, *demeter_comp_loc = NULL,
