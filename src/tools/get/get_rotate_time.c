@@ -12,7 +12,7 @@ time_t get_rotate_time(char *file_name)
 {
     time_t rotate_time = 0;
     char *rotate_time_str = NULL;
-    struct tm rotate_time_tm;
+    struct tm *rotate_time_tm = NULL;
 
     if (file_name == NULL)
         return (0);
@@ -20,12 +20,17 @@ time_t get_rotate_time(char *file_name)
     if (rotate_time_str == NULL)
         return (0);
     rotate_time_str += 4;
-    rotate_time_tm.tm_year = atoi(strndup(rotate_time_str, 4)) - 1900;
-    rotate_time_tm.tm_mon = atoi(strndup(rotate_time_str + 4, 2)) - 1;
-    rotate_time_tm.tm_mday = atoi(strndup(rotate_time_str + 6, 2)) + 1;
-    rotate_time_tm.tm_hour = 0;
-    rotate_time_tm.tm_min = 0;
-    rotate_time_tm.tm_sec = 0;
-    rotate_time = mktime(&rotate_time_tm);
+    rotate_time_tm = malloc(sizeof(struct tm));
+    if (rotate_time_tm == NULL)
+        return (0);
+    rotate_time_tm->tm_year = atoi(strndup(rotate_time_str, 4)) - 1900;
+    rotate_time_tm->tm_mon = atoi(strndup(rotate_time_str + 4, 2)) - 1;
+    rotate_time_tm->tm_mday = atoi(strndup(rotate_time_str + 6, 2)) + 1;
+    rotate_time_tm->tm_hour = 0;
+    rotate_time_tm->tm_min = 0;
+    rotate_time_tm->tm_sec = 0;
+    rotate_time_tm->tm_isdst = -1;
+    rotate_time = mktime(rotate_time_tm);
+    free(rotate_time_tm);
     return (rotate_time);
 }

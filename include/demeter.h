@@ -181,6 +181,8 @@ void free_perf_count(perf_data_t *perf_count);
 // LOGGER FUNCTIONS
 //___________________________________________________________________________________________________________________________________________
 
+FILE *init_log_file(demeter_conf_t *conf, bool silent);
+// Initializes log file.
 int write_log_to_file(demeter_conf_t *conf, char *message, dem_log_level_t level, uint verbose);
 // Writes log to demeter log file.
 void log_parsed_logs(linked_list_t *gathered_logs, demeter_conf_t *demeter_conf);

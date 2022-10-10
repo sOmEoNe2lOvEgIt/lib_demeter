@@ -13,7 +13,7 @@
 
 // LOGGING TOOLS
 //___________________________________________________________________________________________________________________________________________
-static FILE *init_log_file(demeter_conf_t *conf, bool silent)
+FILE *init_log_file(demeter_conf_t *conf, bool silent)
 {
     FILE *log_file;
 
@@ -69,7 +69,7 @@ static char *get_log_level_str(dem_log_level_t level , uint verbose)
 int write_log_to_file(demeter_conf_t *conf, char *message, dem_log_level_t level, uint verbose)
 {
     FILE *log_file;
-    char *log_level;
+    char *log_level, *time;
 
     if (verbose > conf->verbose_lv || level < conf->log_level)
         return (0);
@@ -83,21 +83,23 @@ int write_log_to_file(demeter_conf_t *conf, char *message, dem_log_level_t level
         debug3("demeter : can't write to log file, log level is NULL.");
         return (1);
     }
+    time = get_time_str();
     switch (conf->log_style) {
         case FANCY:
-            fprintf(log_file, "%s:[demeter]> %s%s\n", get_time_str(), log_level, message);
+            fprintf(log_file, "%s:[demeter]> %s%s\n", time, log_level, message);
             break;
         case SIMPLE:
-            fprintf(log_file, "%s demeter: %s%s\n", get_time_str(), log_level, message);
+            fprintf(log_file, "%s demeter: %s%s\n", time, log_level, message);
             break;
         case SYSTEM:
             fprintf(log_file, "demeter: %s%s\n", log_level, message);
             break;
         default:
             debug3("error : invalid log format.");
-            fclose(log_file);
+            break;
     }
     fclose(log_file);
+    free(time);
     free(log_level);
     return (0);
 }

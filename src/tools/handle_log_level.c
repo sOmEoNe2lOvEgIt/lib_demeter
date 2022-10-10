@@ -15,7 +15,7 @@ bool handle_log_level(parsed_log_t *curr_log, demeter_conf_t *demeter_conf)
 {
     dem_log_level_t level_of_curr_log = NONE;
 
-    if (curr_log->unparsed_log == NULL)
+    if (curr_log == NULL || curr_log->unparsed_log == NULL)
         return false;
     if (strcasestr(curr_log->unparsed_log, "FATAL") != NULL ||
     strcasestr(curr_log->unparsed_log, "fatal") != NULL)
