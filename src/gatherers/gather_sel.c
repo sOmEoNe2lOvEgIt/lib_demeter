@@ -11,7 +11,7 @@
 #include "slurm/slurm.h"
 #include "demeter.h"
 
-parsed_sel_t *init_parsed_sel(void)
+static parsed_sel_t *init_parsed_sel(void)
 {
     parsed_sel_t *parsed_sel = malloc(sizeof(parsed_sel_t));
     if (parsed_sel == NULL)

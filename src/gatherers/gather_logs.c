@@ -9,22 +9,7 @@
 #include "slurm/slurm.h"
 #include "demeter.h"
 
-parsed_log_t *init_parsed_log(void)
-{
-    parsed_log_t *parsed_log = malloc(sizeof(parsed_log_t));
-
-    if (parsed_log == NULL)
-        return (NULL);
-    parsed_log->unparsed_log = NULL;
-    parsed_log->log_proc_name = NULL;
-    parsed_log->log_source_path = NULL;
-    parsed_log->log_time_str = NULL;
-    parsed_log->log_level = NONE;
-    parsed_log->error_code = 0;
-    return (parsed_log);
-}
-
-log_counter_t *count_log(linked_list_t *log_list)
+static log_counter_t *count_log(linked_list_t *log_list)
 {
     log_counter_t *log_counter = malloc(sizeof(log_counter_t));
     parsed_log_t *parsed_log = NULL;
@@ -57,6 +42,21 @@ log_counter_t *count_log(linked_list_t *log_list)
         tmp = tmp->next;
     }
     return (log_counter);
+}
+
+parsed_log_t *init_parsed_log(void)
+{
+    parsed_log_t *parsed_log = malloc(sizeof(parsed_log_t));
+
+    if (parsed_log == NULL)
+        return (NULL);
+    parsed_log->unparsed_log = NULL;
+    parsed_log->log_proc_name = NULL;
+    parsed_log->log_source_path = NULL;
+    parsed_log->log_time_str = NULL;
+    parsed_log->log_level = NONE;
+    parsed_log->error_code = 0;
+    return (parsed_log);
 }
 
 linked_list_t *gather_logs(demeter_conf_t *demeter_conf, job_id_info_t *job_info, log_counter_t **log_counter)

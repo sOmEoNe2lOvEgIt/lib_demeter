@@ -13,7 +13,7 @@
 
 // LOGGING TOOLS
 //___________________________________________________________________________________________________________________________________________
-FILE *init_log_file(demeter_conf_t *conf, bool silent)
+static FILE *init_log_file(demeter_conf_t *conf, bool silent)
 {
     FILE *log_file;
 

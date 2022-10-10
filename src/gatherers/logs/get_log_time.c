@@ -8,6 +8,22 @@
 #include <stdio.h>
 #include "demeter.h"
 
+static time_t slurm_time_to_time(char *slurm_time)
+{
+    struct tm timeinfo;
+    int slurm_time_idx = 0;
+
+    if (slurm_time == NULL)
+        return (0);
+    memset(&timeinfo, 0, sizeof(struct tm));
+    slurm_time_idx += get_len_to_char(&slurm_time[slurm_time_idx], '[');
+    sscanf(&slurm_time[slurm_time_idx], "[%d-%d-%dT%d:%d:%d]", &timeinfo.tm_year,
+    &timeinfo.tm_mon, &timeinfo.tm_mday, &timeinfo.tm_hour, &timeinfo.tm_min, &timeinfo.tm_sec);
+    timeinfo.tm_year -= 1900;
+    timeinfo.tm_mon -= 1;
+    return(mktime(&timeinfo));
+}
+
 int get_sys_log_time(parsed_log_t *log_to_parse, time_t start_time)
 {
     char time_str[80];
@@ -22,22 +38,6 @@ int get_sys_log_time(parsed_log_t *log_to_parse, time_t start_time)
     strftime(time_str, 80, "[%Y-%m-%dT%H:%M:%S]", timeinfo);
     log_to_parse->log_time_str = strdup(time_str);
     return (0);
-}
-
-time_t slurm_time_to_time(char *slurm_time)
-{
-    struct tm timeinfo;
-    int slurm_time_idx = 0;
-
-    if (slurm_time == NULL)
-        return (0);
-    memset(&timeinfo, 0, sizeof(struct tm));
-    slurm_time_idx += get_len_to_char(&slurm_time[slurm_time_idx], '[');
-    sscanf(&slurm_time[slurm_time_idx], "[%d-%d-%dT%d:%d:%d]", &timeinfo.tm_year,
-    &timeinfo.tm_mon, &timeinfo.tm_mday, &timeinfo.tm_hour, &timeinfo.tm_min, &timeinfo.tm_sec);
-    timeinfo.tm_year -= 1900;
-    timeinfo.tm_mon -= 1;
-    return(mktime(&timeinfo));
 }
 
 int get_slurm_log_time(parsed_log_t *log_to_parse, time_t start_time)

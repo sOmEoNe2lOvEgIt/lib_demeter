@@ -181,8 +181,6 @@ void free_perf_count(perf_data_t *perf_count);
 // LOGGER FUNCTIONS
 //___________________________________________________________________________________________________________________________________________
 
-FILE *init_log_file(demeter_conf_t *conf, bool silent);
-// Initializes demeter log file.
 int write_log_to_file(demeter_conf_t *conf, char *message, dem_log_level_t level, uint verbose);
 // Writes log to demeter log file.
 void log_parsed_logs(linked_list_t *gathered_logs, demeter_conf_t *demeter_conf);
@@ -241,7 +239,6 @@ int get_slurm_log_time(parsed_log_t *log_to_parse, time_t start_time);
 
 linked_list_t *gather_system_logs (demeter_conf_t *demeter_conf, job_id_info_t *job_info, linked_list_t *log_list);
 // Gathers system logs by reading them from the syslog files and rotated files if necessary.
-char *get_basic_syslog_path(demeter_conf_t *demeter_conf);                                //
 gzFile open_rotated_system_log(demeter_conf_t *demeter_conf, job_id_info_t *job_info);    //
 FILE *open_system_logs(demeter_conf_t *demeter_conf);                                     //
 // sys log tools__________________________________________________________________________//
@@ -260,8 +257,6 @@ linked_list_t *gather_sel(job_id_info_t *job_info);
 // SEL_PARSER TOOLS
 //___________________________________________________________________________________________________________________________________________
 
-parsed_sel_t *init_parsed_sel(void);
-// Returns a new propperly allocated empty parsed sel struct.
 int get_sel_assert(parsed_sel_t *curr_sel);
 int get_sel_element(parsed_sel_t *curr_sel, char **element, int element_nb);
 int get_sel_time(parsed_sel_t *curr_sel, time_t start_time);

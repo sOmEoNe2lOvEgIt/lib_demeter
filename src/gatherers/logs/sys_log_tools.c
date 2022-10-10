@@ -11,7 +11,7 @@
 #include "slurm/slurm.h"
 #include "demeter.h"
 
-char *get_basic_syslog_path(demeter_conf_t *demeter_conf)
+static char *get_basic_syslog_path(demeter_conf_t *demeter_conf)
 {
     char *sys_logs_path = NULL;
 
