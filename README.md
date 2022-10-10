@@ -21,11 +21,11 @@ LogLevel <--------- syntax: *"LogLevel=DEBUG||INFO||WARNING||ERROR||FATAL"*. Set
 
 LogStyle <--------- syntax: *"LogStyle=FANCY||SIMPLE||SYSTEM"*. Sets the logging style for demeter logs.
 
-SlurmLogLevel <--- syntax: *"SlurmLogLevel=DEBUG||INFO||WARNING||ERROR||FATAL"*. Sets the minimum log level at which the plugin will parse slurm logs.
+SlurmLogLevel <-- syntax: *"SlurmLogLevel=DEBUG||INFO||WARNING||ERROR||FATAL"*. Sets the minimum log level at which the plugin will parse slurm logs.
 
 SysLogLevel <------ syntax: *"SlurmLogLevel=DEBUG||INFO||WARNING||ERROR||FATAL"*. Sets the minimum log level at which the plugin will parse sys logs.
 
-LogFilePath <------ syntax: *"LogFilePath=path/to/an/existing/or/non/existing/file"*. Sets a custom path for the log file that demeter outputs in.
+LogFilePath <----- syntax: *"LogFilePath=path/to/an/existing/or/non/existing/file"*. Sets a custom path for the log file that demeter outputs in.
 
 SlurmLogPath <----- syntax: *"SlurmLogPath=path/to/an/existing/folder"*. Sets a custom path for the folder containing the slurm log file that demeter will parse.
 
