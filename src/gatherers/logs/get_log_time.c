@@ -33,8 +33,10 @@ time_t slurm_time_to_time(char *slurm_time)
         return (0);
     memset(&timeinfo, 0, sizeof(struct tm));
     slurm_time_idx += get_len_to_char(&slurm_time[slurm_time_idx], '[');
-    sscanf(&slurm_time[slurm_time_idx], "%d-%d-%dT%d:%d:%d", &timeinfo.tm_year,
+    sscanf(&slurm_time[slurm_time_idx], "[%d-%d-%dT%d:%d:%d]", &timeinfo.tm_year,
     &timeinfo.tm_mon, &timeinfo.tm_mday, &timeinfo.tm_hour, &timeinfo.tm_min, &timeinfo.tm_sec);
+    timeinfo.tm_year -= 1900;
+    timeinfo.tm_mon -= 1;
     return(mktime(&timeinfo));
 }
 

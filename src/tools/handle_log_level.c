@@ -13,7 +13,7 @@
 
 bool handle_log_level(parsed_log_t *curr_log, demeter_conf_t *demeter_conf)
 {
-    dem_log_level_t level_of_curr_log = INFO;
+    dem_log_level_t level_of_curr_log = NONE;
 
     if (curr_log->unparsed_log == NULL)
         return false;
@@ -32,7 +32,8 @@ bool handle_log_level(parsed_log_t *curr_log, demeter_conf_t *demeter_conf)
     if (strcasestr(curr_log->unparsed_log, "DEBUG") != NULL ||
     strcasestr(curr_log->unparsed_log, "kern debug") != NULL)
         level_of_curr_log = DEBUG;
-    if (level_of_curr_log < demeter_conf->slurm_log_level) {
+    if (level_of_curr_log < demeter_conf->slurm_log_level &&
+    level_of_curr_log != NONE) {
         if (curr_log->unparsed_log != NULL) {
             free(curr_log->unparsed_log);
             curr_log->unparsed_log = NULL;

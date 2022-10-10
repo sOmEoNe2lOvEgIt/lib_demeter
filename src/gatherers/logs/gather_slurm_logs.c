@@ -100,5 +100,3 @@ linked_list_t *gather_slurm_logs
         free(buffer);
     return (log_list);
 }
-
-// rm /var/log/slurm/* && touch /var/log/slurm/slurm.slurm_node1.log && cp /shared/slurm.slurm_node1.log-20230813.gz /var/log/slurm/ && srun -n1 -N1 hostname && sleep 1 && cat /var/log/demeter.log
