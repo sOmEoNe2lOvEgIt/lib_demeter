@@ -15,25 +15,25 @@ This is strictly optional but highly recommended as you will probably need to se
 
 ### This file can contain multiple parameters that you can define:
 
-Verbose <---------- syntax: *"Verbose=(uint)"*. Sets the verbose level for the demeter logs.
+Verbose <--       syntax: *"Verbose=(uint)"*. Sets the verbose level for the demeter logs.
 
-LogLevel <--------- syntax: *"LogLevel=DEBUG||INFO||WARNING||ERROR||FATAL"*. Sets the logging level for demeter logs.
+LogLevel <--      syntax: *"LogLevel=DEBUG||INFO||WARNING||ERROR||FATAL"*. Sets the logging level for demeter logs.
 
-LogStyle <---------- syntax: *"LogStyle=FANCY||SIMPLE||SYSTEM"*. Sets the logging style for demeter logs.
+LogStyle <--      syntax: *"LogStyle=FANCY||SIMPLE||SYSTEM"*. Sets the logging style for demeter logs.
 
-SlurmLogLevel <--- syntax: *"SlurmLogLevel=DEBUG||INFO||WARNING||ERROR||FATAL"*. Sets the minimum log level at which the plugin will parse slurm logs.
+SlurmLogLevel <-- syntax: *"SlurmLogLevel=DEBUG||INFO||WARNING||ERROR||FATAL"*. Sets the minimum log level at which the plugin will parse slurm logs.
 
-SysLogLevel <------ syntax: *"SlurmLogLevel=DEBUG||INFO||WARNING||ERROR||FATAL"*. Sets the minimum log level at which the plugin will parse sys logs.
+SysLogLevel <--   syntax: *"SlurmLogLevel=DEBUG||INFO||WARNING||ERROR||FATAL"*. Sets the minimum log level at which the plugin will parse sys logs.
 
-LogFilePath <------ syntax: *"LogFilePath=path/to/an/existing/or/non/existing/file"*. Sets a custom path for the log file that demeter outputs in.
+LogFilePath <--   syntax: *"LogFilePath=path/to/an/existing/or/non/existing/file"*. Sets a custom path for the log file that demeter outputs in.
 
-SlurmLogPath <----- syntax: *"SlurmLogPath=path/to/an/existing/folder"*. Sets a custom path for the folder containing the slurm log file that demeter will parse.
+SlurmLogPath <--  syntax: *"SlurmLogPath=path/to/an/existing/folder"*. Sets a custom path for the folder containing the slurm log file that demeter will parse.
 
-SysLogPath <------- syntax: *"SysLogPath=path/to/an/existing/folder"*. Sets a custom path for the folder containing the system log file that demeter will parse.
+SysLogPath <--    syntax: *"SysLogPath=path/to/an/existing/folder"*. Sets a custom path for the folder containing the system log file that demeter will parse.
 
-DemeterCompLoc <--- syntax: *"DemeterCompLoc=http://link:port/to/the/elastic/database/and/index"*. Sets the link and port that demeter needs to talk with the Elasticsearch database and index the data that it gathered.
+DemeterCompLoc <-- syntax: *"DemeterCompLoc=http://link:port/to/the/elastic/database/and/index"*. Sets the link and port that demeter needs to talk with the Elasticsearch database and index the data that it gathered.
 
-DemeterCompProxy <- syntax: *"DemeterCompProxy=proxyhost:port"*. Sets a proxy used by demeter to talk with the database if needed to access it. Can be ommited if not needed.
+DemeterCompProxy <-- syntax: *"DemeterCompProxy=proxyhost:port"*. Sets a proxy used by demeter to talk with the database if needed to access it. Can be ommited if not needed.
 
 
 !!!NEW OPTIONS TO BE ADDED!!!
