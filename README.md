@@ -19,7 +19,7 @@ Verbose <---------- syntax: *"Verbose=(uint)"*. Sets the verbose level for the d
 
 LogLevel <--------- syntax: *"LogLevel=DEBUG||INFO||WARNING||ERROR||FATAL"*. Sets the logging level for demeter logs.
 
-LogStyle <--------- syntax: *"LogStyle=FANCY||SIMPLE||SYSTEM"*. Sets the logging style for demeter logs.
+LogStyle <---------- syntax: *"LogStyle=FANCY||SIMPLE||SYSTEM"*. Sets the logging style for demeter logs.
 
 SlurmLogLevel <-- syntax: *"SlurmLogLevel=DEBUG||INFO||WARNING||ERROR||FATAL"*. Sets the minimum log level at which the plugin will parse slurm logs.
 
