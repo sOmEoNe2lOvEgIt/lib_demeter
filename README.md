@@ -21,7 +21,7 @@ LogLevel <--------- syntax: *"LogLevel=DEBUG||INFO||WARNING||ERROR||FATAL"*. Set
 
 LogStyle <---------- syntax: *"LogStyle=FANCY||SIMPLE||SYSTEM"*. Sets the logging style for demeter logs.
 
-SlurmLogLevel <-- syntax: *"SlurmLogLevel=DEBUG||INFO||WARNING||ERROR||FATAL"*. Sets the minimum log level at which the plugin will parse slurm logs.
+SlurmLogLevel <--- syntax: *"SlurmLogLevel=DEBUG||INFO||WARNING||ERROR||FATAL"*. Sets the minimum log level at which the plugin will parse slurm logs.
 
 SysLogLevel <------ syntax: *"SlurmLogLevel=DEBUG||INFO||WARNING||ERROR||FATAL"*. Sets the minimum log level at which the plugin will parse sys logs.
 
