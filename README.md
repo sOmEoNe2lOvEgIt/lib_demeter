@@ -1,18 +1,18 @@
 
 ![hoe](https://user-images.githubusercontent.com/87118859/185426997-149c94e8-e33e-4621-b193-81594645686a.png)
 # Demeter
-prep_demeter is a slurm plugin made for harvesting data on your cluster's nodes like info about ram usage, oom state, parsed logs, etc...
+Demeter lib is a lib used by the demeter slurm plugins made for harvesting data on your cluster's nodes like info about ram usage, oom state, parsed logs, etc...
 
 Demeter gathers info by reading sys files just after a job ran as well as reading output logs to parse them into more digestible outputs.
 
-This plugin may be used in pair whith "task_demeter" plugin so that you can gather more accurate information if not any.
+Plugins that use this lib are a PREP and a TASK plugin both named demeter. You can find them on my github!
 
 ## Conf:
-A conf file can be provided to the plugin if placed at /etc/slurm/demeter.conf.
+A conf file can be provided to the plugins if placed at /etc/slurm/demeter.conf.
 
-This file has to be readable by the slurm user and has to be present on every slurmd as well as the slurm controller.
+This file has to be readable by the slurm user and has to be present on every slurmd's (slurm nodes) as well as on the slurm controller.s.
 
-This is strictly optional but highly recommended as you will probably need to setup some file paths or your elastic database adress and index.
+This is strictly optional but highly recommended as you will probably need to setup some file paths or your elastic database adress and index and such.
 
 ### This file can contain multiple parameters that you can define:
 
@@ -35,7 +35,6 @@ This is strictly optional but highly recommended as you will probably need to se
 - DemeterCompLoc: *"DemeterCompLoc= protocol://link:port/to/the/elastic/database/and/index"*. Sets the link and port that demeter needs to talk with the Elasticsearch database and index the data that it gathered.
 
 - DemeterCompProxy: *"DemeterCompProxy=proxyhost:port"*. Sets a proxy used by demeter to talk with the database if needed to access it. Can be ommited if not needed.
-
 
 !!!NEW OPTIONS TO BE ADDED!!!
 
