@@ -5,14 +5,13 @@
 ## Wow, such make, much file!
 ##
 
-SLURM_ROOT_DIR	=	/usr
-SLURM_INC_DIR	=	/root/SLURM/slurm.build
-SLURM_LIB_DIR	=	/usr/lib64/slurm
-SLURM_BUILD		=	21.08.8-2
-SLURM_BUILD_DIR	=	/root/rpmbuild/BUILD/slurm-$(SLURM_BUILD)
-LIBIBMAD_DIR	=	/usr/lib64/
+SLURM_INC_DIR		=	/root/SLURM/slurm.build
+LIBIBMAD_DIR		=	/usr/lib64/
+IBMAD_INC_DIR		=	/usr/include/infiniband/
+LIB_SLURM			=	/usr/lib64/slurm
+SLURM_LIB_RUN_PATH	=	/usr/lib64/slurm
 
-LIB_FILE		=	libdemeter.so
+LIB_FILE			=	libdemeter.so
 
 GATHER_SRC =src/gatherers/gather_cgroup.c							\
 			src/gatherers/gather_logs.c								\
@@ -51,8 +50,8 @@ TOOLS_SRC = src/tools/is_log_empty.c								\
 			src/tools/get/get_rotate_time.c							\
 
 CC		=	gcc
-CFLAGS	?=	-Wall -fPIC -g3 -gstrict-dwarf -Iinclude -I$(SLURM_INC_DIR) -I$(SLURM_BUILD_DIR) -I/usr/include/infiniband/
-LDFLAGS	?=	-shared -lcurl -L. -L$(LIBIBMAD_DIR) -libmad -libumad
+CFLAGS	?=	-Wall -g3 -gstrict-dwarf -fPIC -Iinclude -I$(SLURM_INC_DIR) -I$(IBMAD_INC_DIR) -Wl,-rpath=$(SLURM_LIB_RUN_PATH)
+LDFLAGS	?=	-shared -lcurl -L$(LIBIBMAD_DIR) -libmad -libumad -L$(LIB_SLURM) -lslurmfull
 
 all:			$(LIB_FILE)
 

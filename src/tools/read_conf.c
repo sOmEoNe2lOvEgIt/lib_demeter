@@ -57,8 +57,9 @@ demeter_conf_t *read_conf(void)
     s_p_options_t options[] = {{"Verbose", S_P_UINT32},
     {"LogStyle", S_P_STRING}, {"LogLevel", S_P_STRING},
     {"SlurmLogLevel", S_P_STRING}, {"LogFilePath", S_P_STRING},
-    {"SlurmLogPath", S_P_STRING}, {"SysLogPath", S_P_STRING}, {NULL},
-    {"DemeterCompLoc", S_P_STRING}, {"DemeterCompProxy", S_P_STRING}};
+    {"SlurmLogPath", S_P_STRING}, {"SysLogPath", S_P_STRING},
+    {"DemeterCompLoc", S_P_STRING}, {"DemeterCompProxy", S_P_STRING},
+    {NULL}};
     demeter_conf_t *conf = init_conf();
     char *log_style = NULL, *log_level = NULL, *slurm_log_level = NULL,
     *log_file_path = NULL, *slurm_log_path = NULL, *demeter_comp_loc = NULL,
@@ -68,7 +69,9 @@ demeter_conf_t *read_conf(void)
 
     memset(teststr, 0, 1000);
     tbl = s_p_hashtbl_create(options);
-    if (s_p_parse_file(tbl, NULL, conf_path, false) == SLURM_ERROR) {
+    if (tbl == NULL)
+        return (NULL);
+    if (s_p_parse_file(tbl, NULL, conf_path, false) != SLURM_SUCCESS) {
         s_p_hashtbl_destroy(tbl);
         return (conf);
     }
@@ -99,28 +102,43 @@ demeter_conf_t *read_conf(void)
         xfree(slurm_log_level);
     }
     if (log_file_path != NULL) {
-        if (is_conf_path_accesible(log_file_path))
+        if (is_conf_path_accesible(log_file_path)) {
+            if (conf->log_file_path != NULL)
+                free(conf->log_file_path);
             conf->log_file_path = strdup(log_file_path);
+        }
         xfree(log_file_path);
     }
     if (slurm_log_path != NULL) {
-        if (is_conf_path_accesible(slurm_log_path))
+        if (is_conf_path_accesible(slurm_log_path)) {
+            if (conf->slurm_log_path != NULL)
+                free(conf->slurm_log_path);
             conf->slurm_log_path = strdup(slurm_log_path);
+        }
         xfree(slurm_log_path);
     }
     if (sys_log_path != NULL) {
-        if (is_conf_path_accesible(sys_log_path))
+        if (is_conf_path_accesible(sys_log_path)) {
+            if (conf->sys_log_path != NULL)
+                free(conf->sys_log_path);
             conf->sys_log_path = strdup(sys_log_path);
+        }
         xfree(sys_log_path);
     }
     if (demeter_comp_loc != NULL) {
-        if (demeter_comp_loc != NULL)
+        if (demeter_comp_loc != NULL) {
+            if (conf->demeter_comp_loc != NULL)
+                free(conf->demeter_comp_loc);
             conf->demeter_comp_loc = strdup(demeter_comp_loc);
+        }
         xfree(demeter_comp_loc);
     }
     if (demeter_comp_proxy != NULL) {
-        if (demeter_comp_proxy != NULL)
+        if (demeter_comp_proxy != NULL) {
+            if (conf->demeter_comp_proxy != NULL)
+                free(conf->demeter_comp_proxy);
             conf->demeter_comp_proxy = strdup(demeter_comp_proxy);
+        }
         xfree(demeter_comp_proxy);
     }
     s_p_hashtbl_destroy(tbl);
