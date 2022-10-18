@@ -137,7 +137,9 @@ char *get_time_str(void);
 int get_len_to_char(char *str, char c);
 // Returns distance to the next char c in  string str.
 char *get_job_transfer_path(uint job_id);
+// Returns path to job transfer directory.
 char *get_hostname(void);
+// Returns malloced hostname of the current machine.
 int zgetline(char **line, gzFile file);
 // Returns a line from a gzFile.
 ssize_t getline_from_end(char **line, size_t *len, FILE *file, long *line_offset);
@@ -161,6 +163,12 @@ char *append_str(char *str, char *to_append);
 // Appends string to another.
 time_t get_rotate_time(char *file_name);
 // Returns time of last rotation of file. (file name has to have "~log-YYYY-MM-DD~" format)
+char *get_nodename(char *nodeset);
+// Returns allocated nodename from nodeset, returns NULL if error.
+char *get_nodecount(char *nodeset);
+// Returns clean allocated nodecount from nodeset. Returns NULL if error, "-1" if no nodecount.
+int get_next_node(char *clean_nodecount, int curr_node);
+// Returns next node from nodecount. Returns -84 if error and -1 if last node.
 
 // I'M FREE!!!
 //___________________________________________________________________________________________________________________________________________

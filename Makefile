@@ -48,6 +48,7 @@ TOOLS_SRC = src/tools/is_log_empty.c								\
 			src/tools/get/get_hostname.c							\
 			src/tools/get/zgetline.c								\
 			src/tools/get/get_rotate_time.c							\
+			src/tools/get/get_nodeset.c								\
 
 CC		=	gcc
 CFLAGS	?=	-Wall -g3 -gstrict-dwarf -fPIC -Iinclude -I$(SLURM_INC_DIR) -I$(IBMAD_INC_DIR) -Wl,-rpath=$(SLURM_LIB_RUN_PATH)
