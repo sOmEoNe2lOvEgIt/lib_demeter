@@ -169,6 +169,8 @@ char *get_nodecount(char *nodeset);
 // Returns clean allocated nodecount from nodeset. Returns NULL if error, "-1" if no nodecount.
 int get_next_node(char *clean_nodecount, int curr_node);
 // Returns next node from nodecount. Returns -84 if error and -1 if last node.
+bool is_in_nodeset(char *curr_node, char *nodeset);
+// returns true if curr_node is in nodeset.
 
 // I'M FREE!!!
 //___________________________________________________________________________________________________________________________________________
