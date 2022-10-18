@@ -39,7 +39,7 @@ static bool check_order(char *nodeset)
         return (false);
     i++;
     last_val = atoi(&nodeset[i]);
-    for (i = 0; nodeset[i] != '\0' && nodeset[i] != ']'; i++) {
+    for (; nodeset[i] != '\0' && nodeset[i] != ']'; i++) {
         if (nodeset[i] == '[')
             return (false);
         if (nodeset[i] == ',' || nodeset[i] == '-') {
@@ -48,7 +48,7 @@ static bool check_order(char *nodeset)
             last_val = atoi(&nodeset[i + 1]);
         }
     }
-    if (nodeset[i] != '\0')
+    if (nodeset[i] == '\0')
         return (false);
     return (true);
 }
@@ -69,12 +69,16 @@ char *get_nodecount(char *nodeset)
         for (i = 0; nodeset[i] != '\0' && nodeset[i] != '\n' &&
         (nodeset[i] < '0' || nodeset[i] > '9'); i++);
         for (; nodeset[i] != '\0' && nodeset[i] != '\n' &&
-        (nodeset[i] >= '0' || nodeset[i] <= '9'); i++, j++)
+        (nodeset[i] >= '0' && nodeset[i] <= '9'); i++, j++)
             nodecount[j] = nodeset[i];
         nodecount[j] = '\0';
         if(nodecount[0] == '\0') {
             free(nodecount);
             return (strdup("-1"));
+        }
+        if ((nodeset[i] != '\0' && nodeset[i] != '\n')){
+            free(nodecount);
+            return (NULL);
         }
         return(nodecount);
     }
@@ -83,7 +87,7 @@ char *get_nodecount(char *nodeset)
         free(nodecount);
         return (NULL);
     }
-    if (!check_order(&nodeset[i])) {
+    if (!check_order(nodeset)) {
         free(nodecount);
         return (NULL);
     }
