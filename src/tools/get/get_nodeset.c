@@ -68,8 +68,7 @@ char *get_nodecount(char *nodeset)
     if (strstr(nodeset, "[") == NULL && strstr(nodeset, "]") == NULL) {
         for (i = 0; nodeset[i] != '\0' && nodeset[i] != '\n' &&
         (nodeset[i] < '0' || nodeset[i] > '9'); i++);
-        for (; nodeset[i] != '\0' && nodeset[i] != '\n' &&
-        (nodeset[i] >= '0' && nodeset[i] <= '9'); i++, j++)
+        for (;nodeset[i] >= '0' && nodeset[i] <= '9'; i++, j++)
             nodecount[j] = nodeset[i];
         nodecount[j] = '\0';
         if(nodecount[0] == '\0') {
@@ -121,18 +120,24 @@ int get_next_node(char *clean_nodecount, int curr_node)
 
 static bool is_in_nodecount(char *clean_nodecount, int node)
 {
-    int i = 0, last_val = -1;
+    int i = 0, last_val = -1, max_val = 0;
 
     if (clean_nodecount == NULL)
         return (false);
     last_val = atoi(&clean_nodecount[i]);
-    for (i = 0; clean_nodecount[i] != '\0' && last_val <= node; i++) {
-        if (clean_nodecount[i] == ',' || clean_nodecount[i] == '-') {
+    for (i = 0; clean_nodecount[i] != '\0' && last_val < node; i++) {
+        if (clean_nodecount[i] == '-') {
+            max_val = atoi(&clean_nodecount[i + 1]);
+            if (node <= max_val && node >= last_val)
+                return (true);
+            last_val = max_val;
+        }
+        if (clean_nodecount[i] == ',') {
             last_val = atoi(&clean_nodecount[i + 1]);
         }
     }
     if (last_val == node)
-        return (true);
+            return (true);
     return (false);
 }
 
