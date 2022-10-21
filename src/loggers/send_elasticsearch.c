@@ -60,6 +60,7 @@ linked_list_t *gathered_sel, perf_data_t *gathered_perf_data)
         free(tmp);
     json_log = append_str(json_log, ", ");
     tmp = format_cgroup(cgroup_data);
+    write_log_to_file(demeter_conf, ((cgroup_data_t*)cgroup_data->next->data)->cpuset_cpus, INFO, 0);
     json_log = append_str(json_log, tmp);
     if (tmp != NULL)
         free(tmp);

@@ -11,7 +11,8 @@
 linked_list_t *unlog_cgroup(demeter_conf_t *demeter_conf, uint job_id)
 {
     FILE *file = NULL;
-    char *line = NULL, *cgroup_path = NULL;
+    char *line = NULL, *cgroup_path = NULL,
+    cpuset_cpus[1024] = {0}, cpuset_effective_cpus[1024] = {0};
     size_t len = 1000;
     signed long long int step_id = 0;
     linked_list_t *list = NULL;
@@ -37,7 +38,9 @@ linked_list_t *unlog_cgroup(demeter_conf_t *demeter_conf, uint job_id)
             sscanf(line, "###%lli,%u,%d,%d,%d,#%[^#]#,#%[^#]####",
             &step_id, &cgroup_data->mem_max_usage_bytes, &cgroup_data->oom_kill_disable,
             &cgroup_data->under_oom, &cgroup_data->oom_kill,
-            cgroup_data->cpuset_cpus, cgroup_data->cpuset_effective_cpus);
+            cpuset_cpus, cpuset_effective_cpus);
+            cgroup_data->cpuset_cpus = strdup(cpuset_cpus);
+            cgroup_data->cpuset_effective_cpus = strdup(cpuset_effective_cpus);
             if (step_id < 0)
                 cgroup_data->step_id = 4294967200;
             else

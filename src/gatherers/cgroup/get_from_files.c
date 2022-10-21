@@ -10,16 +10,6 @@
 #include "src/common/xmalloc.h"
 #include "demeter.h"
 
-static void cut_str_ret(char *str)
-{
-    int i = 0;
-
-    if (str == NULL)
-        return;
-    for (;str[i] != 0 && str[i] != '\n'; i++);
-    str[i] = '\0';
-}
-
 static bool is_file_opened(FILE *file, demeter_conf_t *conf)
 {
     if (file == NULL) {
@@ -81,23 +71,29 @@ void get_cpuset(cgroup_data_t *cgroup_data, job_id_info_t *job_info, demeter_con
     FILE *file = NULL;
 
     memset(cgroup_path, 0, 130);
-    sprintf(cgroup_path, "/sys/fs/cgroup/cpuset/slurm/uid_%u/job_%u/cpuset.cpu_exclusive", job_info->uid, job_info->job_id);
+    if (job_info->step_id < 4294967292)
+        sprintf(cgroup_path, "/sys/fs/cgroup/cpuset/slurm/uid_%u/job_%u/step_%u/cpuset.cpu_exclusive", job_info->uid, job_info->job_id, job_info->step_id);
+    else
+        sprintf(cgroup_path, "/sys/fs/cgroup/cpuset/slurm/uid_%u/job_%u/cpuset.cpu_exclusive", job_info->uid, job_info->job_id);
     file = fopen(cgroup_path, "r");
     if (!is_file_opened(file, conf))
         return;
     write_log_to_file(conf, "Getting cpuset", DEBUG, 99);
     getline(&res, &read_size, file);
+    remove_newline(res);
     cgroup_data->cpuset_cpus = strdup(res);
-    cut_str_ret(cgroup_data->cpuset_cpus);
     fclose(file);
-    sprintf(cgroup_path, "/sys/fs/cgroup/cpuset/slurm/uid_%u/job_%u/cpuset.effective_cpus", job_info->uid, job_info->job_id);
+    if (job_info->step_id < 4294967292)
+        sprintf(cgroup_path, "/sys/fs/cgroup/cpuset/slurm/uid_%u/job_%u/step_%u/cpuset.effective_cpus", job_info->uid, job_info->job_id, job_info->step_id);
+    else
+        sprintf(cgroup_path, "/sys/fs/cgroup/cpuset/slurm/uid_%u/job_%u/cpuset.effective_cpus", job_info->uid, job_info->job_id);
     file = fopen(cgroup_path, "r");
     if (!is_file_opened(file, conf))
         return;
     write_log_to_file(conf, "Getting effective cpus", DEBUG, 99);
     getline(&res, &read_size, file);
+    remove_newline(res);
     cgroup_data->cpuset_effective_cpus = strdup(res);
-    cut_str_ret(cgroup_data->cpuset_effective_cpus);
     fclose(file);
     free(res);
 }
