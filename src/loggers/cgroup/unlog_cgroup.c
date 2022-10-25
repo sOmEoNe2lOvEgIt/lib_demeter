@@ -42,7 +42,7 @@ linked_list_t *unlog_cgroup(demeter_conf_t *demeter_conf, uint job_id)
             cgroup_data->cpuset_cpus = strdup(cpuset_cpus);
             cgroup_data->cpuset_effective_cpus = strdup(cpuset_effective_cpus);
             if (step_id < 0)
-                cgroup_data->step_id = 4294967200;
+                cgroup_data->step_id = UINT_MAX -1;
             else
                 cgroup_data->step_id = step_id;
             list = add_to_list(list, cgroup_data);

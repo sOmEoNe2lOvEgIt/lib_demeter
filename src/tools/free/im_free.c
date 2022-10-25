@@ -53,19 +53,14 @@ void free_cgroup(cgroup_data_t *data)
 
 void free_cgroup_list(linked_list_t *cgroup_list)
 {
-    cgroup_data_t *curr_cgroup = NULL;
     linked_list_t *next_list = NULL;
 
-    if (cgroup_list == NULL || cgroup_list->data == NULL)
+    if (!cgroup_list|| !cgroup_list->data)
         return;
-    while (cgroup_list != NULL) {
+    for (;cgroup_list; cgroup_list = next_list) {
         next_list = cgroup_list->next;
-        if (cgroup_list->data != NULL) {
-            curr_cgroup = (cgroup_data_t *)cgroup_list->data;
-            free_cgroup(curr_cgroup);
-        }
+        free_cgroup((cgroup_data_t *)cgroup_list->data);
         free(cgroup_list);
-        cgroup_list = next_list;
     }
 }
 
