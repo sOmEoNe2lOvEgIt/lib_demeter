@@ -15,30 +15,30 @@ char *format_logs(linked_list_t *gathered_logs, linked_list_t *gathered_sel)
     linked_list_t *tmp = gathered_logs;
     char *json_log = NULL, element_str[50];
 
-    if (tmp != NULL)
+    if (tmp)
         json_log = strdup("\"syslogs/slurmlogs\":{\"data\":\"");
-    for (;tmp != NULL; tmp = tmp->next) {
+    for (;tmp; tmp = tmp->next) {
         if (((parsed_log_t *)tmp->data)->unparsed_log == NULL)
             continue;
         remove_newline(((parsed_log_t *)tmp->data)->unparsed_log);
         json_log = append_str(json_log, ((parsed_log_t *)tmp->data)->unparsed_log);
         json_log = append_str(json_log, "\\n");
     }
-    if (gathered_logs != NULL)
+    if (gathered_logs)
         json_log = append_str(json_log, "\"}, ");
     tmp = gathered_sel;
-    if (tmp != NULL) {
+    if (tmp) {
         sprintf(element_str, "\"sel_logs\":{\"data\":\"");
         json_log = append_str(json_log, element_str);
     }
-    for (;tmp != NULL; tmp = tmp->next) {
+    for (;tmp; tmp = tmp->next) {
         if (((parsed_sel_t *)tmp->data)->unparsed_sel == NULL)
             continue;
         remove_newline(((parsed_sel_t *)tmp->data)->unparsed_sel);
         json_log = append_str(json_log, ((parsed_sel_t *)tmp->data)->unparsed_sel);
         json_log = append_str(json_log, "\\n");
     }
-    if (gathered_sel != NULL)
+    if (gathered_sel)
         json_log = append_str(json_log, "\"}");
     return (json_log);
 }
@@ -47,7 +47,7 @@ static char *format_cgroup_single(cgroup_data_t *cgroup)
 {
     char tmp[200];
 
-    if (cgroup == NULL)
+    if (!cgroup)
         return (NULL);
     memset(tmp, 0, 200);
     if (cgroup->step_id < 4294967200)
@@ -64,12 +64,12 @@ char *format_cgroup(linked_list_t *cgroup)
     linked_list_t *tmp = cgroup;
     char *json_cgroup = NULL;
 
-    if (tmp == NULL)
+    if (!tmp)
         return (NULL);
     json_cgroup = strdup("\"cgroup\":{");
-    for (;tmp != NULL; tmp = tmp->next) {
+    for (;tmp; tmp = tmp->next) {
         json_cgroup = append_str(json_cgroup, format_cgroup_single((cgroup_data_t *)tmp->data));
-        if (tmp->next != NULL)
+        if (tmp->next)
             json_cgroup = append_str(json_cgroup, ", ");
     }
     json_cgroup = append_str(json_cgroup, "}");
@@ -90,7 +90,7 @@ char *format_log_counter(log_counter_t *log_counter)
 {
     char tmp[200];
 
-    if (log_counter == NULL)
+    if (!log_counter)
         return (NULL);
     memset(tmp, 0, 200);
     sprintf(tmp, "\"log_counter\":{\"errors\" : %u, \"warnings\" : %u, \"infos\" : %u, \"debugs\" : %u, \"fatals\" : %u}",
@@ -103,7 +103,7 @@ char *format_perf_count(perf_data_t *perf_data)
 {
     char tmp[631];
 
-    if (perf_data == NULL)
+    if (!perf_data)
         return (strdup("\"perf_data\":{}"));
     memset(tmp, 0, 631);
     sprintf (tmp, "\"perf_count\":{\"counterselect\" : %u, \"excbufoverrunerrors\" : %u, \"linkdowned\" : %u, \"linkintegrityerrors\" : %u, \"linkrecovers\" : %u, \"portbufferoverrunerrors\" : %u, \"portdlidmappingerrors\" : %u, \"portlocalphysicalerrors\" : %u, \"portloopingerrors\" : %u, \"portmalformedpkterrors\" : %u, \"portselect\" : %u, \"portvlmappingerrors\" : %u, \"qp1dropped\" : %u, \"rcvconstrainterrors\" : %u, \"rcvdata\" : %u, \"rcverrors\" : %u, \"rcvpkts\" : %u, \"rcvremotephyerrors\" : %u, \"rcvswrelayerrors\" : %u}",

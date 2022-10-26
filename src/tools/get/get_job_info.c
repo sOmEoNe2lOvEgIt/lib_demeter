@@ -13,7 +13,7 @@ job_id_info_t *get_job_info(job_env_t* job)
 {
     job_id_info_t *job_info = malloc(sizeof(job_id_info_t));
 
-    if (job_info == NULL)
+    if (!job_info)
         return (NULL);
     job_info->job_id = job->jobid;
     job_info->uid = job->uid;

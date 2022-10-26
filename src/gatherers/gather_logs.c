@@ -15,10 +15,10 @@ static log_counter_t *count_log(linked_list_t *log_list)
     parsed_log_t *parsed_log = NULL;
     linked_list_t *tmp = log_list;
     
-    if (log_counter == NULL)
+    if (!log_counter)
         return (NULL);
     memset(log_counter, 0, sizeof(log_counter_t));
-    while (tmp != NULL) {
+    while (tmp) {
         parsed_log = (parsed_log_t *)tmp->data;
         switch (parsed_log->log_level) {
             case INFO:
@@ -48,7 +48,7 @@ parsed_log_t *init_parsed_log(void)
 {
     parsed_log_t *parsed_log = malloc(sizeof(parsed_log_t));
 
-    if (parsed_log == NULL)
+    if (!parsed_log)
         return (NULL);
     parsed_log->unparsed_log = NULL;
     parsed_log->log_proc_name = NULL;

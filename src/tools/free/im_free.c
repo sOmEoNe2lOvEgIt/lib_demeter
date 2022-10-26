@@ -13,10 +13,10 @@ void free_list(linked_list_t *list)
 {
     linked_list_t *tmp = list, *prev = NULL;
 
-    while (tmp != NULL) {
+    while (tmp) {
         prev = tmp;
         tmp = tmp->next;
-        if (prev->data != NULL)
+        if (prev->data)
             free(prev->data);
         free(prev);
     }
@@ -24,30 +24,30 @@ void free_list(linked_list_t *list)
 
 void free_conf(demeter_conf_t *conf)
 {
-    if (conf == NULL)
+    if (!conf)
         return;
-    if (conf->log_file_path != NULL)
+    if (conf->log_file_path)
         free(conf->log_file_path);
-    if (conf->slurm_log_path != NULL)
+    if (conf->slurm_log_path)
         free(conf->slurm_log_path);
-    if (conf->sys_log_path != NULL)
+    if (conf->sys_log_path)
         free(conf->sys_log_path);
-    if (conf->demeter_comp_loc != NULL)
+    if (conf->demeter_comp_loc)
         free(conf->demeter_comp_loc);
-    if (conf->demeter_comp_proxy != NULL)
+    if (conf->demeter_comp_proxy)
         free(conf->demeter_comp_proxy);
     free(conf);
 }
 
 void free_cgroup(cgroup_data_t *data)
 {
-    if (data == NULL)
+    if (!data)
         return;
-    if (data->cpuset_cpus != NULL)
+    if (data->cpuset_cpus)
         free(data->cpuset_cpus);
-    if (data->cpuset_effective_cpus != NULL)
+    if (data->cpuset_effective_cpus)
         free(data->cpuset_effective_cpus);
-    if (data != NULL)
+    if (data)
         free(data);
 }
 
@@ -66,7 +66,7 @@ void free_cgroup_list(linked_list_t *cgroup_list)
 
 void free_job_id_info(job_id_info_t *job_info)
 {
-    if (job_info == NULL)
+    if (!job_info)
         return;
     free(job_info);
 }
@@ -76,17 +76,17 @@ void free_job_id_info(job_id_info_t *job_info)
 
 void free_parsed_log(parsed_log_t *log)
 {
-    if (log == NULL)
+    if (!log)
         return;
-    if (log->unparsed_log != NULL)
+    if (log->unparsed_log)
         free(log->unparsed_log);
-    if (log->log_proc_name != NULL)
+    if (log->log_proc_name)
         free(log->log_proc_name);
-    if (log->log_source_path != NULL)
+    if (log->log_source_path)
         free(log->log_source_path);
-    if (log->log_time_str != NULL)
+    if (log->log_time_str)
         free(log->log_time_str);
-    if (log != NULL)
+    if (log)
         free(log);
 }
 
@@ -95,11 +95,11 @@ void free_log_list(linked_list_t *log_list)
     parsed_log_t *curr_log = NULL;
     linked_list_t *next_list = NULL;
 
-    if (log_list == NULL || log_list->data == NULL)
+    if (!log_list || !log_list->data)
         return;
-    while (log_list != NULL) {
+    while (log_list) {
         next_list = log_list->next;
-        if (log_list->data != NULL) {
+        if (log_list->data) {
             curr_log = (parsed_log_t *)log_list->data;
             free_parsed_log(curr_log);
         }
@@ -110,7 +110,7 @@ void free_log_list(linked_list_t *log_list)
 
 void free_log_counter(log_counter_t *log_counter)
 {
-    if (log_counter == NULL)
+    if (!log_counter)
         return;
     free(log_counter);
 }
@@ -120,15 +120,15 @@ void free_log_counter(log_counter_t *log_counter)
 
 void free_parsed_sel(parsed_sel_t *parsed_sel)
 {
-    if (parsed_sel == NULL)
+    if (!parsed_sel)
         return;
-    if (parsed_sel->unparsed_sel != NULL)
+    if (parsed_sel->unparsed_sel)
         free(parsed_sel->unparsed_sel);
-    if (parsed_sel->sel_time_str != NULL)
+    if (parsed_sel->sel_time_str)
         free(parsed_sel->sel_time_str);
-    if (parsed_sel->sel_msg != NULL)
+    if (parsed_sel->sel_msg)
         free(parsed_sel->sel_msg);
-    if (parsed_sel->sel_msg_type != NULL)
+    if (parsed_sel->sel_msg_type)
         free(parsed_sel->sel_msg_type);
     free(parsed_sel);
 }
@@ -138,11 +138,11 @@ void free_sel_list(linked_list_t *sel_list)
     parsed_sel_t *curr_sel = NULL;
     linked_list_t *next_list = NULL;
 
-    if (sel_list == NULL || sel_list->data == NULL)
+    if (!sel_list || !sel_list->data)
         return;
-    while (sel_list != NULL) {
+    while (sel_list) {
         next_list = sel_list->next;
-        if (sel_list->data != NULL) {
+        if (sel_list->data) {
             curr_sel = (parsed_sel_t *)sel_list->data;
             free_parsed_sel(curr_sel);
         }
@@ -156,6 +156,6 @@ void free_sel_list(linked_list_t *sel_list)
 
 void free_perf_count(perf_data_t *perf_count)
 {
-    if (perf_count != NULL)
+    if (perf_count)
         free(perf_count);
 }

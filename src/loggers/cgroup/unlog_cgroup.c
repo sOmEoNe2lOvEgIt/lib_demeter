@@ -18,18 +18,18 @@ linked_list_t *unlog_cgroup(demeter_conf_t *demeter_conf, uint job_id)
     linked_list_t *list = NULL;
     cgroup_data_t *cgroup_data = NULL;
 
-    if (demeter_conf == NULL)
+    if (!demeter_conf)
         return NULL;
     cgroup_path = get_job_transfer_path(job_id);
-    if (cgroup_path == NULL)
+    if (!cgroup_path)
         return NULL;
     file = fopen(cgroup_path, "r");
-    if (file == NULL)
+    if (!file)
         return NULL;
     while (getline(&line, &len, file) != -1) {
-        if (strstr(line, "###") != NULL) {
+        if (strstr(line, "###")) {
             cgroup_data = alloc_cgroup_struct();
-            if (cgroup_data == NULL) {
+            if (!cgroup_data) {
                 fclose(file);
                 free(line);
                 return NULL;
@@ -51,7 +51,7 @@ linked_list_t *unlog_cgroup(demeter_conf_t *demeter_conf, uint job_id)
     fclose(file);
     remove(cgroup_path);
     free (cgroup_path);
-    if (line != NULL)
+    if (line)
         free (line);
     return (list);
 }

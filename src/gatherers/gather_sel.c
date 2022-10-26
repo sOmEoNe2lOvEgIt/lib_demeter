@@ -14,7 +14,7 @@
 static parsed_sel_t *init_parsed_sel(void)
 {
     parsed_sel_t *parsed_sel = malloc(sizeof(parsed_sel_t));
-    if (parsed_sel == NULL)
+    if (!parsed_sel)
         return (NULL);
     parsed_sel->unparsed_sel = NULL;
     parsed_sel->sel_time_str = NULL;
@@ -32,7 +32,7 @@ linked_list_t *gather_sel(job_id_info_t *job_info)
     char *buffer = NULL;
     size_t len = 1000;
 
-    if ((log_fd = popen("ipmitool -U admin -P password sel list", "r")) == NULL) {
+    if (!(log_fd = popen("ipmitool -U admin -P password sel list", "r"))) {
         debug2("demeter: Cannot exec ipmitool command.");
         return (NULL);
     }

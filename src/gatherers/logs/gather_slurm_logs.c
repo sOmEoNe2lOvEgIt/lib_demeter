@@ -18,11 +18,11 @@ static int handle_log_time(parsed_log_t *curr_log, demeter_conf_t *demeter_conf,
     ret = get_slurm_log_time(curr_log, start_time);
     if (ret) {
         write_log_to_file(demeter_conf, "Cannot get log time", DEBUG, 99);
-        if (curr_log->unparsed_log != NULL) {
+        if (curr_log->unparsed_log) {
             free(curr_log->unparsed_log);
             curr_log->unparsed_log = NULL;
         }
-        if (curr_log->log_source_path != NULL) {
+        if (curr_log->log_source_path) {
             free(curr_log->log_source_path);
             curr_log->log_source_path = NULL;
         }
@@ -38,7 +38,7 @@ demeter_conf_t *demeter_conf, job_id_info_t *job_info)
 
     curr_log = (parsed_log_t *)(*log_list)->data;
     curr_log->unparsed_log = strdup(buffer);
-    if (curr_log->unparsed_log == NULL)
+    if (!curr_log->unparsed_log)
         return (false);
     if (is_log_empty(curr_log->unparsed_log)) {
         free(curr_log->unparsed_log);
@@ -65,7 +65,7 @@ linked_list_t *gather_slurm_logs
     int getline_ret = 0, zgetline_ret = 0;
     long ln_offset = 0;
 
-    if ((log_file = open_slurm_log(demeter_conf)) == NULL)
+    if (!(log_file = open_slurm_log(demeter_conf)))
         return (NULL);
     log_list = add_to_list(log_list, init_parsed_log());
     for (ln_offset = 0; (getline_ret = getline_from_end(&buffer, &len, log_file, &ln_offset)) != -1; ln_offset++){
@@ -78,11 +78,11 @@ linked_list_t *gather_slurm_logs
             break;
     }
     fclose(log_file);
-    if (buffer != NULL) {
+    if (buffer) {
         free(buffer);
         buffer = NULL;
     }
-    if ((gz_log_file = open_rotated_slurm_log(demeter_conf, job_info)) == NULL)
+    if (!(gz_log_file = open_rotated_slurm_log(demeter_conf, job_info)))
         return (log_list);
     write_log_to_file(demeter_conf, "Reading rotated slurm log file", INFO, 0);
     for (ln_offset = 0; (zgetline_ret = zgetline_from_end(&buffer, &len, gz_log_file, &ln_offset)) != -1; ln_offset++){
@@ -96,7 +96,7 @@ linked_list_t *gather_slurm_logs
             break;
     }
     gzclose(gz_log_file);
-    if (buffer != NULL)
+    if (buffer)
         free(buffer);
     return (log_list);
 }

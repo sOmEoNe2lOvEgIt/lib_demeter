@@ -13,7 +13,7 @@ char *get_nodename(char *nodeset)
     char nodename[253]; //253 is the max len for a host name.
     int i = 0;
 
-    if (nodeset == NULL)
+    if (!nodeset)
         return (NULL);
     memset(nodename, 0, 253);
     for (i = 0; nodeset[i] != '\0' && nodeset[i] != '[' &&
@@ -32,7 +32,7 @@ static bool check_order(char *nodeset)
 {
     int i = 0, last_val = -1;
 
-    if (nodeset == NULL || nodeset[i] == '\0')
+    if (!nodeset || nodeset[i] == '\0')
         return (false);
     for (i = 0; nodeset[i] != '\0' && nodeset[i] != '['; i++);
     if (nodeset[i] == '\0')
@@ -58,14 +58,14 @@ char *get_nodecount(char *nodeset)
     char *nodecount;
     int i = 0, j = 0;
 
-    if (nodeset == NULL)
+    if (!nodeset)
         return (NULL);
-    if (strstr(nodeset, "[") == NULL && strstr(nodeset, "]") != NULL)
+    if (!strstr(nodeset, "[") && strstr(nodeset, "]"))
         return (NULL);
     nodecount = malloc(sizeof(char) * strlen(nodeset));
-    if (nodecount == NULL)
+    if (!nodecount)
         return (NULL);
-    if (strstr(nodeset, "[") == NULL && strstr(nodeset, "]") == NULL) {
+    if (!strstr(nodeset, "[") && !strstr(nodeset, "]")) {
         for (i = 0; nodeset[i] != '\0' && nodeset[i] != '\n' &&
         (nodeset[i] < '0' || nodeset[i] > '9'); i++);
         for (;nodeset[i] >= '0' && nodeset[i] <= '9'; i++, j++)
@@ -104,7 +104,7 @@ int get_next_node(char *clean_nodecount, int curr_node)
 {
     int i = 0, last_val = -1;
 
-    if (clean_nodecount == NULL)
+    if (!clean_nodecount)
         return (-84);
     last_val = atoi(&clean_nodecount[i]);
     for (i = 0; clean_nodecount[i] != '\0' && last_val <= curr_node; i++) {
@@ -122,7 +122,7 @@ static bool is_in_nodecount(char *clean_nodecount, int node)
 {
     int i = 0, last_val = -1, max_val = 0;
 
-    if (clean_nodecount == NULL)
+    if (!clean_nodecount)
         return (false);
     last_val = atoi(&clean_nodecount[i]);
     for (i = 0; clean_nodecount[i] != '\0' && last_val < node; i++) {
@@ -149,8 +149,8 @@ bool is_in_nodeset(char *curr_node, char *nodeset)
     *curr_node_nodecount = get_nodecount(curr_node);
     bool ret = true;
 
-    if (nodeset_nodename == NULL || curr_node_nodename == NULL ||
-    nodeset_nodecount == NULL || curr_node_nodecount == NULL) {
+    if (!nodeset_nodename || !curr_node_nodename ||
+    !nodeset_nodecount || !curr_node_nodecount) {
         if (nodeset_nodename)
             free(nodeset_nodename);
         if (curr_node_nodename)

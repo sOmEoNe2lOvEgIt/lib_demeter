@@ -14,7 +14,7 @@ char *get_job_transfer_path(uint job_id)
     char *cgroup_basepath = NULL, *cgroup_path = NULL;
     
     cgroup_basepath = slurm_conf.slurmd_spooldir;
-    if (cgroup_basepath == NULL)
+    if (!cgroup_basepath)
         return NULL;
     cgroup_path = malloc(sizeof(char) * (strlen(cgroup_basepath) + 29));
     sprintf(cgroup_path, "%s/demeter_job_%u", cgroup_basepath, job_id);

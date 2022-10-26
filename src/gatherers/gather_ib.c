@@ -133,7 +133,7 @@ perf_data_t *gather_ib(void)
     ib_portid_t portid;
 
     perf_count = malloc(sizeof(perf_data_t));
-    if (perf_count == NULL) {
+    if (!perf_count) {
         debug2("demeter: malloc failed");
         return (NULL);
     }
@@ -159,10 +159,10 @@ perf_data_t *gather_ib_diff(perf_data_t *prolog_perf_count)
 {
     perf_data_t *epilog_perf_count = NULL, *res = NULL;
 
-    if (prolog_perf_count == NULL)
+    if (!prolog_perf_count)
         return (NULL);
     epilog_perf_count = gather_ib();
-    if (epilog_perf_count == NULL)
+    if (!epilog_perf_count)
         return (NULL);
     perf_data_t diff_perf_count = {epilog_perf_count->portselect, epilog_perf_count->counterselect, (epilog_perf_count->symbolerrors - prolog_perf_count->symbolerrors),
     (epilog_perf_count->linkrecovers - prolog_perf_count->linkrecovers),
@@ -189,7 +189,7 @@ perf_data_t *gather_ib_diff(perf_data_t *prolog_perf_count)
     (epilog_perf_count->portvlmappingerrors - prolog_perf_count->portvlmappingerrors),
     (epilog_perf_count->portloopingerrors - prolog_perf_count->portloopingerrors)};
     res = malloc(sizeof(perf_data_t));
-    if (res == NULL)
+    if (!res)
         return (NULL);
     memcpy(res, &diff_perf_count, sizeof(perf_data_t));
     free(epilog_perf_count);

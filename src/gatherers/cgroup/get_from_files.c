@@ -12,7 +12,7 @@
 
 static bool is_file_opened(FILE *file, demeter_conf_t *conf)
 {
-    if (file == NULL) {
+    if (!file) {
         write_log_to_file(conf, "Could not open cgroup file", DEBUG, 0);
         return false;
     }

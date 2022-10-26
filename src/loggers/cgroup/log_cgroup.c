@@ -13,7 +13,7 @@ void log_cgroup(cgroup_data_t *cgroup_data, job_id_info_t *job_info, demeter_con
     char log_msg[250];
 
     memset(log_msg, 0, 250);
-    if (cgroup_data == NULL || job_info == NULL || conf == NULL)
+    if (!cgroup_data || !job_info || !conf)
         return;
     if (job_info->step_id >= 4294967292)
         sprintf(log_msg, "\nCgroup data for job %u from user %u, after last_step:\n\tmem_max_usage_bytes: %u\n\toom_kill_disable: %d\n\tunder_oom: %d\n\toom_kill: %d\n\tcpuset_cpus: %s\n\tcpuset_effective_cpus: %s",
@@ -28,10 +28,10 @@ static void write_cgroup_file(char *path, char *value)
 {
     FILE *file;
 
-    if (path == NULL || value == NULL)
+    if (!path || !value)
         return;
     file = fopen(path, "a");
-    if (file == NULL)
+    if (!file)
         return;
     fprintf(file, "%s", value);
     fclose(file);
@@ -42,7 +42,7 @@ void transfer_log_cgroup(cgroup_data_t *cgroup_data, job_id_info_t *job_info, de
     char log_msg[1000], *file_path;
 
     memset(log_msg, 0, 1000);
-    if (cgroup_data == NULL || job_info == NULL || conf == NULL)
+    if (!cgroup_data || !job_info || !conf)
         return;
     if (job_info->step_id >= 4294967292)
         sprintf(log_msg, "\n###-1,%u,%d,%d,%d,#%s#,#%s####\n",

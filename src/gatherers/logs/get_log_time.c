@@ -13,7 +13,7 @@ static time_t slurm_time_to_time(char *slurm_time)
     struct tm timeinfo;
     int slurm_time_idx = 0;
 
-    if (slurm_time == NULL)
+    if (!slurm_time)
         return (0);
     memset(&timeinfo, 0, sizeof(struct tm));
     slurm_time_idx += get_len_to_char(&slurm_time[slurm_time_idx], '[');
@@ -45,7 +45,7 @@ int get_slurm_log_time(parsed_log_t *log_to_parse, time_t start_time)
     char *time_str = NULL;
     int len = 0;
 
-    if (log_to_parse->log_source_path == NULL || strcmp(log_to_parse->log_source_path, "slurm_log_path") != 0)
+    if (!log_to_parse->log_source_path || strcmp(log_to_parse->log_source_path, "slurm_log_path") != 0)
         return(1);
     for (len = 0; log_to_parse->unparsed_log[len] != '\0' && log_to_parse->unparsed_log[len] != ']'; len++);
     if (log_to_parse->unparsed_log[len] == '\0')

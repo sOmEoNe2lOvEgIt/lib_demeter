@@ -18,13 +18,13 @@ FILE *init_log_file(demeter_conf_t *conf, bool silent)
     FILE *log_file;
 
     log_file = fopen(conf->log_file_path, "a");
-    if (log_file == NULL) {
+    if (!log_file) {
         if (!silent)
             debug2("demeter: warning: can't open log file. Will try to open log file at \"/tmp/demeter.log\".");
         //substitut log file if chosen one is not writable (although this one may not be writable either)
         log_file = fopen("/tmp/demeter.log", "a");
     }
-    if (log_file == NULL) {
+    if (!log_file) {
         //if we can't open the log file, we can't log anything
         error("ERROR: demeter: can't open log file at /tmp/demeter.log either. Exiting.");
         return (NULL);
@@ -74,12 +74,12 @@ int write_log_to_file(demeter_conf_t *conf, char *message, dem_log_level_t level
     if (verbose > conf->verbose_lv || level < conf->log_level)
         return (0);
     log_file = init_log_file(conf, true);
-    if (log_file == NULL) {
+    if (!log_file) {
         debug3("demeter : can't write to log file, log file is NULL.");
         return (1);
     }
     log_level = get_log_level_str(level, verbose);
-    if (log_level == NULL) {
+    if (!log_level) {
         debug3("demeter : can't write to log file, log level is NULL.");
         return (1);
     }

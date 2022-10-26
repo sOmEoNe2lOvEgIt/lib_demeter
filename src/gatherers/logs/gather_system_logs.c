@@ -13,11 +13,11 @@
 static bool handle_log_time(job_id_info_t *job_info, parsed_log_t *curr_log)
 {
     if (get_sys_log_time(curr_log, job_info->start_time) != 0) {
-        if (curr_log->unparsed_log != NULL) {
+        if (curr_log->unparsed_log) {
             free(curr_log->unparsed_log);
             curr_log->unparsed_log = NULL;
         }
-        if (curr_log->log_source_path != NULL) {
+        if (curr_log->log_source_path) {
             free(curr_log->log_source_path);
             curr_log->log_source_path = NULL;
         }
@@ -33,7 +33,7 @@ demeter_conf_t *demeter_conf, job_id_info_t *job_info)
 
     curr_log = (parsed_log_t *)(*log_list)->data;
     curr_log->unparsed_log = strdup(buffer);
-    if (curr_log->unparsed_log == NULL)
+    if (!curr_log->unparsed_log)
         return (false);
     if (is_log_empty(curr_log->unparsed_log)) {
         free(curr_log->unparsed_log);
@@ -60,7 +60,7 @@ linked_list_t *gather_system_logs
     size_t len = 1000;
     int getline_ret = 0, zgetline_ret = 0;
 
-    if ((log_file = open_system_logs(demeter_conf)) == NULL) {
+    if (!(log_file = open_system_logs(demeter_conf))) {
         write_log_to_file(demeter_conf, "Cannot open system logs", WARNING, 0);
         return (NULL);
     }
@@ -75,11 +75,11 @@ linked_list_t *gather_system_logs
             break;
     }
     fclose(log_file);
-    if (buffer != NULL) {
+    if (buffer) {
         free(buffer);
         buffer = NULL;
     }
-    if ((gz_log_file = open_rotated_system_log(demeter_conf, job_info)) == NULL)
+    if (!(gz_log_file = open_rotated_system_log(demeter_conf, job_info)))
         return (log_list);
     for (ln_offset = 0; (zgetline_ret = zgetline_from_end(&buffer, &len, gz_log_file, &ln_offset)) != -1; ln_offset++){
         if (!handle_log(ln_offset, buffer, &log_list, demeter_conf, job_info)) {
@@ -91,7 +91,7 @@ linked_list_t *gather_system_logs
             break;
     }
     gzclose(gz_log_file);
-    if (buffer != NULL)
+    if (buffer)
         free(buffer);
     return (log_list);
 }

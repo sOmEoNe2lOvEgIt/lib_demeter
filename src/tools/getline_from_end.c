@@ -62,7 +62,7 @@ ssize_t zgetline_from_end(char **line, size_t *len, gzFile file, long *line_offs
         return_value = -42;
     } else
         return_value = zgetline(line, file);
-    if ((*line) == NULL)
+    if (!(*line))
         return (-1);
     if (return_value > 0) {
         if (return_value == 1)

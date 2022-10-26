@@ -17,13 +17,13 @@ static bool send_log(demeter_conf_t *demeter_conf, char *json_log, job_id_info_t
     char *base_url = demeter_conf->demeter_comp_loc;
     struct curl_slist *list = NULL;
 
-    if (json_log == NULL)
+    if (!json_log)
         return (true);
     list = curl_slist_append(list, "Content-Type: application/json");
     curl = curl_easy_init();
     if (curl) {
         curl_easy_setopt(curl, CURLOPT_URL, base_url);
-        if (demeter_conf->demeter_comp_proxy != NULL) {
+        if (demeter_conf->demeter_comp_proxy) {
             curl_easy_setopt(curl, CURLOPT_PROXY, demeter_conf->demeter_comp_proxy);
         }
         curl_easy_setopt(curl, CURLOPT_POST, 1);
@@ -56,29 +56,29 @@ linked_list_t *gathered_sel, perf_data_t *gathered_perf_data)
     json_log = append_str(json_log, strdup("\"job_data\":{"));
     tmp = format_logs(gathered_logs, gathered_sel);
     json_log = append_str(json_log, tmp);
-    if (tmp != NULL)
+    if (tmp)
         free(tmp);
     json_log = append_str(json_log, ", ");
     tmp = format_cgroup(cgroup_data);
     write_log_to_file(demeter_conf, ((cgroup_data_t*)cgroup_data->next->data)->cpuset_cpus, INFO, 0);
     json_log = append_str(json_log, tmp);
-    if (tmp != NULL)
+    if (tmp)
         free(tmp);
     json_log = append_str(json_log, ", ");
     tmp = format_log_counter(log_counter);
     json_log = append_str(json_log, tmp);
-    if (tmp != NULL)
+    if (tmp)
         free(tmp);
     json_log = append_str(json_log, ", ");
     tmp = format_perf_count(gathered_perf_data);
     json_log = append_str(json_log, tmp);
-    if (tmp != NULL)
+    if (tmp)
         free(tmp);
     json_log = append_str(json_log, "}}");
     if (send_log(demeter_conf, json_log, job_info) == false)
         write_log_to_file(demeter_conf, "Failed to send log to elastic", DEBUG, 2);
     write_log_to_file(demeter_conf, json_log, INFO, 0);
-    if (json_log != NULL)
+    if (json_log)
         free(json_log);
     return (0);
 }

@@ -12,7 +12,7 @@ static demeter_conf_t *init_conf(void)
 {
     demeter_conf_t *conf;
 
-    if ((conf = malloc(sizeof(demeter_conf_t))) == NULL)
+    if (!(conf = malloc(sizeof(demeter_conf_t))))
         return (NULL);
     conf->verbose_lv = 0;
     conf->log_style = SIMPLE;
@@ -27,7 +27,7 @@ static demeter_conf_t *init_conf(void)
 
 static dem_log_level_t get_slurm_log_level(char *str_level)
 {
-    if (str_level == NULL)
+    if (!str_level)
         return (INFO);
     if (strncmp(str_level, "DEBUG", 5) == 0)
         return (DEBUG);
@@ -46,7 +46,7 @@ static bool is_conf_path_accesible(char *path)
 {
     FILE *file = fopen(path, "r");
  
-    if (file == NULL)
+    if (!file)
         return (false);
     fclose(file);
     return (true);
@@ -69,7 +69,7 @@ demeter_conf_t *read_conf(void)
 
     memset(teststr, 0, 1000);
     tbl = s_p_hashtbl_create(options);
-    if (tbl == NULL)
+    if (!tbl)
         return (NULL);
     if (s_p_parse_file(tbl, NULL, conf_path, false) != SLURM_SUCCESS) {
         s_p_hashtbl_destroy(tbl);
@@ -84,7 +84,7 @@ demeter_conf_t *read_conf(void)
     s_p_get_string(&sys_log_path, "SysLogPath", tbl);
     s_p_get_string(&demeter_comp_loc, "DemeterCompLoc", tbl);
     s_p_get_string(&demeter_comp_proxy, "DemeterCompProxy", tbl);
-    if (log_style != NULL) {
+    if (log_style) {
         if (strncmp(log_style, "FANCY", 5) == 0)
             conf->log_style = FANCY;
         if (strncmp(log_style, "SIMPLE", 6) == 0)
@@ -93,49 +93,49 @@ demeter_conf_t *read_conf(void)
             conf->log_style = SYSTEM;
         xfree(log_style);
     }
-    if (log_level != NULL) {
+    if (log_level) {
         conf->log_level = get_slurm_log_level(log_level);
         xfree(log_level);
     }
-    if (slurm_log_level != NULL) {
+    if (slurm_log_level) {
         conf->slurm_log_level = get_slurm_log_level(slurm_log_level);
         xfree(slurm_log_level);
     }
-    if (log_file_path != NULL) {
+    if (log_file_path) {
         if (is_conf_path_accesible(log_file_path)) {
-            if (conf->log_file_path != NULL)
+            if (conf->log_file_path)
                 free(conf->log_file_path);
             conf->log_file_path = strdup(log_file_path);
         }
         xfree(log_file_path);
     }
-    if (slurm_log_path != NULL) {
+    if (slurm_log_path) {
         if (is_conf_path_accesible(slurm_log_path)) {
-            if (conf->slurm_log_path != NULL)
+            if (conf->slurm_log_path)
                 free(conf->slurm_log_path);
             conf->slurm_log_path = strdup(slurm_log_path);
         }
         xfree(slurm_log_path);
     }
-    if (sys_log_path != NULL) {
+    if (sys_log_path) {
         if (is_conf_path_accesible(sys_log_path)) {
-            if (conf->sys_log_path != NULL)
+            if (conf->sys_log_path)
                 free(conf->sys_log_path);
             conf->sys_log_path = strdup(sys_log_path);
         }
         xfree(sys_log_path);
     }
-    if (demeter_comp_loc != NULL) {
-        if (demeter_comp_loc != NULL) {
-            if (conf->demeter_comp_loc != NULL)
+    if (demeter_comp_loc) {
+        if (demeter_comp_loc) {
+            if (conf->demeter_comp_loc)
                 free(conf->demeter_comp_loc);
             conf->demeter_comp_loc = strdup(demeter_comp_loc);
         }
         xfree(demeter_comp_loc);
     }
-    if (demeter_comp_proxy != NULL) {
-        if (demeter_comp_proxy != NULL) {
-            if (conf->demeter_comp_proxy != NULL)
+    if (demeter_comp_proxy) {
+        if (demeter_comp_proxy) {
+            if (conf->demeter_comp_proxy)
                 free(conf->demeter_comp_proxy);
             conf->demeter_comp_proxy = strdup(demeter_comp_proxy);
         }
