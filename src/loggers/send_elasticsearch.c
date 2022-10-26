@@ -10,6 +10,9 @@
 #include "src/common/macros.h"
 #include "demeter.h"
 
+// CURL FUNCTION
+//___________________________________________________________________________________________________________________________________________
+
 static bool send_log(demeter_conf_t *demeter_conf, char *json_log, job_id_info_t *job_info)
 {
     CURL *curl;
@@ -42,6 +45,9 @@ static bool send_log(demeter_conf_t *demeter_conf, char *json_log, job_id_info_t
         return false;
     return true;
 }
+
+// "MAIN" FUNCTION CALLS FORMATTERS AND SENDS LOGS
+//___________________________________________________________________________________________________________________________________________
 
 int send_elastic(demeter_conf_t *demeter_conf ,job_id_info_t *job_info, linked_list_t *cgroup_data,
 linked_list_t *gathered_logs, log_counter_t *log_counter,

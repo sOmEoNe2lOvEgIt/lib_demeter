@@ -8,25 +8,9 @@
 #include "src/slurmd/slurmd/slurmd.h"
 #include "demeter.h"
 
-cgroup_data_t *alloc_cgroup_struct(void)
-{
-    cgroup_data_t *cgroup_data = malloc(sizeof(cgroup_data_t));
-
-    if (!cgroup_data)
-        return (NULL);
-    cgroup_data->mem_max_usage_bytes = 0;
-    cgroup_data->oom_kill_disable = 0;
-    cgroup_data->under_oom = 0;
-    cgroup_data->oom_kill = 0;
-    cgroup_data->cpuset_cpus = NULL;
-    cgroup_data->cpuset_effective_cpus = NULL;
-    cgroup_data->step_id = 4294967200;
-    return (cgroup_data);
-}
-
 cgroup_data_t *gather_cgroup(job_id_info_t *job_info, demeter_conf_t *conf)
 {
-    cgroup_data_t *cgroup_data = alloc_cgroup_struct();
+    cgroup_data_t *cgroup_data = init_cgroup_struct();
 
     if (!cgroup_data || !job_info)
         return (NULL);

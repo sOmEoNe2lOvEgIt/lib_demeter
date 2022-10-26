@@ -8,6 +8,9 @@
 #include "src/slurmd/slurmd/slurmd.h"
 #include "demeter.h"
 
+// LOGS CGROUP DATA TO A FILE (USED FOR DEBUGGING)
+//___________________________________________________________________________________________________________________________________________
+
 void log_cgroup(cgroup_data_t *cgroup_data, job_id_info_t *job_info, demeter_conf_t *conf)
 {
     char log_msg[250];
@@ -23,6 +26,9 @@ void log_cgroup(cgroup_data_t *cgroup_data, job_id_info_t *job_info, demeter_con
         job_info->job_id, job_info->uid, job_info->step_id, cgroup_data->mem_max_usage_bytes, cgroup_data->oom_kill_disable, cgroup_data->under_oom, cgroup_data->oom_kill, cgroup_data->cpuset_cpus, cgroup_data->cpuset_effective_cpus);
     write_log_to_file(conf, log_msg, INFO, 0);
 }
+
+// WRITES THE CGROUP DATA TO A TRANSFER FILE
+//___________________________________________________________________________________________________________________________________________
 
 static void write_cgroup_file(char *path, char *value)
 {

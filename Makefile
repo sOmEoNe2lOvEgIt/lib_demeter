@@ -40,6 +40,7 @@ TOOLS_SRC = src/tools/is_log_empty.c								\
 			src/tools/remove_newline.c								\
 			src/tools/append_str.c									\
 			src/tools/getline_from_end.c							\
+			src/tools/init/im_init.c								\
 			src/tools/free/im_free.c								\
 			src/tools/get/get_job_info.c							\
 			src/tools/get/get_time_str.c							\
@@ -48,7 +49,8 @@ TOOLS_SRC = src/tools/is_log_empty.c								\
 			src/tools/get/get_hostname.c							\
 			src/tools/get/zgetline.c								\
 			src/tools/get/get_rotate_time.c							\
-			src/tools/get/get_nodeset.c								\
+			src/tools/nodeset/get_nodeset.c							\
+			src/tools/nodeset/is_in_nodeset.c						\
 
 CC		=	gcc
 CFLAGS	?=	-Wall -g3 -gstrict-dwarf -fPIC -Iinclude -I$(SLURM_INC_DIR) -I$(IBMAD_INC_DIR) -Wl,-rpath=$(SLURM_LIB_RUN_PATH)

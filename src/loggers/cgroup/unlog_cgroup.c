@@ -8,6 +8,9 @@
 #include <stdio.h>
 #include "demeter.h"
 
+// UNLOGS CGROUP DATA FROM A FILE
+//___________________________________________________________________________________________________________________________________________
+
 linked_list_t *unlog_cgroup(demeter_conf_t *demeter_conf, uint job_id)
 {
     FILE *file = NULL;
@@ -28,7 +31,7 @@ linked_list_t *unlog_cgroup(demeter_conf_t *demeter_conf, uint job_id)
         return NULL;
     while (getline(&line, &len, file) != -1) {
         if (strstr(line, "###")) {
-            cgroup_data = alloc_cgroup_struct();
+            cgroup_data = init_cgroup_struct();
             if (!cgroup_data) {
                 fclose(file);
                 free(line);

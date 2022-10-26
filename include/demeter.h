@@ -172,6 +172,19 @@ int get_next_node(char *clean_nodecount, int curr_node);
 bool is_in_nodeset(char *curr_node, char *nodeset);
 // returns true if curr_node is in nodeset.
 
+// I'M INIT!!!
+//___________________________________________________________________________________________________________________________________________
+
+// Functions used to initialize and allocate memory for vars and structs.
+FILE *init_log_file(demeter_conf_t *conf, bool silent);
+// Initializes log file.
+demeter_conf_t *init_conf(void);
+// Initializes demeter configuration.
+cgroup_data_t *init_cgroup_struct(void);
+// Initializes cgroup struct.
+parsed_log_t *init_parsed_log(void);
+// Returns a new propperly allocated empty parsed log struct.
+
 // I'M FREE!!!
 //___________________________________________________________________________________________________________________________________________
 
@@ -191,8 +204,6 @@ void free_perf_count(perf_data_t *perf_count);
 // LOGGER FUNCTIONS
 //___________________________________________________________________________________________________________________________________________
 
-FILE *init_log_file(demeter_conf_t *conf, bool silent);
-// Initializes log file.
 int write_log_to_file(demeter_conf_t *conf, char *message, dem_log_level_t level, uint verbose);
 // Writes log to demeter log file.
 void log_parsed_logs(linked_list_t *gathered_logs, demeter_conf_t *demeter_conf);
@@ -226,7 +237,6 @@ linked_list_t *unlog_cgroup(demeter_conf_t *demeter_conf, uint job_id);
 // CGROUP TOOLS
 //___________________________________________________________________________________________________________________________________________
 
-cgroup_data_t *alloc_cgroup_struct(void);
 void get_oom_status(cgroup_data_t *cgroup_data, job_id_info_t *job_info, demeter_conf_t *conf);
 void get_mem_max_usage(cgroup_data_t *cgroup_data, job_id_info_t *job_info, demeter_conf_t *conf);
 void get_cpuset(cgroup_data_t *cgroup_data, job_id_info_t *job_info, demeter_conf_t *conf);
@@ -240,8 +250,6 @@ linked_list_t *gather_logs(demeter_conf_t *demeter_conf, job_id_info_t *job_info
 // LOG_PARSER TOOLS
 //___________________________________________________________________________________________________________________________________________
 
-parsed_log_t *init_parsed_log(void);
-// Returns a new propperly allocated empty parsed log struct.
 int get_sys_log_time(parsed_log_t *log_to_parse, time_t start_time);
 // Adds readable time to log. Returns 0 if no error,
 // other if error (including the log time not being at job runtime).

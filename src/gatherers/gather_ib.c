@@ -154,6 +154,8 @@ perf_data_t *gather_ib(void)
     return (perf_count);
 }
 
+// CALCULATE DIFF BETWEEN PREV AND CURRENT IB VALUES
+//______________________________________________________________________________
 
 perf_data_t *gather_ib_diff(perf_data_t *prolog_perf_count)
 {

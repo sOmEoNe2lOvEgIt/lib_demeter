@@ -1,7 +1,7 @@
 // ATOS PROJECT, 2022
 // DEMETER
 // File description:
-// Wow, such logs, much file!
+// Wow, such logs, much file, amny demeter debugging!
 //___________________________________________________________________________________________________________________________________________
 
 #include <stdio.h>
@@ -10,27 +10,6 @@
 #include "slurm/slurm_errno.h"
 #include "src/common/log.h"
 #include "demeter.h"
-
-// LOGGING TOOLS
-//___________________________________________________________________________________________________________________________________________
-FILE *init_log_file(demeter_conf_t *conf, bool silent)
-{
-    FILE *log_file;
-
-    log_file = fopen(conf->log_file_path, "a");
-    if (!log_file) {
-        if (!silent)
-            debug2("demeter: warning: can't open log file. Will try to open log file at \"/tmp/demeter.log\".");
-        //substitut log file if chosen one is not writable (although this one may not be writable either)
-        log_file = fopen("/tmp/demeter.log", "a");
-    }
-    if (!log_file) {
-        //if we can't open the log file, we can't log anything
-        error("ERROR: demeter: can't open log file at /tmp/demeter.log either. Exiting.");
-        return (NULL);
-    }
-    return (log_file);
-}
 
 //LOGGING FUNCTIONS
 //___________________________________________________________________________________________________________________________________________ 

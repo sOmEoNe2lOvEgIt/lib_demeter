@@ -8,22 +8,8 @@
 #include "demeter.h"
 #include "src/common/slurm_xlator.h"
 
-static demeter_conf_t *init_conf(void)
-{
-    demeter_conf_t *conf;
-
-    if (!(conf = malloc(sizeof(demeter_conf_t))))
-        return (NULL);
-    conf->verbose_lv = 0;
-    conf->log_style = SIMPLE;
-    conf->log_level = INFO;
-    conf->log_file_path = strdup("/var/log/demeter.log");
-    conf->slurm_log_path = strdup("/var/log/slurm/");
-    conf->sys_log_path = strdup("/var/log/");
-    conf->demeter_comp_loc = strdup("http://elastic:9200/demeter/_doc");
-    conf->demeter_comp_proxy = NULL;
-    return (conf);
-}
+// CCONVERT STRING TO LOG LEVEL
+//___________________________________________________________________________________________________________________________________________
 
 static dem_log_level_t get_slurm_log_level(char *str_level)
 {
@@ -42,6 +28,9 @@ static dem_log_level_t get_slurm_log_level(char *str_level)
     return (INFO);
 }
 
+// TRY A PATH TO A FILE AND CHECK IF WRITABLE
+//___________________________________________________________________________________________________________________________________________
+
 static bool is_conf_path_accesible(char *path)
 {
     FILE *file = fopen(path, "r");
@@ -51,6 +40,9 @@ static bool is_conf_path_accesible(char *path)
     fclose(file);
     return (true);
 }
+
+// READ CONFIG FILE
+//___________________________________________________________________________________________________________________________________________
 
 demeter_conf_t *read_conf(void)
 {

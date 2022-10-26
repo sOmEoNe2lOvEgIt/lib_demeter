@@ -8,6 +8,9 @@
 #include <zlib.h>
 #include "demeter.h"
 
+// GET LINE FROM END OF FILE STREAM
+//___________________________________________________________________________________________________________________________________________
+
 ssize_t getline_from_end(char **line, size_t *len, FILE *file, long *line_offset)
 {
     long line_count = 0;
@@ -38,6 +41,9 @@ ssize_t getline_from_end(char **line, size_t *len, FILE *file, long *line_offset
     }
     return (return_value);
 }
+
+// GET LINE FROM END OF COMPRESSED FILE STREAM
+//___________________________________________________________________________________________________________________________________________
 
 ssize_t zgetline_from_end(char **line, size_t *len, gzFile file, long *line_offset)
 {

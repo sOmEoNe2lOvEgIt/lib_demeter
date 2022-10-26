@@ -10,6 +10,9 @@
 #include "demeter.h"
 #include "src/common/macros.h"
 
+// FORMATS LOGS TO JSON FORMAT FOR ELASTICSEARCH
+//___________________________________________________________________________________________________________________________________________
+
 char *format_logs(linked_list_t *gathered_logs, linked_list_t *gathered_sel)
 {
     linked_list_t *tmp = gathered_logs;
@@ -43,6 +46,9 @@ char *format_logs(linked_list_t *gathered_logs, linked_list_t *gathered_sel)
     return (json_log);
 }
 
+// FORMATS CGROUP DATA TO JSON FORMAT FOR ELASTICSEARCH
+//___________________________________________________________________________________________________________________________________________
+
 static char *format_cgroup_single(cgroup_data_t *cgroup)
 {
     char tmp[200];
@@ -50,7 +56,7 @@ static char *format_cgroup_single(cgroup_data_t *cgroup)
     if (!cgroup)
         return (NULL);
     memset(tmp, 0, 200);
-    if (cgroup->step_id < 4294967200)
+    if (cgroup->step_id < (UINT_MAX - 1))
         sprintf(tmp, "\"step_%u\":{\"cpuset_cpus\":\"%s\", \"cpuset_effective_cpus\":\"%s\", \"mem_max_usage_bytes\":%u, \"oom_kill\":%u, \"oom_kill_disable\":%u, \"under_oom\":%u}",
         cgroup->step_id, cgroup->cpuset_cpus, cgroup->cpuset_effective_cpus, cgroup->mem_max_usage_bytes, cgroup->oom_kill, cgroup->oom_kill_disable, cgroup->under_oom);
     else
@@ -76,15 +82,21 @@ char *format_cgroup(linked_list_t *cgroup)
     return (json_cgroup);
 }
 
+// FORMATS JOB DATA TO JSON FORMAT FOR ELASTICSEARCH
+//___________________________________________________________________________________________________________________________________________
+
 char *format_job_info(job_id_info_t *job_info)
 {
-    char tmp[1224], hostname[1024];
+    char tmp[454], hostname[254];
 
-    memset(tmp, 0, 200);
-    gethostname(hostname, 1024);
+    memset(tmp, 0, 454);
+    gethostname(hostname, 254);
     sprintf(tmp, "\"job_id\": \"%u\", \"user_id\":%u, \"hostname\":\"%s\", ", job_info->job_id, job_info->uid, hostname);
     return (strdup(tmp));
 }
+
+// FORMATS LOG COUNTERS TO JSON FORMAT FOR ELASTICSEARCH
+//___________________________________________________________________________________________________________________________________________
 
 char *format_log_counter(log_counter_t *log_counter)
 {
@@ -98,6 +110,8 @@ char *format_log_counter(log_counter_t *log_counter)
     return (strdup(tmp));   
 }
 
+// FORMATS PERFORMANCE DATA TO JSON FORMAT FOR ELASTICSEARCH
+//___________________________________________________________________________________________________________________________________________
 // to be completed
 char *format_perf_count(perf_data_t *perf_data)
 {
