@@ -215,16 +215,19 @@ void transfer_log_cgroup(cgroup_data_t *cgroup_data, job_id_info_t *job_info, de
 void log_parsed_sel(linked_list_t *gathered_sel);
 // Specific to gathered sel.
 int send_elastic(demeter_conf_t *demeter_conf ,job_id_info_t *job_info, linked_list_t *cgroup_data,
-linked_list_t *gathered_logs, log_counter_t *log_counter,
+linked_list_t *gathered_slurm_logs, log_counter_t *slurm_log_counter,
+linked_list_t *gathered_sys_logs, log_counter_t *sys_log_counter,
 linked_list_t *gathered_sel, perf_data_t *gathered_perf_data);
 
 // JSON FORMATTERS
 //__________________________________________________________________________________________________________________________________________
 
-char *format_logs(linked_list_t *gathered_logs, linked_list_t *gathered_sel);
+
+char *format_logs(linked_list_t *gathered_logs, bool is_syslog);
+char *format_sel_logs(linked_list_t *gathered_sel);
 char *format_cgroup(linked_list_t *cgroup);
 char *format_job_info(job_id_info_t *job_info);
-char *format_log_counter(log_counter_t *log_counter);
+char *format_log_counter(log_counter_t *log_counter, bool is_syslog);
 char *format_perf_count(perf_data_t *perf_data);
 
 // CGROUP FUNCTION
@@ -244,7 +247,8 @@ void get_cpuset(cgroup_data_t *cgroup_data, job_id_info_t *job_info, demeter_con
 // LOG_PARSER FUNCTION
 //___________________________________________________________________________________________________________________________________________
 
-linked_list_t *gather_logs(demeter_conf_t *demeter_conf, job_id_info_t *job_info, log_counter_t **log_counter);
+linked_list_t *gather_all_sys_logs(demeter_conf_t *demeter_conf, job_id_info_t *job_info, log_counter_t **log_counter);
+linked_list_t *gather_all_slurm_logs(demeter_conf_t *demeter_conf, job_id_info_t *job_info, log_counter_t **log_counter);
 // Gathers logs.
 
 // LOG_PARSER TOOLS

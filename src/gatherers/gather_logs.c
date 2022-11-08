@@ -47,15 +47,26 @@ static log_counter_t *count_log(linked_list_t *log_list)
     return (log_counter);
 }
 
-// GATHER LOGS
-//___________________________________________________________________________________________________________________________________________
+// GATHER SYSTEM LOGS
+//___________________________________________________________________________________________________________________________________________linked_list_t *gather_logs(demeter_conf_t *demeter_conf, job_id_info_t *job_info, log_counter_t **log_counter)
 
-linked_list_t *gather_logs(demeter_conf_t *demeter_conf, job_id_info_t *job_info, log_counter_t **log_counter)
+linked_list_t *gather_all_sys_logs(demeter_conf_t *demeter_conf, job_id_info_t *job_info, log_counter_t **log_counter)
 {
-    linked_list_t *log_list;
+    linked_list_t *log_list = NULL;
 
     log_list = gather_system_logs(demeter_conf, job_info, NULL);
-    log_list = gather_slurm_logs(demeter_conf, job_info, log_list);
+    *log_counter = count_log(log_list);
+    return (log_list);
+}
+
+// GATHER SLURM LOGS
+//___________________________________________________________________________________________________________________________________________
+
+linked_list_t *gather_all_slurm_logs(demeter_conf_t *demeter_conf, job_id_info_t *job_info, log_counter_t **log_counter)
+{
+    linked_list_t *log_list = NULL;
+
+    log_list = gather_slurm_logs(demeter_conf, job_info, NULL);
     *log_counter = count_log(log_list);
     return (log_list);
 }

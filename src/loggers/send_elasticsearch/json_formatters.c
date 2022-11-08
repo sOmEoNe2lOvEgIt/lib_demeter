@@ -13,13 +13,17 @@
 // FORMATS LOGS TO JSON FORMAT FOR ELASTICSEARCH
 //___________________________________________________________________________________________________________________________________________
 
-char *format_logs(linked_list_t *gathered_logs, linked_list_t *gathered_sel)
+char *format_logs(linked_list_t *gathered_logs, bool is_syslog)
 {
     linked_list_t *tmp = gathered_logs;
-    char *json_log = NULL, element_str[50];
+    char *json_log = NULL;
 
-    if (tmp)
-        json_log = strdup("\"syslogs/slurmlogs\":{\"data\":\"");
+    if (tmp) {
+        if (is_syslog)
+            json_log = strdup("\"syslogs\":{\"data\":\"");
+        else
+            json_log = strdup("\"slurmlogs\":{\"data\":\"");
+    }
     for (;tmp; tmp = tmp->next) {
         if (((parsed_log_t *)tmp->data)->unparsed_log == NULL)
             continue;
@@ -28,12 +32,20 @@ char *format_logs(linked_list_t *gathered_logs, linked_list_t *gathered_sel)
         json_log = append_str(json_log, "\\n");
     }
     if (gathered_logs)
-        json_log = append_str(json_log, "\"}, ");
-    tmp = gathered_sel;
-    if (tmp) {
-        sprintf(element_str, "\"sel_logs\":{\"data\":\"");
-        json_log = append_str(json_log, element_str);
-    }
+        json_log = append_str(json_log, "\"}");
+    return (json_log);
+}
+
+// FORMATS SEL LOGS TO JSON FORMAT FOR ELASTICSEARCH
+//___________________________________________________________________________________________________________________________________________
+
+char *format_sel_logs(linked_list_t *gathered_sel)
+{
+    linked_list_t *tmp = gathered_sel;
+    char *json_log = NULL;
+
+    if (tmp)
+        json_log = strdup("\"sel_logs\":{\"data\":\"");
     for (;tmp; tmp = tmp->next) {
         if (((parsed_sel_t *)tmp->data)->unparsed_sel == NULL)
             continue;
@@ -98,15 +110,19 @@ char *format_job_info(job_id_info_t *job_info)
 // FORMATS LOG COUNTERS TO JSON FORMAT FOR ELASTICSEARCH
 //___________________________________________________________________________________________________________________________________________
 
-char *format_log_counter(log_counter_t *log_counter)
+char *format_log_counter(log_counter_t *log_counter, bool is_syslog)
 {
     char tmp[200];
 
     if (!log_counter)
         return (NULL);
     memset(tmp, 0, 200);
-    sprintf(tmp, "\"log_counter\":{\"errors\" : %u, \"warnings\" : %u, \"infos\" : %u, \"debugs\" : %u, \"fatals\" : %u}",
-    log_counter->errors, log_counter->warnings, log_counter->infos, log_counter->debugs, log_counter->fatals);
+    if (is_syslog)
+        sprintf(tmp, "\"sys_log_counter\":{\"errors\" : %u, \"warnings\" : %u, \"infos\" : %u, \"debugs\" : %u, \"fatals\" : %u}",
+        log_counter->errors, log_counter->warnings, log_counter->infos, log_counter->debugs, log_counter->fatals);
+    else
+        sprintf(tmp, "\"slurm_log_counter\":{\"errors\" : %u, \"warnings\" : %u, \"infos\" : %u, \"debugs\" : %u, \"fatals\" : %u}",
+        log_counter->errors, log_counter->warnings, log_counter->infos, log_counter->debugs, log_counter->fatals);
     return (strdup(tmp));   
 }
 
