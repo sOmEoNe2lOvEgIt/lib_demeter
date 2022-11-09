@@ -92,7 +92,7 @@ linked_list_t *gathered_sel, perf_data_t *gathered_perf_data)
     if (tmp)
         free(tmp);
     json_log = append_str(json_log, ", ");
-    tmp = format_perf_count(gathered_perf_data);
+    tmp = format_sel_count(gathered_perf_data);
     json_log = append_str(json_log, tmp);
     if (tmp)
         free(tmp);

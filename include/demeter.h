@@ -229,7 +229,7 @@ char *format_sel_logs(linked_list_t *gathered_sel);
 char *format_cgroup(linked_list_t *cgroup);
 char *format_job_info(job_id_info_t *job_info);
 char *format_log_counter(log_counter_t *log_counter, bool is_syslog);
-char *format_perf_count(perf_data_t *perf_data);
+char *format_sel_count(perf_data_t *perf_data);
 
 // CGROUP FUNCTION
 //___________________________________________________________________________________________________________________________________________

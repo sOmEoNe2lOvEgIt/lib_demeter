@@ -129,14 +129,14 @@ char *format_log_counter(log_counter_t *log_counter, bool is_syslog)
 // FORMATS PERFORMANCE DATA TO JSON FORMAT FOR ELASTICSEARCH
 //___________________________________________________________________________________________________________________________________________
 // to be completed
-char *format_perf_count(perf_data_t *perf_data)
+char *format_sel_count(perf_data_t *perf_data)
 {
     char tmp[631];
 
     if (!perf_data)
-        return (strdup("\"perf_data\":{}"));
+        return (strdup("\"sel_data\":{}"));
     memset(tmp, 0, 631);
-    sprintf (tmp, "\"perf_count\":{\"counterselect\" : %u, \"excbufoverrunerrors\" : %u, \"linkdowned\" : %u, \"linkintegrityerrors\" : %u, \"linkrecovers\" : %u, \"portbufferoverrunerrors\" : %u, \"portdlidmappingerrors\" : %u, \"portlocalphysicalerrors\" : %u, \"portloopingerrors\" : %u, \"portmalformedpkterrors\" : %u, \"portselect\" : %u, \"portvlmappingerrors\" : %u, \"qp1dropped\" : %u, \"rcvconstrainterrors\" : %u, \"rcvdata\" : %u, \"rcverrors\" : %u, \"rcvpkts\" : %u, \"rcvremotephyerrors\" : %u, \"rcvswrelayerrors\" : %u}",
+    sprintf (tmp, "\"sel_count\":{\"counterselect\" : %u, \"excbufoverrunerrors\" : %u, \"linkdowned\" : %u, \"linkintegrityerrors\" : %u, \"linkrecovers\" : %u, \"portbufferoverrunerrors\" : %u, \"portdlidmappingerrors\" : %u, \"portlocalphysicalerrors\" : %u, \"portloopingerrors\" : %u, \"portmalformedpkterrors\" : %u, \"portselect\" : %u, \"portvlmappingerrors\" : %u, \"qp1dropped\" : %u, \"rcvconstrainterrors\" : %u, \"rcvdata\" : %u, \"rcverrors\" : %u, \"rcvpkts\" : %u, \"rcvremotephyerrors\" : %u, \"rcvswrelayerrors\" : %u}",
     perf_data->counterselect, perf_data->excbufoverrunerrors, perf_data->linkdowned, perf_data->linkintegrityerrors, perf_data->linkrecovers, perf_data->portbufferoverrunerrors, perf_data->portdlidmappingerrors, perf_data->portlocalphysicalerrors, perf_data->portloopingerrors, perf_data->portmalformedpkterrors, perf_data->portselect, perf_data->portvlmappingerrors, perf_data->qp1dropped, perf_data->rcvconstrainterrors, perf_data->rcvdata, perf_data->rcverrors, perf_data->rcvpkts, perf_data->rcvremotephyerrors, perf_data->rcvswrelayerrors);
     return (strdup(tmp));
 }
