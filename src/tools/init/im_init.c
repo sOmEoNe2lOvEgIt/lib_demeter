@@ -25,6 +25,7 @@ demeter_conf_t *init_conf(void)
     conf->sys_log_path = strdup("/var/log/");
     conf->demeter_comp_loc = strdup("http://elastic:9200/demeter/_doc");
     conf->demeter_comp_proxy = NULL;
+    conf->using_task_plugin = false;
     return (conf);
 }
 

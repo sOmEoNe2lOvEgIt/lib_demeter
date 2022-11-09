@@ -46,7 +46,8 @@ static bool is_conf_path_accesible(char *path)
 
 demeter_conf_t *read_conf(void)
 {
-    s_p_options_t options[] = {{"Verbose", S_P_UINT32},
+    s_p_options_t options[] = {
+    {"Verbose", S_P_UINT32}, {"TaskPlugin", S_P_STRING},
     {"LogStyle", S_P_STRING}, {"LogLevel", S_P_STRING},
     {"SlurmLogLevel", S_P_STRING}, {"LogFilePath", S_P_STRING},
     {"SlurmLogPath", S_P_STRING}, {"SysLogPath", S_P_STRING},
@@ -55,8 +56,8 @@ demeter_conf_t *read_conf(void)
     demeter_conf_t *conf = init_conf();
     char *log_style = NULL, *log_level = NULL, *slurm_log_level = NULL,
     *log_file_path = NULL, *slurm_log_path = NULL, *demeter_comp_loc = NULL,
-    *demeter_comp_proxy = NULL, *sys_log_path = NULL, teststr[1000],
-    conf_path[] = "/etc/slurm/demeter.conf";
+    *demeter_comp_proxy = NULL, *sys_log_path = NULL, task_plugin = NULL,
+    teststr[1000], conf_path[] = "/etc/slurm/demeter.conf";
     s_p_hashtbl_t *tbl = NULL;
 
     memset(teststr, 0, 1000);
@@ -68,6 +69,7 @@ demeter_conf_t *read_conf(void)
         return (conf);
     }
     s_p_get_uint32(&conf->verbose_lv, "Verbose", tbl);
+    s_p_get_string(&task_plugin, "TaskPlugin", tbl);
     s_p_get_string(&log_style, "LogStyle", tbl);
     s_p_get_string(&log_level, "LogLevel", tbl);
     s_p_get_string(&slurm_log_level, "SlurmLogLevel", tbl);
@@ -132,6 +134,11 @@ demeter_conf_t *read_conf(void)
             conf->demeter_comp_proxy = strdup(demeter_comp_proxy);
         }
         xfree(demeter_comp_proxy);
+    }
+    if (task_plugin) {
+        if (!strncmp(task_plugin, "true", 4))
+            conf->using_task_plugin = true;
+        xfree(task_plugin);
     }
     s_p_hashtbl_destroy(tbl);
     return (conf);
