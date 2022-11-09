@@ -56,7 +56,7 @@ demeter_conf_t *read_conf(void)
     demeter_conf_t *conf = init_conf();
     char *log_style = NULL, *log_level = NULL, *slurm_log_level = NULL,
     *log_file_path = NULL, *slurm_log_path = NULL, *demeter_comp_loc = NULL,
-    *demeter_comp_proxy = NULL, *sys_log_path = NULL, task_plugin = NULL,
+    *demeter_comp_proxy = NULL, *sys_log_path = NULL, *task_plugin = NULL,
     teststr[1000], conf_path[] = "/etc/slurm/demeter.conf";
     s_p_hashtbl_t *tbl = NULL;
 
