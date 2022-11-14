@@ -83,11 +83,11 @@ char *format_cgroup(linked_list_t *cgroup)
     char *json_cgroup = NULL;
 
     if (!tmp)
-        return (NULL);
+        return (strdup("\"cgroup\":{}"));
     json_cgroup = strdup("\"cgroup\":{");
     for (;tmp; tmp = tmp->next) {
         json_cgroup = append_str(json_cgroup, format_cgroup_single((cgroup_data_t *)tmp->data));
-        if (tmp->next)
+        if (tmp->next && json_cgroup[strlen(json_cgroup) - 1] == '}')
             json_cgroup = append_str(json_cgroup, ", ");
     }
     json_cgroup = append_str(json_cgroup, "}");
@@ -115,7 +115,7 @@ char *format_log_counter(log_counter_t *log_counter, bool is_syslog)
     char tmp[200];
 
     if (!log_counter)
-        return (NULL);
+        return (strdup("\"no_log_counter\":{}"));
     memset(tmp, 0, 200);
     if (is_syslog)
         sprintf(tmp, "\"sys_log_counter\":{\"errors\" : %u, \"warnings\" : %u, \"infos\" : %u, \"debugs\" : %u, \"fatals\" : %u}",
@@ -134,7 +134,7 @@ char *format_sel_count(perf_data_t *perf_data)
     char tmp[631];
 
     if (!perf_data)
-        return (strdup("\"sel_data\":{}"));
+        return (strdup("\"sel_count\":{}"));
     memset(tmp, 0, 631);
     sprintf (tmp, "\"sel_count\":{\"counterselect\" : %u, \"excbufoverrunerrors\" : %u, \"linkdowned\" : %u, \"linkintegrityerrors\" : %u, \"linkrecovers\" : %u, \"portbufferoverrunerrors\" : %u, \"portdlidmappingerrors\" : %u, \"portlocalphysicalerrors\" : %u, \"portloopingerrors\" : %u, \"portmalformedpkterrors\" : %u, \"portselect\" : %u, \"portvlmappingerrors\" : %u, \"qp1dropped\" : %u, \"rcvconstrainterrors\" : %u, \"rcvdata\" : %u, \"rcverrors\" : %u, \"rcvpkts\" : %u, \"rcvremotephyerrors\" : %u, \"rcvswrelayerrors\" : %u}",
     perf_data->counterselect, perf_data->excbufoverrunerrors, perf_data->linkdowned, perf_data->linkintegrityerrors, perf_data->linkrecovers, perf_data->portbufferoverrunerrors, perf_data->portdlidmappingerrors, perf_data->portlocalphysicalerrors, perf_data->portloopingerrors, perf_data->portmalformedpkterrors, perf_data->portselect, perf_data->portvlmappingerrors, perf_data->qp1dropped, perf_data->rcvconstrainterrors, perf_data->rcvdata, perf_data->rcverrors, perf_data->rcvpkts, perf_data->rcvremotephyerrors, perf_data->rcvswrelayerrors);

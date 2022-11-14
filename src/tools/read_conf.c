@@ -136,7 +136,7 @@ demeter_conf_t *read_conf(void)
         xfree(demeter_comp_proxy);
     }
     if (task_plugin) {
-        if (!strncmp(task_plugin, "true", 4))
+        if (!strcmp(task_plugin, "true"))
             conf->using_task_plugin = true;
         xfree(task_plugin);
     }

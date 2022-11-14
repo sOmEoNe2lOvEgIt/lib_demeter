@@ -7,6 +7,7 @@
 #include <inttypes.h>
 #include <string.h>
 #include <zlib.h>
+#include <stdbool.h>
 #include "slurm/slurm.h"
 #include "src/slurmd/slurmd/slurmd.h"
 #include "src/slurmd/slurmstepd/slurmstepd_job.h"

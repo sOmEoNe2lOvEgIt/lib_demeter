@@ -13,6 +13,8 @@ void free_list(linked_list_t *list)
 {
     linked_list_t *tmp = list, *prev = NULL;
 
+    if (!list)
+        return;
     while (tmp) {
         prev = tmp;
         tmp = tmp->next;
@@ -55,7 +57,7 @@ void free_cgroup_list(linked_list_t *cgroup_list)
 {
     linked_list_t *next_list = NULL;
 
-    if (!cgroup_list|| !cgroup_list->data)
+    if (!cgroup_list || !cgroup_list->data)
         return;
     for (;cgroup_list; cgroup_list = next_list) {
         next_list = cgroup_list->next;
