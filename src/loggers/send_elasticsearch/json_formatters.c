@@ -20,9 +20,9 @@ char *format_logs(linked_list_t *gathered_logs, bool is_syslog)
 
     if (tmp) {
         if (is_syslog)
-            json_log = strdup("\"syslogs\":{\"data\":\"");
+            json_log = strdup("\"syslogs\":\"");
         else
-            json_log = strdup("\"slurmlogs\":{\"data\":\"");
+            json_log = strdup("\"slurmlogs\":\"");
     }
     for (;tmp; tmp = tmp->next) {
         if (((parsed_log_t *)tmp->data)->unparsed_log == NULL)
@@ -32,7 +32,7 @@ char *format_logs(linked_list_t *gathered_logs, bool is_syslog)
         json_log = append_str(json_log, "\\n");
     }
     if (gathered_logs)
-        json_log = append_str(json_log, "\"}");
+        json_log = append_str(json_log, "\"");
     return (json_log);
 }
 
@@ -45,7 +45,7 @@ char *format_sel_logs(linked_list_t *gathered_sel)
     char *json_log = NULL;
 
     if (tmp)
-        json_log = strdup("\"sel_logs\":{\"data\":\"");
+        json_log = strdup("\"sel_logs\":\"");
     for (;tmp; tmp = tmp->next) {
         if (((parsed_sel_t *)tmp->data)->unparsed_sel == NULL)
             continue;
@@ -54,7 +54,7 @@ char *format_sel_logs(linked_list_t *gathered_sel)
         json_log = append_str(json_log, "\\n");
     }
     if (gathered_sel)
-        json_log = append_str(json_log, "\"}");
+        json_log = append_str(json_log, "\"");
     return (json_log);
 }
 
