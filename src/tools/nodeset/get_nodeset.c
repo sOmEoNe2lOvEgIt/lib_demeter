@@ -4,6 +4,7 @@
 // Wow, such nodeset, many nodes!
 //___________________________________________________________________________________________________________________________________________
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
@@ -42,11 +43,15 @@ static bool check_order(char *nodeset)
     for (; nodeset[i] != '\0' && nodeset[i] != ']'; i++) {
         if (nodeset[i] == '[')
             return (false);
-        if (nodeset[i] == ',' || nodeset[i] == '-') {
-            if (last_val > atoi(&nodeset[i + 1]))
+        if (nodeset[i] == '-') {
+            if (last_val > atoi(&nodeset[i + 1])) {
+                printf("Error: nodeset is not in order\n");
                 return (false);
+            }
             last_val = atoi(&nodeset[i + 1]);
         }
+        if (nodeset[i] == ',')
+            last_val = atoi(&nodeset[i + 1]);
     }
     if (nodeset[i] == '\0')
         return (false);
@@ -62,12 +67,10 @@ char *get_nodecount(char *nodeset)
         return (NULL);
     if (!strstr(nodeset, "[") && strstr(nodeset, "]"))
         return (NULL);
-    nodecount = malloc(sizeof(char) * strlen(nodeset));
-    if (!nodecount)
+    if (!(nodecount = malloc(sizeof(char) * strlen(nodeset))))
         return (NULL);
     if (!strstr(nodeset, "[") && !strstr(nodeset, "]")) {
-        for (i = 0; nodeset[i] != '\0' && nodeset[i] != '\n' &&
-        (nodeset[i] < '0' || nodeset[i] > '9'); i++);
+        for (i = 0; nodeset[i] != '\0' && (nodeset[i] < '0' || nodeset[i] > '9'); i++);
         for (;nodeset[i] >= '0' && nodeset[i] <= '9'; i++, j++)
             nodecount[j] = nodeset[i];
         nodecount[j] = '\0';
@@ -75,7 +78,7 @@ char *get_nodecount(char *nodeset)
             free(nodecount);
             return (strdup("-1"));
         }
-        if ((nodeset[i] != '\0' && nodeset[i] != '\n')){
+        if ((nodeset[i] != '\0')){
             free(nodecount);
             return (NULL);
         }

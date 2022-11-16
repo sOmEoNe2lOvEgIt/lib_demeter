@@ -16,7 +16,7 @@ static bool is_in_nodecount(char *clean_nodecount, int node)
     if (!clean_nodecount)
         return (false);
     last_val = atoi(&clean_nodecount[i]);
-    for (i = 0; clean_nodecount[i] != '\0' && last_val < node; i++) {
+    for (i = 0; clean_nodecount[i] != '\0' && last_val != node; i++) {
         if (clean_nodecount[i] == '-') {
             max_val = atoi(&clean_nodecount[i + 1]);
             if (node <= max_val && node >= last_val)
