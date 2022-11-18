@@ -173,6 +173,8 @@ int get_next_node(char *clean_nodecount, int curr_node);
 // Returns next node from nodecount. Returns -84 if error and -1 if last node.
 bool is_in_nodeset(char *curr_node, char *nodeset);
 // returns true if curr_node is in nodeset.
+char *strptime(const char *restrict s, const char *restrict f, struct tm *restrict tm);
+// strptime implementation
 
 // I'M INIT!!!
 //___________________________________________________________________________________________________________________________________________

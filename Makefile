@@ -34,6 +34,7 @@ LOGER_SRC =	src/loggers/logger.c									\
 			src/loggers/send_elasticsearch.c						\
 
 TOOLS_SRC = src/tools/is_log_empty.c								\
+			src/tools/strptime.c									\
 			src/tools/read_conf.c									\
 			src/tools/linked_list.c									\
 			src/tools/handle_log_level.c							\
