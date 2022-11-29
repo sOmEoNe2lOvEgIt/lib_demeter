@@ -175,6 +175,7 @@ bool is_in_nodeset(char *curr_node, char *nodeset);
 // returns true if curr_node is in nodeset.
 char *strptime(const char *restrict s, const char *restrict f, struct tm *restrict tm);
 // strptime implementation
+int sstat_pull(uint job_id, uint step_id, demeter_conf_t *demeter_conf);
 
 // I'M INIT!!!
 //___________________________________________________________________________________________________________________________________________

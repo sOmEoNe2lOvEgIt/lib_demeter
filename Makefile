@@ -17,6 +17,7 @@ GATHER_SRC =src/gatherers/gather_cgroup.c							\
 			src/gatherers/gather_logs.c								\
 			src/gatherers/gather_sel.c								\
 			src/gatherers/gather_ib.c								\
+			src/gatherers/gather_sstat.c							\
 			src/gatherers/cgroup/get_from_files.c					\
 			src/gatherers/logs/gather_system_logs.c					\
 			src/gatherers/logs/sys_log_tools.c						\

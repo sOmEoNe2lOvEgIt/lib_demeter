@@ -64,7 +64,8 @@ demeter_conf_t *read_conf(void)
     tbl = s_p_hashtbl_create(options);
     if (!tbl)
         return (NULL);
-    if (s_p_parse_file(tbl, NULL, conf_path, false) != SLURM_SUCCESS) {
+    if (s_p_parse_file(tbl, NULL, conf_path, false, NULL) != SLURM_SUCCESS) {     //<---- Updated slurm version
+    // if (s_p_parse_file(tbl, NULL, conf_path, false) != SLURM_SUCCESS) {
         s_p_hashtbl_destroy(tbl);
         return (conf);
     }

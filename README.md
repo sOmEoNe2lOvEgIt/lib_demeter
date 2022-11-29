@@ -38,3 +38,4 @@ This is strictly optional but highly recommended as you will probably need to se
 
 !!!NEW OPTIONS TO BE ADDED!!!
 
+Note: In slurm conf, specifying the task plugin, it is better to put the task plugin first (in name order), as in cetain vertions of slurm, in the case of an OOM, the Cgroup task plugin stops the execution of any more plugins and prevents demeter gathering memory data (wich can be pretty important in the case of an OOM...). Specifying the demeter plugin first prevents this behaviour.

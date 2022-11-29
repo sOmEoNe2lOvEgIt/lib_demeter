@@ -98,7 +98,7 @@ linked_list_t *gathered_sel, perf_data_t *gathered_perf_data)
     json_log = append_str(json_log, "}}");
     if (send_log(demeter_conf, json_log, job_info) == false)
         write_log_to_file(demeter_conf, "Failed to send log to elastic", DEBUG, 2);
-    write_log_to_file(demeter_conf, json_log, INFO, 0);
+    write_log_to_file(demeter_conf, json_log, DEBUG, 0);
     if (json_log)
         free(json_log);
     return (0);
