@@ -63,34 +63,40 @@ linked_list_t *gathered_sel, perf_data_t *gathered_perf_data)
     json_log = append_str(json_log, strdup("\"job_data\":{"));
     tmp = format_cgroup(cgroup_data);
     json_log = append_str(json_log, tmp);
-    if (tmp)
+    if (tmp) {
         free(tmp);
-    json_log = append_str(json_log, ", ");
+        json_log = append_str(json_log, ", ");
+    }
     tmp = format_logs(gathered_slurm_logs, false);
     json_log = append_str(json_log, tmp);
-    if (tmp)
+    if (tmp) {
         free(tmp);
-    json_log = append_str(json_log, ", ");
+        json_log = append_str(json_log, ", ");
+    }
     tmp = format_log_counter(slurm_log_counter, false);
     json_log = append_str(json_log, tmp);
-    if (tmp)
+    if (tmp) {
         free(tmp);
-    json_log = append_str(json_log, ", ");
+        json_log = append_str(json_log, ", ");
+    }
     tmp = format_logs(gathered_sys_logs, true);
     json_log = append_str(json_log, tmp);
-    if (tmp)
+    if (tmp) {
         free(tmp);
-    json_log = append_str(json_log, ", ");
+        json_log = append_str(json_log, ", ");
+    }
     tmp = format_log_counter(sys_log_counter, true);
     json_log = append_str(json_log, tmp);
-    if (tmp)
+    if (tmp) {
         free(tmp);
-    json_log = append_str(json_log, ", ");
+        json_log = append_str(json_log, ", ");
+    }
     tmp = format_sel_logs(gathered_sel);
     json_log = append_str(json_log, tmp);
-    if (tmp)
+    if (tmp) {
         free(tmp);
-    json_log = append_str(json_log, ", ");
+        json_log = append_str(json_log, ", ");
+    }
     tmp = format_sel_count(gathered_perf_data);
     json_log = append_str(json_log, tmp);
     if (tmp)
