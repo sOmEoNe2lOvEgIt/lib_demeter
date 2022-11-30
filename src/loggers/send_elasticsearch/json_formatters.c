@@ -18,12 +18,16 @@ char *format_logs(linked_list_t *gathered_logs, bool is_syslog)
     linked_list_t *tmp = gathered_logs;
     char *json_log = NULL;
 
-    if (tmp) {
+    if (!tmp) {
         if (is_syslog)
-            json_log = strdup("\"syslogs\":\"");
+            return(strdup("\"syslogs\":\"\""));
         else
-            json_log = strdup("\"slurmlogs\":\"");
+            return(strdup("\"slurmlogs\":\"\""));
     }
+    if (is_syslog)
+        json_log = strdup("\"syslogs\":\"");
+    else
+        json_log = strdup("\"slurmlogs\":\"");
     for (;tmp; tmp = tmp->next) {
         if (((parsed_log_t *)tmp->data)->unparsed_log == NULL)
             continue;
@@ -44,8 +48,9 @@ char *format_sel_logs(linked_list_t *gathered_sel)
     linked_list_t *tmp = gathered_sel;
     char *json_log = NULL;
 
-    if (tmp)
-        json_log = strdup("\"sel_logs\":\"");
+    if (!tmp)
+        return (strdup("\"sellogs\":\"\""));
+    json_log = strdup("\"sel_logs\":\"");
     for (;tmp; tmp = tmp->next) {
         if (((parsed_sel_t *)tmp->data)->unparsed_sel == NULL)
             continue;
@@ -101,6 +106,8 @@ char *format_job_info(job_id_info_t *job_info)
 {
     char tmp[454], hostname[254];
 
+    if (!job_info)
+        return (NULL);
     memset(tmp, 0, 454);
     gethostname(hostname, 254);
     sprintf(tmp, "\"job_id\": \"%u\", \"user_id\":%u, \"hostname\":\"%s\", ", job_info->job_id, job_info->uid, hostname);
@@ -114,8 +121,12 @@ char *format_log_counter(log_counter_t *log_counter, bool is_syslog)
 {
     char tmp[200];
 
-    if (!log_counter)
-        return (strdup("\"no_log_counter\":{}"));
+    if (!log_counter) {
+        if (is_syslog)
+            return (strdup("\"syslog_counter\":{}"));
+        else
+            return (strdup("\"slurmlog_counter\":{}"));
+    }
     memset(tmp, 0, 200);
     if (is_syslog)
         sprintf(tmp, "\"sys_log_counter\":{\"errors\" : %u, \"warnings\" : %u, \"infos\" : %u, \"debugs\" : %u, \"fatals\" : %u}",
@@ -134,8 +145,7 @@ char *format_sel_count(perf_data_t *perf_data)
     char tmp[631];
 
     if (!perf_data)
-        return (strdup("\"sel_count\":{\"counterselect\" : 123, \"excbufoverrunerrors\" : 123, \"linkdowned\" : 123, \"linkintegrityerrors\" : 123, \"linkrecovers\" : 123, \"portbufferoverrunerrors\" : 123, \"portdlidmappingerrors\" : 123, \"portlocalphysicalerrors\" : 123, \"portloopingerrors\" : 123, \"portmalformedpkterrors\" : 123, \"portselect\" : 123, \"portvlmappingerrors\" : 123, \"qp1dropped\" : 123, \"rcvconstrainterrors\" : 123, \"rcvdata\" : 123, \"rcverrors\" : 123, \"rcvpkts\" : 123, \"rcvremotephyerrors\" : 123, \"rcvswrelayerrors\" : 123, \"symbolerrors\" : 123, \"vl15dropped\" : 123, \"xmitconstrainterrors\" : 123, \"xmitdata\" : 123, \"xmitdiscards\" : 123, \"xmitpkts\" : 123, \"xmitwait\" : 123}"));
-        // return (strdup("\"sel_count\":{}"));
+        return (strdup("\"sel_count\":{}"));
     memset(tmp, 0, 631);
     sprintf (tmp, "\"sel_count\":{\"counterselect\" : %u, \"excbufoverrunerrors\" : %u, \"linkdowned\" : %u, \"linkintegrityerrors\" : %u, \"linkrecovers\" : %u, \"portbufferoverrunerrors\" : %u, \"portdlidmappingerrors\" : %u, \"portlocalphysicalerrors\" : %u, \"portloopingerrors\" : %u, \"portmalformedpkterrors\" : %u, \"portselect\" : %u, \"portvlmappingerrors\" : %u, \"qp1dropped\" : %u, \"rcvconstrainterrors\" : %u, \"rcvdata\" : %u, \"rcverrors\" : %u, \"rcvpkts\" : %u, \"rcvremotephyerrors\" : %u, \"rcvswrelayerrors\" : %u, \"symbolerrors\" : %u, \"vl15dropped\" : %u, \"xmitconstrainterrors\" : %u, \"xmitdata\" : %u, \"xmitdiscards\" : %u, \"xmitpkts\" : %u, \"xmitwait\" : %u}",
     perf_data->counterselect, perf_data->excbufoverrunerrors, perf_data->linkdowned, perf_data->linkintegrityerrors, perf_data->linkrecovers, perf_data->portbufferoverrunerrors, perf_data->portdlidmappingerrors, perf_data->portlocalphysicalerrors, perf_data->portloopingerrors, perf_data->portmalformedpkterrors, perf_data->portselect, perf_data->portvlmappingerrors, perf_data->qp1dropped, perf_data->rcvconstrainterrors, perf_data->rcvdata, perf_data->rcverrors, perf_data->rcvpkts, perf_data->rcvremotephyerrors, perf_data->rcvswrelayerrors, perf_data->symbolerrors, perf_data->vl15dropped, perf_data->xmtconstrainterrors, perf_data->xmtdata, perf_data->xmtdiscards, perf_data->xmtpkts, perf_data->xmtwait);
