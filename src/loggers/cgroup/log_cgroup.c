@@ -57,7 +57,6 @@ void transfer_log_cgroup(cgroup_data_t *cgroup_data, job_id_info_t *job_info, de
         sprintf(log_msg, "\n###%u,%u,%d,%d,%d,#%s#,#%s####\n",
         job_info->step_id, cgroup_data->mem_max_usage_bytes, cgroup_data->oom_kill_disable, cgroup_data->under_oom, cgroup_data->oom_kill, cgroup_data->cpuset_cpus, cgroup_data->cpuset_effective_cpus);
     file_path = get_job_transfer_path(job_info->job_id);
-    write_log_to_file(conf, file_path, DEBUG, 10);
     write_cgroup_file(file_path, log_msg);
     free(file_path);
 }

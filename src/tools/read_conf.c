@@ -142,7 +142,7 @@ demeter_conf_t *read_conf(void)
         xfree(demeter_comp_proxy);
     }
     if (demeter_comp_usr) {
-        if (!demeter_comp_psswd)
+        if (!demeter_comp_psswd && conf->demeter_comp_psswd)
             error("demeter :DemeterCompUsr is set but DemeterCompPsswd is not");
         if (conf->demeter_comp_usr)
             free(conf->demeter_comp_usr);
@@ -150,7 +150,7 @@ demeter_conf_t *read_conf(void)
         xfree(demeter_comp_usr);
     }
     if (demeter_comp_psswd) {
-        if (!demeter_comp_usr)
+        if (!demeter_comp_usr && !conf->demeter_comp_usr)
             error("demeter :DemeterCompPsswd is set but DemeterCompUsr is not");
         if (conf->demeter_comp_psswd)
             free(conf->demeter_comp_psswd);
