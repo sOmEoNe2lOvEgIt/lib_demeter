@@ -36,6 +36,12 @@ This is strictly optional but highly recommended as you will probably need to se
 
 - DemeterCompProxy: *"DemeterCompProxy=proxyhost:port"*. Sets a proxy used by demeter to talk with the database if needed to access it. Can be ommited if not needed.
 
+- DemeterCompUsr: *"DemeterCompUsr=username"*. Sets a username for the authentification with the Elasticsearch database.
+
+- DemeterCompPsswd: *"DemeterCompPsswd=password"*. Sets a password for the authentification with the Elasticsearch database.
+
+- TaskPlugin: *"TaskPlugin=true||false"*. Tells demeter if the task plugin is used in pair with the prep plugin.
+
 !!!NEW OPTIONS TO BE ADDED!!!
 
 Note: In slurm conf, specifying the task plugin, it is better to put the task plugin first (in name order), as in cetain vertions of slurm, in the case of an OOM, the Cgroup task plugin stops the execution of any more plugins and prevents demeter gathering memory data (wich can be pretty important in the case of an OOM...). Specifying the demeter plugin first prevents this behaviour.
