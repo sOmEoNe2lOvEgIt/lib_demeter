@@ -47,3 +47,5 @@ This is strictly optional but highly recommended as you will probably need to se
 Note: In slurm conf, specifying the task plugin, it is better to put the task plugin first (in name order), as in cetain vertions of slurm, in the case of an OOM, the Cgroup task plugin stops the execution of any more plugins and prevents demeter gathering memory data (wich can be pretty important in the case of an OOM...). Specifying the demeter plugin first prevents this behaviour.
 
 /!\ Task plugin doesn't work propperly with "AllowedRAMSpace" enabled in cgroup.conf in older slurm. /!\
+
+/!\ The demete.conf file has to be owned by the slurm usr and has to have 600 (or rw*-***-*** ) as it access rights as it holds sensitive data like a password to a user on the elk database. /!\
