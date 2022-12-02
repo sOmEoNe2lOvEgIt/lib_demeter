@@ -5,8 +5,9 @@
 //___________________________________________________________________________________________________________________________________________
 
 #include <stdio.h>
+#include <src/common/slurm_xlator.h>
+#include <src/common/log.h>
 #include "demeter.h"
-#include "src/common/slurm_xlator.h"
 
 // CCONVERT STRING TO LOG LEVEL
 //___________________________________________________________________________________________________________________________________________
@@ -52,12 +53,14 @@ demeter_conf_t *read_conf(void)
     {"SlurmLogLevel", S_P_STRING}, {"LogFilePath", S_P_STRING},
     {"SlurmLogPath", S_P_STRING}, {"SysLogPath", S_P_STRING},
     {"DemeterCompLoc", S_P_STRING}, {"DemeterCompProxy", S_P_STRING},
+    {"DemeterCompUsr", S_P_STRING}, {"DemeterCompPsswd", S_P_STRING},
     {NULL}};
     demeter_conf_t *conf = init_conf();
     char *log_style = NULL, *log_level = NULL, *slurm_log_level = NULL,
     *log_file_path = NULL, *slurm_log_path = NULL, *demeter_comp_loc = NULL,
     *demeter_comp_proxy = NULL, *sys_log_path = NULL, *task_plugin = NULL,
-    teststr[1000], conf_path[] = "/etc/slurm/demeter.conf";
+    *demeter_comp_usr = NULL, *demeter_comp_psswd = NULL, teststr[1000],
+    conf_path[] = "/etc/slurm/demeter.conf";
     s_p_hashtbl_t *tbl = NULL;
 
     memset(teststr, 0, 1000);
@@ -79,6 +82,8 @@ demeter_conf_t *read_conf(void)
     s_p_get_string(&sys_log_path, "SysLogPath", tbl);
     s_p_get_string(&demeter_comp_loc, "DemeterCompLoc", tbl);
     s_p_get_string(&demeter_comp_proxy, "DemeterCompProxy", tbl);
+    s_p_get_string(&demeter_comp_usr, "DemeterCompUsr", tbl);
+    s_p_get_string(&demeter_comp_psswd, "DemeterCompPsswd", tbl);
     if (log_style) {
         if (strncmp(log_style, "FANCY", 5) == 0)
             conf->log_style = FANCY;
@@ -135,6 +140,22 @@ demeter_conf_t *read_conf(void)
             conf->demeter_comp_proxy = strdup(demeter_comp_proxy);
         }
         xfree(demeter_comp_proxy);
+    }
+    if (demeter_comp_usr) {
+        if (!demeter_comp_psswd)
+            error("demeter :DemeterCompUsr is set but DemeterCompPsswd is not");
+        if (conf->demeter_comp_usr)
+            free(conf->demeter_comp_usr);
+        conf->demeter_comp_usr = strdup(demeter_comp_usr);
+        xfree(demeter_comp_usr);
+    }
+    if (demeter_comp_psswd) {
+        if (!demeter_comp_usr)
+            error("demeter :DemeterCompPsswd is set but DemeterCompUsr is not");
+        if (conf->demeter_comp_psswd)
+            free(conf->demeter_comp_psswd);
+        conf->demeter_comp_psswd = strdup(demeter_comp_psswd);
+        xfree(demeter_comp_psswd);
     }
     if (task_plugin) {
         if (!strcmp(task_plugin, "true"))

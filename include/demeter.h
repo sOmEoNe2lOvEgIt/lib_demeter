@@ -54,6 +54,10 @@ typedef struct demeter_conf_s {
     // Location of elasticsearch database.
     char *demeter_comp_proxy;
     // Proxy to use for elasticsearch database.
+    char *demeter_comp_usr;
+    // Username for elasticsearch database.
+    char *demeter_comp_psswd;
+    // Password for elasticsearch database.
     bool using_task_plugin;
 } demeter_conf_t;
 // Demeter configuration.

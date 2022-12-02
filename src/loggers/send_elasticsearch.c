@@ -18,6 +18,9 @@ static void curl_write_function(void *ptr, size_t size, size_t nmemb, void *stre
         printf("demeter curl: %s", (char *)ptr);
 }
 
+static void curl_dont_write_function(void *ptr, size_t size, size_t nmemb, void *stream){
+    return;
+}
 
 static bool send_log(demeter_conf_t *demeter_conf, char *json_log, job_id_info_t *job_info)
 {
@@ -39,9 +42,14 @@ static bool send_log(demeter_conf_t *demeter_conf, char *json_log, job_id_info_t
         curl_easy_setopt(curl, CURLOPT_POSTFIELDS, json_log);
         curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, (long)(sizeof(char) * strlen(json_log)));
         curl_easy_setopt(curl, CURLOPT_HTTPHEADER, list);
-        curl_easy_setopt(curl, CURLOPT_USERNAME, "demeter");
-        curl_easy_setopt(curl, CURLOPT_PASSWORD, "demeter");
-        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, curl_write_function);
+        if (demeter_conf->demeter_comp_usr && demeter_conf->demeter_comp_psswd) {
+            curl_easy_setopt(curl, CURLOPT_USERNAME, demeter_conf->demeter_comp_usr);
+            curl_easy_setopt(curl, CURLOPT_PASSWORD, demeter_conf->demeter_comp_psswd);
+        }
+        if (demeter_conf->verbose_lv >= 2)
+            curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, curl_write_function);
+        else
+            curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, curl_dont_write_function);
         res = curl_easy_perform(curl);
         if (res != CURLE_OK)
             write_log_to_file(demeter_conf, "curl_easy_perform() failed... We'ere screwed...", DEBUG, 5);
