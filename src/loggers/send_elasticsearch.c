@@ -7,7 +7,7 @@
 #define _GNU_SOURCE
 #include <stdio.h>
 #include <curl/curl.h>
-#include "src/common/macros.h"
+#include <src/common/macros.h>
 #include "demeter.h"
 
 // CURL FUNCTION

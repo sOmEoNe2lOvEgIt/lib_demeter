@@ -7,8 +7,8 @@
 #define _GNU_SOURCE
 #include <stdio.h>
 #include <curl/curl.h>
+#include <src/common/macros.h>
 #include "demeter.h"
-#include "src/common/macros.h"
 
 // FORMATS LOGS TO JSON FORMAT FOR ELASTICSEARCH
 //___________________________________________________________________________________________________________________________________________

@@ -6,9 +6,9 @@
 
 #include <stdio.h>
 #include <inttypes.h>
-#include "slurm/slurm.h"
-#include "slurm/slurm_errno.h"
-#include "src/common/log.h"
+#include <slurm/slurm.h>
+#include <slurm/slurm_errno.h>
+#include <src/common/log.h>
 #include "demeter.h"
 
 //LOGGING FUNCTIONS
