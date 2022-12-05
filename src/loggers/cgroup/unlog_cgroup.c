@@ -7,6 +7,9 @@
 #include <string.h>
 #include <stdio.h>
 #include "demeter.h"
+#ifndef UINT_MAX
+#define UINT_MAX 2147483647
+#endif
 
 // UNLOGS CGROUP DATA FROM A FILE
 //___________________________________________________________________________________________________________________________________________
