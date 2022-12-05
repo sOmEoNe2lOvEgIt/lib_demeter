@@ -6,10 +6,8 @@
 ##
 
 SLURM_INC_DIR		=	/root/SLURM/slurm.build
-LIBIBMAD_DIR		=	/usr/lib64/
 IBMAD_INC_DIR		=	/usr/include/infiniband/
 LIB_SLURM			=	/usr/lib64/slurm
-SLURM_LIB_RUN_PATH	=	/usr/lib64/slurm
 
 LIB_FILE			=	libdemeter.so
 
@@ -53,8 +51,8 @@ TOOLS_SRC = src/tools/is_log_empty.c								\
 			src/tools/nodeset/is_in_nodeset.c						\
 
 CC		=	gcc
-CFLAGS	?=	-Wall -g3 -gstrict-dwarf -fPIC -Iinclude -I$(SLURM_INC_DIR) -I$(IBMAD_INC_DIR) -Wl,-rpath=$(SLURM_LIB_RUN_PATH)
-LDFLAGS	?=	-shared -lcurl -L$(LIBIBMAD_DIR) -libmad -libumad -L$(LIB_SLURM) -lslurmfull
+CFLAGS	?=	-Wall -g3 -gstrict-dwarf -fPIC -Iinclude -I$(SLURM_INC_DIR) -I$(IBMAD_INC_DIR)
+LDFLAGS	?=	-shared -lcurl -libmad -libumad -L$(LIB_SLURM) -lslurmfull
 
 all:			$(LIB_FILE)
 
