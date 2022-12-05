@@ -4,3 +4,5 @@
 The demeter lib is a lib used by the demeter slurm plugins made for harvesting data on your cluster's nodes like info about ram usage, oom state, parsed logs, etc...
 
 Plugins that use this lib are a PREP and a TASK plugin both named demeter. You can find them on my github!
+
+Go to https://github.com/sOmEoNe2lOvEgIt/demeter for more info.
