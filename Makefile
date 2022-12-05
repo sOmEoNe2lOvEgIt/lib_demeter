@@ -49,7 +49,7 @@ TOOLS_SRC = src/tools/is_log_empty.c								\
 			src/tools/nodeset/is_in_nodeset.c						\
 
 CC		=	gcc
-CFLAGS	?=	-Wall -g3 -gstrict-dwarf -fPIC -Iinclude -I$(SLURM_INC_DIR) -I$(IBMAD_INC_DIR) -Wl,-rpath=$(LIB_SLURM)
+CFLAGS	?=	-std=gnu11 -Wall -g3 -gstrict-dwarf -fPIC -Iinclude -I$(SLURM_INC_DIR) -I$(IBMAD_INC_DIR) -Wl,-rpath=$(LIB_SLURM)
 LDFLAGS	?=	-shared -lcurl -libmad -libumad -L$(LIB_SLURM) -lslurmfull
 
 all:			$(LIB_FILE)
