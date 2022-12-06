@@ -63,6 +63,10 @@ demeter_conf_t *read_conf(void)
     conf_path[] = "/etc/slurm/demeter.conf";
     s_p_hashtbl_t *tbl = NULL;
 
+    if (!is_conf_path_accesible(conf_path)){
+        info("demeter :No conf provided, going with default configuration.");
+        return (conf);
+    }
     memset(teststr, 0, 1000);
     tbl = s_p_hashtbl_create(options);
     if (!tbl)
