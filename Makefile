@@ -50,7 +50,7 @@ TOOLS_SRC = src/tools/is_log_empty.c								\
 
 CC		=	gcc
 CFLAGS	?=	-std=gnu11 -Wall -g3 -gstrict-dwarf -fPIC -Iinclude -I$(SLURM_INC_DIR) -I$(IBMAD_INC_DIR) -Wl,-rpath=$(LIB_SLURM)
-LDFLAGS	?=	-shared -lcurl -libmad -libumad -L$(LIB_SLURM) -lslurmfull
+LDFLAGS	?=	-shared -lcurl -libmad -libumad -L$(LIB_SLURM) -l$(LIB_SLURM_FULL)
 
 all:			$(LIB_FILE)
 
