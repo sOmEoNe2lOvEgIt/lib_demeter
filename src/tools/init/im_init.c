@@ -82,6 +82,7 @@ parsed_log_t *init_parsed_log(void)
     if (!parsed_log)
         return (NULL);
     parsed_log->unparsed_log = NULL;
+    parsed_log->data = NULL;
     parsed_log->log_proc_name = NULL;
     parsed_log->log_source_path = NULL;
     parsed_log->log_time_str = NULL;

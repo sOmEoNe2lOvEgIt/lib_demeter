@@ -19,13 +19,14 @@
 // ENUMS&STRUCTS
 //___________________________________________________________________________________________________________________________________________
 
+// Log style for demeter log output.
 typedef enum log_style_e {
     FANCY=0,
     SIMPLE=1,
     SYSTEM=2,
 } log_style_t;
-// Log style for demeter log output.
 
+// Log level for demeter log output.
 typedef enum dem_log_level_e {
     DEBUG=0,
     INFO=1,
@@ -34,37 +35,37 @@ typedef enum dem_log_level_e {
     FATAL=4,
     NONE=5,
 } dem_log_level_t;
-// Log level for demeter log output.
 
+// Demeter configuration.
 typedef struct demeter_conf_s {
-    uint verbose_lv;
     // Verbosity level if log level is DEBUG.
-    dem_log_level_t log_level;
+    uint verbose_lv;
     // Log level for demeter log output.
+    dem_log_level_t log_level;
     log_style_t log_style;
-    char *log_file_path;
     // Path to demeter log file.
+    char *log_file_path;
+    // Path to file in which demeter will parse log from.
     char *slurm_log_path;
     // Path to file in which demeter will parse log from.
     char *sys_log_path;
-    // Path to file in which demeter will parse log from.
-    dem_log_level_t slurm_log_level;
     // Log level for slurm log parsing.
-    char *demeter_comp_loc;
+    dem_log_level_t slurm_log_level;
     // Location of elasticsearch database.
-    char *demeter_comp_proxy;
+    char *demeter_comp_loc;
     // Proxy to use for elasticsearch database.
-    char *demeter_comp_usr;
+    char *demeter_comp_proxy;
     // Username for elasticsearch database.
-    char *demeter_comp_psswd;
+    char *demeter_comp_usr;
     // Password for elasticsearch database.
+    char *demeter_comp_psswd;
     bool using_task_plugin;
 } demeter_conf_t;
-// Demeter configuration.
 
+// Cgroup gathered data for each job step || job.
 typedef struct cgroup_data_s {
-    uint mem_max_usage_bytes;
     // Maximum memory usage in bytes.
+    uint mem_max_usage_bytes;
     uint oom_kill_disable;
     uint under_oom;
     uint oom_kill; 
@@ -72,59 +73,61 @@ typedef struct cgroup_data_s {
     char *cpuset_effective_cpus;
     uint step_id;
 } cgroup_data_t;
-// Cgroup gathered data for each job step || job.
 
 typedef struct job_id_info_s {
-    uint job_id;
     // Id from current job when setup propperly.
-    uint uid;
+    uint job_id;
     // User id from current job when setup propperly.
-    uint step_id;
+    uint uid;
     // Id from current job step when setup propperly.
-    time_t start_time;
+    uint step_id;
     // "Start time for job", actually time of
     //execution of the acct_gather_profile_p_node_step_start function in the plugin.
     // Used to verify that logs gathered are logs that are timestamped in job runtime.
+    time_t start_time;
 } job_id_info_t;
 
-typedef struct parsed_log_s {
-    char *unparsed_log;
-    // Raw log line.
-    char *log_proc_name;
-    // Name of process outputing log.
-    char *log_source_path;
-    //path to the log file, "stdout" if stdout
-    char *log_time_str;
-    // Time & date of log in readable format.
-    //struct host_info_s *host_info; <-- future struct whith info about the host to implement eventually
-    int error_code;
-    //0 if no error, 1 if error, only used for stdout as log source
-    dem_log_level_t log_level;
-    // Log level of log.
-} parsed_log_t;
 // Logs gathered for each job step || job.
+typedef struct parsed_log_s {
+    // Raw log line.
+    char *unparsed_log;
+    // Log message.
+    char *data;
+    // Name of process outputing log.
+    char *log_proc_name;
+    //path to the log file, "stdout" if stdout
+    char *log_source_path;
+    // Time & date of log in readable format.
+    char *log_time_str;
+    //struct host_info_s *host_info; <-- future struct whith info about the host to implement eventually
+
+    //0 if no error, 1 if error, only used for stdout as log source
+    int error_code;
+    // Log level of log.
+    dem_log_level_t log_level;
+} parsed_log_t;
 
 typedef struct parsed_sel_s {
-    char *unparsed_sel;
     // Raw sel line.
-    char *sel_time_str;
+    char *unparsed_sel;
     // Time & date of sel in readable format.
-    char *sel_msg_type;
+    char *sel_time_str;
     // Type of sel message.
-    char *sel_msg;
+    char *sel_msg_type;
     // Actual sel message.
-    bool asserted;
+    char *sel_msg;
     // True if sel message is "asserted".
-    dem_log_level_t log_level;
+    bool asserted;
     // Log level of log.
+    dem_log_level_t log_level;
 } parsed_sel_t;
 
+// Generic linked list.
 typedef struct linked_list_s {
-    void *data;
     // Needs to be casted to the appropriate type.
+    void *data;
     struct linked_list_s *next;
 } linked_list_t;
-// Generic linked list.
 
 typedef struct log_counter_s {
     uint errors;
@@ -138,61 +141,62 @@ typedef struct log_counter_s {
 // TOOLS
 //___________________________________________________________________________________________________________________________________________
 
-char *get_time_str(void);
 // Returns time in readable format.
-int get_len_to_char(char *str, char c);
+char *get_time_str(void);
 // Returns distance to the next char c in  string str.
-char *get_job_transfer_path(uint job_id);
+int get_len_to_char(char *str, char c);
 // Returns path to job transfer directory.
-char *get_hostname(void);
+char *get_job_transfer_path(uint job_id);
 // Returns malloced hostname of the current machine.
-int zgetline(char **line, gzFile file);
+char *get_hostname(void);
 // Returns a line from a gzFile.
-ssize_t getline_from_end(char **line, size_t *len, FILE *file, long *line_offset);
+int zgetline(char **line, gzFile file);
 // Returns line from end of file. Offset of Line_nb
-ssize_t zgetline_from_end(char **line, size_t *len, gzFile file, long *line_offset);
+ssize_t getline_from_end(char **line, size_t *len, FILE *file, long *line_offset);
 // Returns line from end of gzfile. Offset of Line_nb
-bool is_log_empty(char *log);
+ssize_t zgetline_from_end(char **line, size_t *len, gzFile file, long *line_offset);
 // Returns true if log is empty.
-demeter_conf_t *read_conf(void);
+bool is_log_empty(char *log);
 // Reads demeter configuration.
-job_id_info_t *get_job_info(job_env_t* job);
+demeter_conf_t *read_conf(void);
 // Returns job info.
-linked_list_t *add_to_list(linked_list_t *list, void *data);
+job_id_info_t *get_job_info(job_env_t* job);
 // Adds a new link to the begining
 //of the list given as arg, returns new said link.
-bool handle_log_level(parsed_log_t *curr_log, demeter_conf_t *demeter_conf);
+linked_list_t *add_to_list(linked_list_t *list, void *data);
 // Handles log level.
-void remove_newline(char *str);
+bool handle_log_level(parsed_log_t *curr_log, demeter_conf_t *demeter_conf);
 // Removes newline from string.
-char *append_str(char *str, char *to_append);
+void remove_newline(char *str);
 // Appends string to another.
-time_t get_rotate_time(char *file_name);
+char *append_str(char *str, char *to_append);
 // Returns time of last rotation of file. (file name has to have "~log-YYYY-MM-DD~" format)
-char *get_nodename(char *nodeset);
+time_t get_rotate_time(char *file_name);
 // Returns allocated nodename from nodeset, returns NULL if error.
-char *get_nodecount(char *nodeset);
+char *get_nodename(char *nodeset);
 // Returns clean allocated nodecount from nodeset. Returns NULL if error, "-1" if no nodecount.
-int get_next_node(char *clean_nodecount, int curr_node);
+char *get_nodecount(char *nodeset);
 // Returns next node from nodecount. Returns -84 if error and -1 if last node.
-bool is_in_nodeset(char *curr_node, char *nodeset);
+int get_next_node(char *clean_nodecount, int curr_node);
 // returns true if curr_node is in nodeset.
-char *strptime(const char *restrict s, const char *restrict f, struct tm *restrict tm);
+bool is_in_nodeset(char *curr_node, char *nodeset);
 // strptime implementation
+char *strptime(const char *restrict s, const char *restrict f, struct tm *restrict tm);
 int sstat_pull(uint job_id, uint step_id, demeter_conf_t *demeter_conf);
 
 // I'M INIT!!!
 //___________________________________________________________________________________________________________________________________________
 
 // Functions used to initialize and allocate memory for vars and structs.
-FILE *init_log_file(demeter_conf_t *conf, bool silent);
+
 // Initializes log file.
-demeter_conf_t *init_conf(void);
+FILE *init_log_file(demeter_conf_t *conf, bool silent);
 // Initializes demeter configuration.
-cgroup_data_t *init_cgroup_struct(void);
+demeter_conf_t *init_conf(void);
 // Initializes cgroup struct.
-parsed_log_t *init_parsed_log(void);
+cgroup_data_t *init_cgroup_struct(void);
 // Returns a new propperly allocated empty parsed log struct.
+parsed_log_t *init_parsed_log(void);
 
 // I'M FREE!!!
 //___________________________________________________________________________________________________________________________________________
@@ -213,16 +217,16 @@ void free_perf_count(perf_data_t *perf_count);
 // LOGGER FUNCTIONS
 //___________________________________________________________________________________________________________________________________________
 
-int write_log_to_file(demeter_conf_t *conf, char *message, dem_log_level_t level, uint verbose);
 // Writes log to demeter log file.
-void log_parsed_logs(linked_list_t *gathered_logs, demeter_conf_t *demeter_conf);
+int write_log_to_file(demeter_conf_t *conf, char *message, dem_log_level_t level, uint verbose);
 // Specific to gathered logs.
-void log_cgroup(cgroup_data_t *cgroup_data, job_id_info_t *job_info, demeter_conf_t *conf);
+void log_parsed_logs(linked_list_t *gathered_logs, demeter_conf_t *demeter_conf);
 // Specific to cgroup data.
-void transfer_log_cgroup(cgroup_data_t *cgroup_data, job_id_info_t *job_info, demeter_conf_t *conf);
+void log_cgroup(cgroup_data_t *cgroup_data, job_id_info_t *job_info, demeter_conf_t *conf);
 // for transfering cgroup data between plugins.
-void log_parsed_sel(linked_list_t *gathered_sel);
+void transfer_log_cgroup(cgroup_data_t *cgroup_data, job_id_info_t *job_info, demeter_conf_t *conf);
 // Specific to gathered sel.
+void log_parsed_sel(linked_list_t *gathered_sel);
 int send_elastic(demeter_conf_t *demeter_conf ,job_id_info_t *job_info, linked_list_t *cgroup_data,
 linked_list_t *gathered_slurm_logs, log_counter_t *slurm_log_counter,
 linked_list_t *gathered_sys_logs, log_counter_t *sys_log_counter,
@@ -242,8 +246,8 @@ char *format_sel_count(perf_data_t *perf_data);
 // CGROUP FUNCTION
 //___________________________________________________________________________________________________________________________________________
 
-cgroup_data_t *gather_cgroup(job_id_info_t *job_info, demeter_conf_t *conf);
 // Gathers cgroup data.
+cgroup_data_t *gather_cgroup(job_id_info_t *job_info, demeter_conf_t *conf);
 linked_list_t *unlog_cgroup(demeter_conf_t *demeter_conf, uint job_id);
 
 // CGROUP TOOLS
@@ -257,27 +261,27 @@ void get_cpuset(cgroup_data_t *cgroup_data, job_id_info_t *job_info, demeter_con
 //___________________________________________________________________________________________________________________________________________
 
 linked_list_t *gather_all_sys_logs(demeter_conf_t *demeter_conf, job_id_info_t *job_info, log_counter_t **log_counter);
-linked_list_t *gather_all_slurm_logs(demeter_conf_t *demeter_conf, job_id_info_t *job_info, log_counter_t **log_counter);
 // Gathers logs.
+linked_list_t *gather_all_slurm_logs(demeter_conf_t *demeter_conf, job_id_info_t *job_info, log_counter_t **log_counter);
 
 // LOG_PARSER TOOLS
 //___________________________________________________________________________________________________________________________________________
 
-int get_sys_log_time(parsed_log_t *log_to_parse, time_t start_time);
 // Adds readable time to log. Returns 0 if no error,
 // other if error (including the log time not being at job runtime).
-int get_slurm_log_time(parsed_log_t *log_to_parse, time_t start_time);
+int get_sys_log_time(parsed_log_t *log_to_parse, time_t start_time);
 // Adds readable time to log. Returns 0 if no error,
 // positive int if error (including the log time not being at job runtime).
+int get_slurm_log_time(parsed_log_t *log_to_parse, time_t start_time);
 
-linked_list_t *gather_system_logs (demeter_conf_t *demeter_conf, job_id_info_t *job_info, linked_list_t *log_list);
 // Gathers system logs by reading them from the syslog files and rotated files if necessary.
+linked_list_t *gather_system_logs (demeter_conf_t *demeter_conf, job_id_info_t *job_info, linked_list_t *log_list);
 gzFile open_rotated_system_log(demeter_conf_t *demeter_conf, job_id_info_t *job_info);    //
 FILE *open_system_logs(demeter_conf_t *demeter_conf);                                     //
 // sys log tools__________________________________________________________________________//
 
-linked_list_t *gather_slurm_logs (demeter_conf_t *demeter_conf, job_id_info_t *job_info, linked_list_t *log_list);
 // Gathers slurm logs by reading them from the slurm logs files and rotated files if necessary.
+linked_list_t *gather_slurm_logs (demeter_conf_t *demeter_conf, job_id_info_t *job_info, linked_list_t *log_list);
 gzFile open_rotated_slurm_log(demeter_conf_t *demeter_conf, job_id_info_t *job_info);      //
 FILE *open_slurm_log(demeter_conf_t *demeter_conf);                                        //
 // slurm log tools_________________________________________________________________________//
@@ -297,10 +301,10 @@ int get_sel_time(parsed_sel_t *curr_sel, time_t start_time);
 // GATHER_IB FUNCTION
 //___________________________________________________________________________________________________________________________________________
 
-perf_data_t *gather_ib(void);
 // Gathers IB data.
-perf_data_t *gather_ib_diff(perf_data_t *prolog_perf_count);
+perf_data_t *gather_ib(void);
 // Gathers IB data and substracts prolog data.
+perf_data_t *gather_ib_diff(perf_data_t *prolog_perf_count);
 
 
 

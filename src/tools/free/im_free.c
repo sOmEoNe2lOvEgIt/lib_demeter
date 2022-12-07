@@ -82,6 +82,8 @@ void free_parsed_log(parsed_log_t *log)
         return;
     if (log->unparsed_log)
         free(log->unparsed_log);
+    if (log->data)
+        free(log->data);
     if (log->log_proc_name)
         free(log->log_proc_name);
     if (log->log_source_path)

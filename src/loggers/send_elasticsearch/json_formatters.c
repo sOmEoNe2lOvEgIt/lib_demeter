@@ -13,6 +13,42 @@
 // FORMATS LOGS TO JSON FORMAT FOR ELASTICSEARCH
 //___________________________________________________________________________________________________________________________________________
 
+// char *format_logs(linked_list_t *gathered_logs, bool is_syslog)
+// {
+//     linked_list_t *tmp = gathered_logs;
+//     char *json_log = NULL, log_id[10];
+//     u_int32_t id= 0;
+
+//     if (!tmp) {
+//         if (is_syslog)
+//             return(strdup("\"syslogs\":{}"));
+//         else
+//             return(strdup("\"slurmlogs\":{}"));
+//     }
+//     if (is_syslog)
+//         json_log = strdup("\"syslogs\":{");
+//     else
+//         json_log = strdup("\"slurmlogs\":{");
+//     for (;tmp; tmp = tmp->next, id++) {
+//         memset(log_id, 0, 10);
+//         sprintf(log_id, "%d", id);
+//         if (((parsed_log_t *)tmp->data)->unparsed_log == NULL)
+//             continue;
+//         if (json_log[strlen(json_log) - 1] != '{')
+//             json_log = append_str(json_log, ",");
+//         json_log = append_str(json_log, "\"");
+//         json_log = append_str(json_log, log_id);
+//         json_log = append_str(json_log, "\":{\"data\":\"");
+//         json_log = append_str(json_log, ((parsed_log_t *)tmp->data)->data);
+//         json_log = append_str(json_log, "\", \"log_time\":\"");
+//         json_log = append_str(json_log, ((parsed_log_t *)tmp->data)->log_time_str);
+//         json_log = append_str(json_log, "\"}");
+//     }
+//     if (gathered_logs)
+//         json_log = append_str(json_log, "}");
+//     return (json_log);
+// }
+
 char *format_logs(linked_list_t *gathered_logs, bool is_syslog)
 {
     linked_list_t *tmp = gathered_logs;

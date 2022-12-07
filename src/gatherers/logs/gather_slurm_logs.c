@@ -35,8 +35,11 @@ static bool handle_log(long ln_offset, char *buffer, linked_list_t **log_list,
 demeter_conf_t *demeter_conf, job_id_info_t *job_info)
 {
     parsed_log_t *curr_log = NULL;
+    char *data = NULL;
 
     curr_log = (parsed_log_t *)(*log_list)->data;
+    // if (buffer)
+    //     remove_newline(buffer);
     curr_log->unparsed_log = strdup(buffer);
     if (!curr_log->unparsed_log)
         return (false);
@@ -50,6 +53,12 @@ demeter_conf_t *demeter_conf, job_id_info_t *job_info)
         return (true);
     if (handle_log_time(curr_log, demeter_conf, job_info->start_time))
         return (false);
+    data = curr_log->unparsed_log;
+    for (; *data && *data != ']'; data++);
+    if (*data) {
+        data++;
+        curr_log->data = strdup(data);
+    }
     curr_log->log_proc_name = strdup("slurm");
     (*log_list) = add_to_list((*log_list), init_parsed_log());
     return (true);
