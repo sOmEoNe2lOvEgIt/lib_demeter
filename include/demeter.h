@@ -183,6 +183,8 @@ bool is_in_nodeset(char *curr_node, char *nodeset);
 // strptime implementation
 char *strptime(const char *restrict s, const char *restrict f, struct tm *restrict tm);
 int sstat_pull(uint job_id, uint step_id, demeter_conf_t *demeter_conf);
+// Sends json log to the elasticsearch database set in conf.
+bool send_json(demeter_conf_t *demeter_conf, char *json_log, job_id_info_t *job_info);
 
 // I'M INIT!!!
 //___________________________________________________________________________________________________________________________________________
@@ -231,6 +233,8 @@ int send_elastic(demeter_conf_t *demeter_conf ,job_id_info_t *job_info, linked_l
 linked_list_t *gathered_slurm_logs, log_counter_t *slurm_log_counter,
 linked_list_t *gathered_sys_logs, log_counter_t *sys_log_counter,
 linked_list_t *gathered_sel, perf_data_t *gathered_perf_data);
+int send_logs_elastic(demeter_conf_t *demeter_conf ,job_id_info_t *job_info, linked_list_t *gathered_slurm_logs,
+linked_list_t *gathered_sys_logs, linked_list_t *gathered_sel);
 
 // JSON FORMATTERS
 //__________________________________________________________________________________________________________________________________________

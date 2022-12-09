@@ -25,8 +25,9 @@ GATHER_SRC =src/gatherers/gather_cgroup.c							\
 LOGER_SRC =	src/loggers/logger.c									\
 			src/loggers/cgroup/log_cgroup.c							\
 			src/loggers/cgroup/unlog_cgroup.c						\
-			src/loggers/send_elasticsearch/json_formatters.c		\
 			src/loggers/send_elasticsearch.c						\
+			src/loggers/send_logs_elasticsearch.c					\
+			src/loggers/send_elasticsearch/json_formatters.c		\
 
 TOOLS_SRC = src/tools/is_log_empty.c								\
 			src/tools/strptime.c									\
@@ -36,6 +37,7 @@ TOOLS_SRC = src/tools/is_log_empty.c								\
 			src/tools/remove_newline.c								\
 			src/tools/append_str.c									\
 			src/tools/getline_from_end.c							\
+			src/tools/curl_tools.c									\
 			src/tools/init/im_init.c								\
 			src/tools/free/im_free.c								\
 			src/tools/get/get_job_info.c							\

@@ -33,8 +33,8 @@ demeter_conf_t *demeter_conf, job_id_info_t *job_info)
     char *data = NULL;
 
     curr_log = (parsed_log_t *)(*log_list)->data;
-    // if (buffer)
-    //     remove_newline(buffer);
+    if (buffer)
+        remove_newline(buffer);
     curr_log->unparsed_log = strdup(buffer);
     if (!curr_log->unparsed_log)
         return (false);
