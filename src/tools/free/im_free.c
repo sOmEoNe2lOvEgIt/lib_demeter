@@ -38,6 +38,10 @@ void free_conf(demeter_conf_t *conf)
         free(conf->demeter_comp_loc);
     if (conf->demeter_comp_proxy)
         free(conf->demeter_comp_proxy);
+    if (conf->demeter_comp_usr)
+        free(conf->demeter_comp_usr);
+    if (conf->demeter_comp_psswd)
+        free(conf->demeter_comp_psswd);
     free(conf);
 }
 
